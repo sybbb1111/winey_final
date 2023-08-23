@@ -25,6 +25,6 @@ public class SmallCategoryEntity {
     private String sKind;
 
     @ManyToOne
-    @JoinColumn(name = "regionNmId", updatable = false, nullable = false)
+    @JoinColumn(name = "bigCategoryId", updatable = false, nullable = false)
     private BigCategoryEntity bigCategoryEntity;
 }
