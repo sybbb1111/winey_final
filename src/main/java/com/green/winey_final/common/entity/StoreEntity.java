@@ -11,7 +11,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "t_feed_cmt")
+@Table(name = "t_store")
 @Data
 @SuperBuilder
 @NoArgsConstructor
