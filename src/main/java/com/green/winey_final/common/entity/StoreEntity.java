@@ -1,6 +1,7 @@
 package com.green.winey_final.common.entity;
 
-import com.green.jpaentitytest.config.jpa.BaseEntity;
+
+import com.green.winey_final.common.config.jpa.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;

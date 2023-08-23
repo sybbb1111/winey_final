@@ -1,9 +1,10 @@
 package com.green.winey_final.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.green.jpaentitytest.config.jpa.BaseEntity;
-import com.green.jpaentitytest.config.security.model.ProviderType;
-import com.green.jpaentitytest.config.security.model.RoleType;
+
+import com.green.winey_final.common.config.jpa.BaseEntity;
+import com.green.winey_final.common.config.security.model.ProviderType;
+import com.green.winey_final.common.config.security.model.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
