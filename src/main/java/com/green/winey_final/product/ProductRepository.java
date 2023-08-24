@@ -1,6 +1,7 @@
 package com.green.winey_final.product;
 
-import com.green.jpaentitytest.common.entity.ProductEntity;
+
+import com.green.winey_final.common.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

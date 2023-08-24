@@ -1,6 +1,7 @@
 package com.green.winey_final.product;
 
-import com.green.jpaentitytest.product.model.WineTotalVo;
+
+import com.green.winey_final.product.model.WineTotalVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
