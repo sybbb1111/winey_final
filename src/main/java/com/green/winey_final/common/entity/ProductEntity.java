@@ -16,9 +16,9 @@ import org.hibernate.annotations.DynamicInsert;
 @SuperBuilder
 @NoArgsConstructor
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @DynamicInsert
-public class ProductEntity extends BaseEntity {
+public class ProductEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package com.green.winey_final.product.model;
+package com.green.winey_final.main.model;
 
 import lombok.Getter;
 import lombok.Setter;

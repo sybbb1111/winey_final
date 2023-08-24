@@ -1,7 +1,7 @@
-package com.green.winey_final.product;
+package com.green.winey_final.main;
 
 
-import com.green.winey_final.product.model.WineTotalVo;
+import com.green.winey_final.main.model.WineTotalVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,12 +15,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/main")
-public class ProductController {
+public class MainController {
 
-    private final ProductService SERVICE;
+    private final MainService SERVICE;
 
-    @GetMapping("/wines")
-    public List<WineTotalVo> selWine(@PageableDefault(sort="ifeed", direction = Sort.Direction.DESC, size=9) Pageable pageable){
-        return SERVICE.selWine(pageable);
+    @GetMapping("/redwine")
+    public List<WineTotalVo> getRedWines(@PageableDefault(sort="productId", direction = Sort.Direction.DESC, size=9) Pageable pageable){
+        return SERVICE.selRedWines(pageable);
     }
 }
