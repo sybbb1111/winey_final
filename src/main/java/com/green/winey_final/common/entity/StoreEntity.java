@@ -36,6 +36,6 @@ public class StoreEntity extends BaseEntity {
 //    @Size(min = 2, max = 100)
 //    private String address;
 
-    @Column(length = 11)
+    @Column(length = 20)
     private String tel;
 }
