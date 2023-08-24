@@ -26,7 +26,7 @@ public class AromaEntity {
 
     @ManyToOne
     @JoinColumn(name = "aromaCategoryId", updatable = false, nullable = false)
-    private aromaCategoryEntity aromaCategoryEntity;
+    private AromaCategoryEntity aromaCategoryEntity;
 
 
 }
