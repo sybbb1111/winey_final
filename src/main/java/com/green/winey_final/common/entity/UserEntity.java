@@ -28,43 +28,60 @@ public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
-    private Long userId;
+    private Long iuser;
 
     @Column(name = "provider_type", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     @NotNull
     private ProviderType providerType;
 
-    @Size(min = 10, max = 40)
-    @Column(length = 40)
-    private String email;
+    @Column(nullable = false, length = 80)
+    @Size(min = 3, max = 80)
+    private String uid;
 
     @JsonIgnore
-    private String pw;
-
-    @JsonIgnore
-    @Column(name = "role", length = 20)
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private RoleType role;
+    @Column(nullable = false)
+    private String upw;
 
     @Column(nullable = false, length = 20)
     @Size(min = 2, max = 20)
-    private String nm;
+    private String unm;
 
-    @Column(length = 11)
+
+    @JsonIgnore
+    @Column(nullable = false, name = "role_type", length = 20)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private RoleType roleType;
+
+
+    @Size(min = 10, max = 60)
+    @Column(length = 60)
+    private String email;
+
+
+
+
+    @Column(nullable = false, length = 11)
     private String tel;
 
     @ManyToOne
     @JoinColumn(name = "regionNmId", updatable = false, nullable = false)
     private RegionNmEntity regionNm;
 
-    @Column(length = 11)
+
+
+
+    @Column(nullable = false, length = 11)
     private Long tos_yn;
 
-    @Column(length = 11)
+
+
+    @Column(nullable = false, length = 11)
     private Long del_yn;
 
-    @Column(length = 11)
+
+
+    @Column(nullable = false)
     private String secretKey;
 }
