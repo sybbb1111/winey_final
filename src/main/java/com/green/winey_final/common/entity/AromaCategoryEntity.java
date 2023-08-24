@@ -14,7 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @DynamicInsert
-public class aromaCategoryEntity {
+public class AromaCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
