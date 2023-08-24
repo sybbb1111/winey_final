@@ -24,14 +24,15 @@ public class UserRecommendEntity {
     @ManyToOne
     @JoinColumn(name = "userId", updatable = false, nullable = false)
     private UserEntity userEntity;
-    @Column(nullable = false, length = 20)
+
+    @Column(nullable = true,length = 20)
     private Long categoryId;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true,length = 20)
     private Long countryId;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true,length = 20)
     private Long smallCateGoryId;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false,length = 20,columnDefinition = "bigint default 0")
     private Long priceRange;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true,length = 20)
     private Long AromaCategoryId;
 }
