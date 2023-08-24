@@ -32,9 +32,9 @@ public class StoreEntity extends BaseEntity {
     @Size(min = 2, max = 20)
     private String nm;
 
-    @Column(nullable = false, length = 100)
-    @Size(min = 2, max = 100)
-    private String address;
+//    @Column(nullable = false, length = 100)
+//    @Size(min = 2, max = 100)
+//    private String address;
 
     @Column(length = 11)
     private String tel;
