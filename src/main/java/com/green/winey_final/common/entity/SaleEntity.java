@@ -35,7 +35,7 @@ public class SaleEntity {
     @Column(length = 11)
     private Long saleYn;
 
-    private LocalDateTime startSale; //이거 두개 확인 필요
-    private LocalDateTime endSale;
+    private String startSale; //이거 두개 확인 필요 //LocalDateTime을 String으로 바꿈
+    private String endSale;
 
 }
