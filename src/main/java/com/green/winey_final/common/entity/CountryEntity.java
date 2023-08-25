@@ -2,6 +2,7 @@ package com.green.winey_final.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -12,7 +13,8 @@ import org.hibernate.annotations.DynamicInsert;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@ToString(callSuper = true)
+@ToString
+@EqualsAndHashCode
 @DynamicInsert
 public class CountryEntity {
     @Id

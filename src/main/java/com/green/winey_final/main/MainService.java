@@ -4,6 +4,7 @@ package com.green.winey_final.main;
 import com.green.winey_final.common.entity.ProductEntity;
 import com.green.winey_final.main.model.WineSelRes;
 import com.green.winey_final.main.model.WineTotalVo;
+import com.green.winey_final.repository.MainRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;

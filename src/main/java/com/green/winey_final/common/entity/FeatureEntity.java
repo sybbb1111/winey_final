@@ -2,6 +2,7 @@ package com.green.winey_final.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @DynamicInsert
+@EqualsAndHashCode
 public class FeatureEntity {
 
     @Id
