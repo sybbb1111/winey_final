@@ -1,6 +1,7 @@
 package com.green.winey_final.main;
 
 
+import com.green.winey_final.common.entity.CategoryEntity;
 import com.green.winey_final.common.entity.ProductEntity;
 import com.green.winey_final.repository.MainRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,12 @@ public class MainController {
         return ResponseEntity.ok(products.getContent());
     }
 
+    @GetMapping("/products")
+    public List<ProductEntity> getProductsByCategoryId() {
+        Long categoryId = 1L; // 원하는 카테고리 아이디 설정
+
+        return SERVICE.getProductsByCategoryId(categoryId);
+    }
 
 
 }

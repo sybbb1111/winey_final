@@ -35,5 +35,6 @@ public class CartEntity extends BaseEntity {
 
     @Column(length = 11)
     private Long buyYn; // 근데 이거 check 문 어떻게 적용시켜야 할지 몰라서...그냥 적음
+    //enum적용하세요
 
 }

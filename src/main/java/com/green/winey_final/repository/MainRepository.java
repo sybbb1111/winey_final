@@ -14,11 +14,11 @@ import java.util.List;
 @Repository
 public interface MainRepository extends JpaRepository<ProductEntity, Long> {
 
+    List<ProductEntity> findByCategoryEntityCategoryId(Long categoryId);
 
-
-   /* @Query("select a from ProductEntity a join fetch a.categoryEntity " +
-            "join fetch a.featureEntity join fetch a.countryEntity")
-    List<ProductEntity> selProductList();*/
+//    @Query("select a from ProductEntity a join fetch a.categoryEntity " +
+//            "join fetch a.featureEntity join fetch a.countryEntity")
+//    List<ProductEntity> selProductList();
 
 
 }

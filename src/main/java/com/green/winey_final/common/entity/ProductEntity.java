@@ -10,6 +10,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.List;
+
 @Entity
 @Table(name = "t_product")
 @Data
@@ -32,21 +34,21 @@ public class ProductEntity extends BaseEntity {
     private String nmEng;
 
     @Column(length = 20, nullable = false)
-    private Long price;
+    private int price;
 
     private String pic;
 
     @Column(length = 3)
-    private Long promotion;
+    private int promotion;
 
     @Column(length = 3)
-    private Long beginner;
+    private int beginner;
 
     @Column(length = 11)
-    private Long alcohol;
+    private int alcohol;
 
     @Column(length = 11)
-    private Long quantity;
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "categoryId", updatable = false, nullable = false)
@@ -59,4 +61,7 @@ public class ProductEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "countryId", updatable = false, nullable = false)
     private CountryEntity countryEntity;
+
+    @OneToMany(mappedBy = "productEntity")
+    private List<AromaEntity> aromaEntityList;
 }
