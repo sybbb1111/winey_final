@@ -9,5 +9,5 @@ import java.util.List;
 
 @Mapper
 public interface MainMapper {
-    List<WineTotalVo> selRedWines(WineSelRes dto);
+
 }

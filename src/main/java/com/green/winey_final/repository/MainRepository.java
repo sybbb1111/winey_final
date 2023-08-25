@@ -14,8 +14,11 @@ import java.util.List;
 @Repository
 public interface MainRepository extends JpaRepository<ProductEntity, Long> {
 
-    List<ProductEntity> findAll();
-    List<ProductEntity> findAllByRedWine(Long categoryId);
-    List<ProductEntity> findAllByCategoryId(Long categoryId, Pageable pageable);
+
+
+   /* @Query("select a from ProductEntity a join fetch a.categoryEntity " +
+            "join fetch a.featureEntity join fetch a.countryEntity")
+    List<ProductEntity> selProductList();*/
+
 
 }
