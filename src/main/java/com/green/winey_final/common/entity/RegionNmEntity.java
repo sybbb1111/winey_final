@@ -25,4 +25,6 @@ public class RegionNmEntity {
 
     @Column(nullable = false, length = 15)
     private String regionNm;
+
+
 }
