@@ -13,7 +13,7 @@ app:
       - http://localhost:8082/oauth/redirect
       - http://192.168.0.50:8082/oauth/redirect #원희 ip주소
 mybatis:
-  type-aliases-package: com.green.greengram
+  type-aliases-package: com.green.winey_final
   mapper-locations: mappers/**/*.xml
 
 spring:
