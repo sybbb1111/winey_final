@@ -28,7 +28,7 @@ public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
-    private Long iuser;
+    private Long userId;
 
     @Column(name = "provider_type", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
@@ -65,10 +65,10 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, length = 11)
     private String tel;
 
-    @ManyToOne
-    @JoinColumn(name = "regionNmId", updatable = false, nullable = false)
-    private RegionNmEntity regionNm;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "region_nm_id", updatable = false, nullable = false)
+    private RegionNmEntity regionNmEntity;
 
 
 

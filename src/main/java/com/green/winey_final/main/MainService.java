@@ -19,12 +19,7 @@ public class MainService {
     private final MainMapper MAPPER;
     private final MainRepository PRODUCT_REP;
 
-    public List<WineTotalVo> selRedWines(Pageable pageable) {
-        List<ProductEntity> vo = PRODUCT_REP.findAllByRedWine(1L);
-        WineSelRes dto = WineSelRes.builder()
-                .startIdx((pageable.getPageNumber() - 1) * pageable.getPageSize())
-                .list(vo)
-                .build();
-        return MAPPER.selRedWines(dto);
-    }
+
+
+
 }

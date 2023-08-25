@@ -25,7 +25,8 @@ public class MainController {
 
 
     @GetMapping
-    public ResponseEntity<List<ProductEntity>> getWines(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "9") int size) {
+    public ResponseEntity<List<ProductEntity>> getWines(@RequestParam(defaultValue = "1") int page
+                                                        , @RequestParam(defaultValue = "9") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductEntity> products = MAIN_REP.findAll(pageable);
@@ -33,16 +34,6 @@ public class MainController {
         return ResponseEntity.ok(products.getContent());
     }
 
-    @GetMapping("/redWines")
-    public ResponseEntity<List<ProductEntity>> getRedWines(
-            @RequestParam Long categoryId,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "9") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        List<ProductEntity> products = MAIN_REP.findAllByCategoryId(categoryId, pageable);
-
-        return ResponseEntity.ok(products);
-    }
 
 }
