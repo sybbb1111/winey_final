@@ -9,6 +9,7 @@ import com.green.winey_final.user.model.UserVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,6 +19,8 @@ public class UserService {
 
     private final UserRepository userRep;
     private final RegionNmRepository regionNmRep;
+
+    private final PasswordEncoder PW_ENCODER;
 
     public UserVo postUser(UserRegDto dto) {
 
@@ -31,7 +34,7 @@ public class UserService {
                 .tel(dto.getTel())
                 .tos_yn(dto.getTos_yn())
                 .unm(dto.getUnm())
-                .upw(dto.getPw())
+                .upw(PW_ENCODER.encode(dto.getUpw()))
                 .regionNmEntity(regionNmEntity)
                 .build();
 
@@ -39,8 +42,15 @@ public class UserService {
 
         return UserVo.builder()
                 .userId(entity.getUserId())
-
-
+                .del_yn(entity.getDel_yn())
+                .email(entity.getEmail())
+                .providerType(entity.getProviderType())
+                .roleType(entity.getRoleType())
+                .tel(entity.getTel())
+                .tos_yn(entity.getTos_yn())
+                .unm(entity.getUnm())
+                .upw(entity.getUpw())
+                .regionNmId(entity.getRegionNmEntity().getRegionNmId())
                 .build();
     }
 }

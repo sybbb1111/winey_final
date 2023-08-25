@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@IdClass(UserId.class)
 public class UserTokenEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
