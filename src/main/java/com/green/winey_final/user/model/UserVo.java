@@ -18,6 +18,6 @@ public class UserVo {
     private String tel;
     private Long tos_yn;
     private String unm;
-    private String pw;
+    private String upw;
     private Long regionNmId;
 }

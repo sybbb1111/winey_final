@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class UserRegDto {
     private String email;
-    private String pw;
+    private String upw;
     private RoleType roleType;
     private ProviderType providerType;
 
