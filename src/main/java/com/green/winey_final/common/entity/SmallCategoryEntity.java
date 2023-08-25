@@ -3,6 +3,7 @@ package com.green.winey_final.common.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -12,7 +13,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@ToString(callSuper = true)
+@ToString
+@EqualsAndHashCode
 public class SmallCategoryEntity {
 
     @Id
