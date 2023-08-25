@@ -65,10 +65,10 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, length = 11)
     private String tel;
 
-    @ManyToOne
-    @JoinColumn(name = "regionNmId", updatable = false, nullable = false)
-    private RegionNmEntity regionNm;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "region_nm_id", updatable = false, nullable = false)
+    private RegionNmEntity regionNmEntity;
 
 
 
