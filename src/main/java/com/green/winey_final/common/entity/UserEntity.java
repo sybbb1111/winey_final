@@ -35,7 +35,7 @@ public class UserEntity extends BaseEntity {
     @NotNull
     private ProviderType providerType;
 
-    @Column(nullable = false, length = 80)
+    @Column(length = 80)
     @Size(min = 3, max = 80)
     private String uid;
 
@@ -72,16 +72,16 @@ public class UserEntity extends BaseEntity {
 
 
 
-    @Column(nullable = false, length = 11)
+    @Column(length = 11)
     private Long tos_yn;
 
 
 
-    @Column(nullable = false, length = 11)
+    @Column(length = 11)
     private Long del_yn;
 
 
 
-    @Column(nullable = false)
+    @Column
     private String secretKey;
 }

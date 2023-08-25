@@ -12,8 +12,10 @@ import com.green.winey_final.common.config.properties.AppProperties;
 import com.green.winey_final.common.config.redis.RedisService;
 import com.green.winey_final.common.config.security.AuthTokenProvider;
 import com.green.winey_final.common.config.security.model.*;
+import com.green.winey_final.common.entity.RegionNmEntity;
 import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.common.utils.MyHeaderUtils;
+import com.green.winey_final.repository.RegionNmRepository;
 import com.green.winey_final.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,6 +47,9 @@ public class AuthService {
     private final AppProperties appProperties;
     private final PasswordEncoder passwordEncoder;
 
+    private final RegionNmRepository regionNmRep;
+
+
     public AuthResVo signUp(SignUpReqDto dto
             , HttpServletRequest req
             , HttpServletResponse res) {
@@ -52,17 +57,28 @@ public class AuthService {
         String ip = req.getRemoteAddr();
         log.info("local-login ip : {}", ip);
 
+        RegionNmEntity regionNmEntity = regionNmRep.findById(dto.getRegionNmId()).get();
+        log.info("RegionNmEntity : {}", regionNmEntity);
+
         UserEntity p = UserEntity.builder()
-                .uid(dto.getUid())
+
+                .email(dto.getEmail())
                 .upw(passwordEncoder.encode(dto.getUpw()))
                 .unm(dto.getUnm())
-                .email(dto.getEmail())
                 .providerType(ProviderType.LOCAL)
                 .roleType(RoleType.USER)
+                .tel(dto.getTel())
+                .tos_yn(dto.getTos_yn())
+                .del_yn(dto.getDel_yn())
+                .regionNmEntity(regionNmEntity)
                 .build();
+
+        log.info("UserEntity : {}", p);
         userRep.save(p);
+
         return processAuth(p, req, res);
     }
+
 
     public AuthResVo signIn(SignInReqDto dto, HttpServletRequest req, HttpServletResponse res) {
         String ip = req.getRemoteAddr();
