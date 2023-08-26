@@ -4,49 +4,61 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.winey_final.main.MainMapper">
 
-    <select id="searchProduct" resultType="WineVo">
-        SELECT ELECT a.product_id productId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
+    <select id="searchWine" resultType="WineVo">
+        SELECT a.product_id productId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.pic,
         a.promotion, a.beginner, b.sale, b.sale_price salePrice, b.sale_yn saleYn
         FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
         <where>
-            <if test = "categoryId != null">
-                AND category_id = #{categoryId}
+            <if test="categoryId != null">
+                and a.category_id = #{categoryId}
             </if>
-            <if test = "bigCategoryId != null">
-                AND big_category_id = #{bigCategoryId}
+            <if test="bigCategoryId != null">
+                AND a.big_category_id = #{bigCategoryId}
             </if>
-            <if test = "countryId != null">
-                AND country_id = #{countryId}
+            <if test="countryId != null">
+                AND a.country_id = #{countryId}
             </if>
-            <if test = "price == 0">
-                AND price <![CDATA[< 20000]]>
+            <if test="price == 0">
+                AND a.price <![CDATA[< 20000]]>
             </if>
-            <if test = "price == 1">
-                AND price >= 20000 AND price <![CDATA[< 50000]]>
+            <if test="price == 1">
+                AND a.price >= 20000 AND a.price <![CDATA[< 50000]]>
             </if>
-            <if test = "price == 2">
-                AND price<![CDATA[ < ]]> 20000
+            <if test="price == 2">
+                AND a.price <![CDATA[>= 50000]]>
             </if>
-            <if test = "price == 3">
-                AND price >= 50000 AND price <![CDATA[< 100000]]>
+            <if test="price == 3">
+                AND a.price >= 100000
             </if>
-            <if test = "price == 3">
-                AND price >= 100000
-            </if>
-            <if test = "text != null">
-                AND `name` LIKE CONCAT('%',#{text},'%')
+            <if test="text != null">
+                AND a.nm_kor LIKE CONCAT('%', #{text}, '%')
             </if>
         </where>
-        <if test = "sort == 0">
-            ORDER BY created_at
+        <if test="sort == 0">
+            ORDER BY a.product_id DESC
         </if>
-        <if test = "sort == 1">
-            ORDER BY price DESC
+        <if test="sort == 1">
+            ORDER BY a.price DESC
         </if>
         <if test="sort == 2">
-            ORDER BY price
+            ORDER BY a.price
         </if>
-        LIMIT ${startIdx}, ${row}
+        LIMIT #{startIdx}, #{row}
+    </select>
+
+    <select id="selLastWine" resultType="int">
+        SELECT count(product_id)
+        FROM item
+        <where>
+            <if test = "product_id != null">
+                and product_id = #{productId}
+            </if>
+            <if test = "text != null">
+                and `nm_kor` LIKE CONCAT('%',#{text},'%')
+            </if>
+        </where>
     </select>
 
     <select id="redWine">

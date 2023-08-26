@@ -59,6 +59,7 @@ public class SecurityConfiguration {
                                         , "/dm","/feed","/user/profile","/user/signin","/user/signup"
                                         ,"/api/v1/auth/**"
                                         ,"/api/v1/feed/**"
+                                ,"/**"
                                 ).permitAll()
                                 //   .requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
 
