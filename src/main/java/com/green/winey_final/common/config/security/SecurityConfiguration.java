@@ -12,6 +12,7 @@ import com.green.winey_final.common.utils.MyHeaderUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -61,7 +62,7 @@ public class SecurityConfiguration {
                                         ,"/api/v1/feed/**"
                                 ,"/**"
                                 ).permitAll()
-                                //   .requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
+                                //.requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
 
                                 .requestMatchers("**exception**").permitAll()
                                 .anyRequest().authenticated()
