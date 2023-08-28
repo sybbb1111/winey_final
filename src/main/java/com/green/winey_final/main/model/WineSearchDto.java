@@ -3,8 +3,10 @@ package com.green.winey_final.main.model;
 import lombok.Data;
 
 @Data
-public class ItemSearchDto {
-    private Long iitemCategory;
+public class WineSearchDto {
+    private Long categoryId;
+    private Long bigCategoryId;
+    private Long countryId;
     private String text;
     private int sort;
     private int price;

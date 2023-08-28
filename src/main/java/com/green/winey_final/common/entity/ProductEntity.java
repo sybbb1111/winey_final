@@ -62,6 +62,4 @@ public class ProductEntity extends BaseEntity {
     @JoinColumn(name = "countryId", updatable = false, nullable = false)
     private CountryEntity countryEntity;
 
-    @OneToMany(mappedBy = "productEntity")
-    private List<AromaEntity> aromaEntityList;
 }

@@ -1,15 +1,19 @@
 package com.green.winey_final.main;
 
 
+import com.green.winey_final.common.config.security.AuthenticationFacade;
 import com.green.winey_final.common.entity.AromaEntity;
 import com.green.winey_final.common.entity.ProductEntity;
-import com.green.winey_final.main.model.WineSelRes;
-import com.green.winey_final.main.model.WineTotalVo;
+import com.green.winey_final.main.model.*;
 import com.green.winey_final.repository.MainRepository;
+import com.twitter.penguin.korean.TwitterKoreanProcessorJava;
+import com.twitter.penguin.korean.phrase_extractor.KoreanPhraseExtractor;
+import com.twitter.penguin.korean.tokenizer.KoreanTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import scala.collection.Seq;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
 public class MainService {
     private final MainMapper MAPPER;
     private final MainRepository MAIN_REP;
+    private final AuthenticationFacade FACADE;
 
     public List<WineTotalVo> getWineCate() {
         List<ProductEntity> list = MAIN_REP.findAll();
@@ -53,32 +58,31 @@ public class MainService {
         return MAIN_REP.findByCategoryEntityCategoryId(categoryId);
     }
 
-//    public ItemSelDetailRes searchItem(ItemSearchDto dto) {
-//        // 아이템 리스트 뿌려주기 전에 로그인 상태 체크
-//
-//        if(!FACADE.isLogin()) {
-//            dto.setIuser(0L);
-//        } else {
-//            dto.setIuser(FACADE.getLoginUserPk());
-//            log.info("iuser: {}",dto.getIuser());
-//        }
-//        dto.setStartIdx((dto.getPage()-1) * dto.getRow());
-//        List<ItemVo> list = MAPPER.searchItem(dto);
-//        int count = MAPPER.selLastItem(dto);
-//        int maxPage = (int)Math.ceil((double) count /dto.getRow());
-//        int isMore = maxPage > dto.getPage() ? 1 : 0;
-//
-//        return ItemSelDetailRes.builder()
-//                .iitemCategory(dto.getIitemCategory())
-//                .text(dto.getText())
-//                .sort(dto.getSort())
-//                .maxPage(maxPage)
-//                .startIdx(dto.getStartIdx())
-//                .isMore(isMore)
-//                .page(dto.getPage())
-//                .row(dto.getRow())
-//                .itemList(list)
-//                .build();
-//    }
+    public WineSelDetailRes searchWine(WineSearchDto dto) {
+
+        dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        List<WineVo> list = MAPPER.searchWine(dto);
+        int count = MAPPER.selLastWine(dto);
+        int maxPage = (int) Math.ceil((double) count / dto.getRow());
+        int isMore = maxPage > dto.getPage() ? 1 : 0;
+
+        return WineSelDetailRes.builder()
+                .categoryId(dto.getCategoryId())
+                .bigCategoryId(dto.getBigCategoryId())
+                .countryId(dto.getCountryId())
+                .text(dto.getText())
+                .sort(dto.getSort())
+                .price(dto.getPrice())
+                .startIdx(dto.getStartIdx())
+                .page(dto.getPage())
+                .row(dto.getRow())
+                .isMore(isMore)
+                .maxPage(maxPage)
+                .wineList(list)
+                .build();
+    }
+
+
 
 }

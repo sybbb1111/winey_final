@@ -1,12 +1,11 @@
 package com.green.winey_final.main.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.List;
-
-@Getter
+@Data
 @Builder
 public class WineTotalVo {
     private Long productId;
