@@ -12,5 +12,5 @@ public class WineSelRes {
     private Long productId;
     private int startIdx;
     private int size;
-    List<ProductEntity> list;
+    List<WineVo> list;
 }

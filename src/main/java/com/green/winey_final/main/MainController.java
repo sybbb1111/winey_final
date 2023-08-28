@@ -6,6 +6,7 @@ import com.green.winey_final.common.entity.ProductEntity;
 import com.green.winey_final.main.model.*;
 import com.green.winey_final.repository.MainRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "메인")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/main")
@@ -25,6 +27,7 @@ public class MainController {
 
 
     @GetMapping
+    @Operation(summary = "와인전체")
     public ResponseEntity<List<ProductEntity>> getWines1(@RequestParam(defaultValue = "1") int page
                                                         , @RequestParam(defaultValue = "9") int size) {
 
@@ -34,7 +37,8 @@ public class MainController {
         return ResponseEntity.ok(products.getContent());
     }
 
-    @GetMapping("/products")
+    @GetMapping("/redWines")
+    @Operation(summary = "레드와인")
     public List<ProductEntity> getProductsByCategoryId() {
         Long categoryId = 1L;
         return SERVICE.getProductsByCategoryId(categoryId);

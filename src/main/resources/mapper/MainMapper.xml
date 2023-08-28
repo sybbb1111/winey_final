@@ -4,18 +4,22 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.winey_final.main.MainMapper">
 
-    <select id="searchWine" resultType="WineVo">
-        SELECT a.product_id productId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.pic,
+    <select id="searchWine" resultType="WineListVo">
+        SELECT DISTINCT a.product_id productId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.pic,
         a.promotion, a.beginner, b.sale, b.sale_price salePrice, b.sale_yn saleYn
         FROM t_product a
         INNER JOIN t_sale b
         ON a.product_id = b.product_id
+        INNER JOIN t_wine_pairing c
+        ON c.product_id = a.product_id
+        INNER JOIN t_small_category d
+        ON c.small_category_id = d.small_category_id
         <where>
             <if test="categoryId != null">
                 and a.category_id = #{categoryId}
             </if>
             <if test="bigCategoryId != null">
-                AND a.big_category_id = #{bigCategoryId}
+                AND d.big_category_id = #{bigCategoryId}
             </if>
             <if test="countryId != null">
                 AND a.country_id = #{countryId}
@@ -27,7 +31,7 @@
                 AND a.price >= 20000 AND a.price <![CDATA[< 50000]]>
             </if>
             <if test="price == 2">
-                AND a.price <![CDATA[>= 50000]]>
+                AND price >= 50000 AND price <![CDATA[< 100000]]>
             </if>
             <if test="price == 3">
                 AND a.price >= 100000
@@ -50,7 +54,7 @@
 
     <select id="selLastWine" resultType="int">
         SELECT count(product_id)
-        FROM item
+        FROM t_product
         <where>
             <if test = "product_id != null">
                 and product_id = #{productId}

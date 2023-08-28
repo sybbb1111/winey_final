@@ -10,7 +10,6 @@ import java.util.List;
 public interface MainMapper {
 
     List<WineVo> searchWine(WineSearchDto dto);
-
     int selLastWine(WineSearchDto dto);
 
 
