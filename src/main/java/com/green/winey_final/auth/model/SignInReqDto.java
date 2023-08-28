@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SignInReqDto {
-    private String uid;
+    private String email;
     private String upw;
 }

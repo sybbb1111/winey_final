@@ -84,7 +84,7 @@ public class AuthService {
         String ip = req.getRemoteAddr();
         log.info("local-login ip : {}", ip);
 
-        UserEntity r = userRep.findByProviderTypeAndUid(ProviderType.LOCAL, dto.getUid());
+        UserEntity r = userRep.findByProviderTypeAndEmail(ProviderType.LOCAL, dto.getEmail());
         if(r == null) {
             throw new RestApiException(AuthErrorCode.NOT_FOUND_ID);
         }
