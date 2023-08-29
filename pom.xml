@@ -15,6 +15,9 @@
     <description>winey_final</description>
     <properties>
         <java.version>17</java.version>
+
+        <prop key="mail.smtp.ssl.enable">true</prop>
+
     </properties>
     <dependencies>
         <dependency>
@@ -128,6 +131,27 @@
             <version>4.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <!-->이메일 인증<-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+
+
+
     </dependencies>
 
     <build>
@@ -144,9 +168,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-
         </plugins>
-
     </build>
 
 </project>
