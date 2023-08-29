@@ -35,7 +35,7 @@ spring:
     password: green502
   jpa:
     hibernate:
-      ddl-auto: update #update #create
+      ddl-auto: create #update #create
     show-sql: true
     properties:
       hibernate:
