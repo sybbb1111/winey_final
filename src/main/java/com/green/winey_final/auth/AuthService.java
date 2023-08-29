@@ -71,6 +71,8 @@ public class AuthService {
                 .tos_yn(dto.getTos_yn())
                 .del_yn(dto.getDel_yn())
                 .regionNmEntity(regionNmEntity)
+
+                .uid(dto.getEmail()) //로컬로그인 시 email을 id로 쓸 수 있도록 id컬럼에 등록한 email을 같이 인서트
                 .build();
 
         log.info("UserEntity : {}", p);
