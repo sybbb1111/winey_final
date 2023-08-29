@@ -82,6 +82,4 @@ public class UserEntity extends BaseEntity {
 
 
 
-    @Column
-    private String secretKey;
 }
