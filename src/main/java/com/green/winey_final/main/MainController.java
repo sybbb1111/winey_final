@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,17 +26,6 @@ public class MainController {
     private final MainService SERVICE;
     private final MainRepository MAIN_REP;
 
-
-    @GetMapping
-    @Operation(summary = "와인전체")
-    public ResponseEntity<List<ProductEntity>> getWines1(@RequestParam(defaultValue = "1") int page
-                                                        , @RequestParam(defaultValue = "9") int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ProductEntity> products = MAIN_REP.findAll(pageable);
-
-        return ResponseEntity.ok(products.getContent());
-    }
 
     @GetMapping("/redWines")
     @Operation(summary = "레드와인")
