@@ -12,10 +12,10 @@ app:
     authorized-redirect-uris:
       - http://localhost:8082/oauth/redirect
       #- http://192.168.0.50:8082/oauth/redirect #원희 ip주소
-      - http://192.168.0.203:8082/oauth/redirect #서윤 ip주소
+      #- http://192.168.0.203:8082/oauth/redirect #서윤 ip주소
 mybatis:
   type-aliases-package: com.green.winey_final
-  mapper-locations: mappers/**/*.xml
+  mapper-locations: mapper/**/*.xml
 
 spring:
   thymeleaf:
