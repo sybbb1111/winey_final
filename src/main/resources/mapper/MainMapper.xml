@@ -57,9 +57,6 @@
         SELECT count(product_id)
         FROM t_product
         <where>
-            <if test = "product_id != null">
-                and product_id = #{productId}
-            </if>
             <if test = "text != null">
                 and `nm_kor` LIKE CONCAT('%',#{text},'%')
             </if>
