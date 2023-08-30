@@ -20,7 +20,7 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/sign-up")
-    @Operation(summary = "회원가입")
+    @Operation(summary = "로컬 회원가입")
     public ResponseEntity<AuthResVo> postSignUp(@RequestBody SignUpReqDto dto
             , HttpServletRequest req
             , HttpServletResponse res) {
@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
-    @Operation(summary = "로그인")
+    @Operation(summary = "로컬 로그인")
     public ResponseEntity<AuthResVo> postSignIn(@RequestBody SignInReqDto dto
             , HttpServletRequest req
             , HttpServletResponse res) {

@@ -67,7 +67,7 @@ public class UserEntity extends BaseEntity {
 
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "region_nm_id", updatable = false, nullable = false)
+    @JoinColumn(name = "region_nm_id", nullable = false)
     private RegionNmEntity regionNmEntity;
 
 
