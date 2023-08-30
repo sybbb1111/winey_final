@@ -14,7 +14,7 @@ public class SignUpReqDto {
 
     private String unm;
     private String tel;
-    private Long tos_yn;
+    private Long tosYn;
     private Long regionNmId;
-    private Long del_yn;
+    private Long delYn;
 }

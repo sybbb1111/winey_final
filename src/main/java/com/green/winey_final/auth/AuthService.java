@@ -3,10 +3,8 @@ package com.green.winey_final.auth;
 
 import com.green.winey_final.auth.model.AuthResVo;
 import com.green.winey_final.auth.model.SignInReqDto;
-import com.green.winey_final.auth.model.SignOutReqDto;
 import com.green.winey_final.auth.model.SignUpReqDto;
 import com.green.winey_final.common.config.exception.AuthErrorCode;
-import com.green.winey_final.common.config.exception.ErrorCode;
 import com.green.winey_final.common.config.exception.RestApiException;
 import com.green.winey_final.common.config.properties.AppProperties;
 import com.green.winey_final.common.config.redis.RedisService;
@@ -22,13 +20,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -68,8 +62,8 @@ public class AuthService {
                 .providerType(ProviderType.LOCAL)
                 .roleType(RoleType.USER)
                 .tel(dto.getTel())
-                .tos_yn(dto.getTos_yn())
-                .del_yn(dto.getDel_yn())
+                .tosYn(dto.getTosYn())
+                .delYn(dto.getDelYn())
                 .regionNmEntity(regionNmEntity)
 
                 .uid(dto.getEmail()) //로컬로그인 시 email을 id로 쓸 수 있도록 등록한 email을 id컬럼에 같이 인서트
@@ -86,7 +80,7 @@ public class AuthService {
         String ip = req.getRemoteAddr();
         log.info("local-login ip : {}", ip);
 
-        UserEntity r = userRep.findByProviderTypeAndEmail(ProviderType.LOCAL, dto.getEmail());
+        UserEntity r = userRep.findByProviderTypeAndEmailAndDelYn(ProviderType.LOCAL, dto.getEmail(), 0L);
         if(r == null) {
             throw new RestApiException(AuthErrorCode.NOT_FOUND_ID);
         }

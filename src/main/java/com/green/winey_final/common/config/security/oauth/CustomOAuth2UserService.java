@@ -40,7 +40,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         ProviderType providerType = ProviderType.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
 
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
-        UserEntity savedUser = rep.findByProviderTypeAndUid(providerType, userInfo.getId());
+        UserEntity savedUser = rep.findByProviderTypeAndUidAndDelYn(providerType, userInfo.getId(), 0L);
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {

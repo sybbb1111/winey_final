@@ -1,4 +1,4 @@
-package com.green.winey_final.user.model;
+package com.green.winey_final.mypage.model;
 
 import com.green.winey_final.common.config.security.model.ProviderType;
 import com.green.winey_final.common.config.security.model.RoleType;
@@ -7,17 +7,18 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class UserVo {
+public class UserRes {
     private Long userId;
+    private String email;
+    private String unm;
+    private String tel;
+
+    private Long regionNmId;
+    private String regionNm;
 
     private Long del_yn;
-    private String email;
+
     private ProviderType providerType;
     private RoleType roleType;
 
-    private String tel;
-    private Long tos_yn;
-    private String unm;
-    private String upw;
-    private Long regionNmId;
 }

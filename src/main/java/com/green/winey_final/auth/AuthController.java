@@ -4,6 +4,7 @@ import com.green.winey_final.auth.model.SignInReqDto;
 import com.green.winey_final.auth.model.AuthResVo;
 import com.green.winey_final.auth.model.SignOutReqDto;
 import com.green.winey_final.auth.model.SignUpReqDto;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/sign-up")
+    @Operation(summary = "회원가입")
     public ResponseEntity<AuthResVo> postSignUp(@RequestBody SignUpReqDto dto
             , HttpServletRequest req
             , HttpServletResponse res) {
@@ -28,6 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
+    @Operation(summary = "로그인")
     public ResponseEntity<AuthResVo> postSignIn(@RequestBody SignInReqDto dto
             , HttpServletRequest req
             , HttpServletResponse res) {
@@ -36,6 +39,7 @@ public class AuthController {
     }
 
     @GetMapping("/sign-out")
+    @Operation(summary = "로그아웃")
     public ResponseEntity getSignout(@RequestParam(required = false) String accessToken
             , HttpServletRequest req
             , HttpServletResponse res) {
@@ -44,6 +48,7 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
+    @Operation(summary = "리프레쉬 토큰으로 액세스 토큰 재발급 자동화")
     public ResponseEntity<AuthResVo> getRefresh(HttpServletRequest req) {
         AuthResVo vo = service.refresh(req);
         return ResponseEntity.ok(vo);

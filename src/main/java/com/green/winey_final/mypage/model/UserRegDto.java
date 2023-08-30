@@ -1,4 +1,4 @@
-package com.green.winey_final.user.model;
+package com.green.winey_final.mypage.model;
 
 import com.green.winey_final.common.config.security.model.ProviderType;
 import com.green.winey_final.common.config.security.model.RoleType;

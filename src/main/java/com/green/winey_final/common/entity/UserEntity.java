@@ -73,12 +73,12 @@ public class UserEntity extends BaseEntity {
 
 
     @Column(length = 11)
-    private Long tos_yn;
+    private Long tosYn;
 
 
 
     @Column(length = 11)
-    private Long del_yn;
+    private Long delYn;
 
 
 
