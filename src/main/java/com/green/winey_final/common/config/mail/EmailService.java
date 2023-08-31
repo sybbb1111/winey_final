@@ -24,7 +24,7 @@ import java.util.Random;
 
 import static com.green.winey_final.common.config.security.model.ProviderType.LOCAL;
 
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.txt")
 @Slf4j
 @RequiredArgsConstructor
 @Service
