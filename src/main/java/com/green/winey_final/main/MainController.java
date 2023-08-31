@@ -27,8 +27,7 @@ public class MainController {
 
     @GetMapping("/redWines")
     @Operation(summary = "레드와인")
-    public List<ProductEntity> getProductsByCategoryId() {
-        Long categoryId = 1L;
+    public List<ProductEntity> getProductsByCategoryId(@RequestParam Long categoryId) {
         return SERVICE.getProductsByCategoryId(categoryId);
     }
 
