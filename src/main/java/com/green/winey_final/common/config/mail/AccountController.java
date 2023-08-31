@@ -19,7 +19,7 @@ public class AccountController {
 
     @PostMapping("/mailConfirm")
     @ResponseBody
-    @Operation(summary = "이메일로 인증코드 발송", description = "발송 성공 시 인증코드 리턴")
+    @Operation(summary = "이메일로 인증코드 발송", description = "발송 성공 시 Response body에 인증코드가 뜹니당")
     public String mailConfirm(@RequestParam String email) throws Exception {
         String code = emailService.sendSimpleMessage(email);
         log.info("인증코드 : " + code);
@@ -45,7 +45,7 @@ public class AccountController {
 
     @PutMapping("/putpw")
     @ResponseBody
-    @Operation(summary = "비밀번호 변경", description = "임시 비밀번호로 로그인 이후 사용자가 다시 본인이 원하는 비밀번호로 변경")
+    @Operation(summary = "비밀번호 변경", description = "비밀번호 변경을 원할 시, 또는 임시 비밀번호로 로그인 이후 사용자가 다시 본인이 원하는 비밀번호로 변경할 때")
     public ResponseEntity<Integer> updatePassWord(String memberPassword){
 
         emailService.updatePassWord(memberPassword);

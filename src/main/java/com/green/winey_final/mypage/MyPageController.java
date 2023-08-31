@@ -18,7 +18,7 @@ public class MyPageController {
     private final MyPageService service;
 
     @GetMapping("/userinfo")
-    @Operation(summary = "로그인한 사람의 회원정보 출력", description = "로그인되어있을때 사용하셔야합니다. 탈퇴회원(del_yn)일 경우 정보 뜨지 않음")
+    @Operation(summary = "로그인한 사람의 회원정보 출력", description = "로그인되어있을때 사용하셔야합니다. 탈퇴회원(del_yn=1)일 경우 정보 뜨지 않음")
     public ResponseEntity<UserRes> getUserInfo() {
         return ResponseEntity.ok(service.getUserInfo());
     }
@@ -32,7 +32,7 @@ public class MyPageController {
 
     @PutMapping("/deluser")
     @Operation(summary = "회원 탈퇴 처리", description = "로그인되어있을때 사용하셔야합니다. 회원정보의 del_yn을 1로 수정, 탈퇴처럼 안보이게 함<br>" +
-            "탈퇴처리될 경우 Request body 에 1로 뜸")
+            "탈퇴처리됐을 경우 Request body 에 1로 뜸")
     public ResponseEntity<Integer> delUser() {
         service.delUser();
         return ResponseEntity.ok(1);
