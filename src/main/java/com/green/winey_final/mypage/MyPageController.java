@@ -5,6 +5,7 @@ import com.green.winey_final.mypage.model.UserRes;
 import com.green.winey_final.mypage.model.UserUpdDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.OnOpen;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,22 @@ public class MyPageController {
     public ResponseEntity<Integer> delUser() {
         service.delUser();
         return ResponseEntity.ok(1);
-
     }
 
 
+    @GetMapping("/emails/{email}/exists")
+    @Operation(summary = "로컬 가입 회원 이메일 중복체크", description = "있던 기능은 아니지만 혹시 필요할수도 있을까봐 만들어봤어용,,ㅎ,,true일 경우 이미 가입한 회원, false일 경우 가입가능(가입이력없음)")
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
+        return ResponseEntity.ok(service.checkEmailDuplicate(email));
+    }
 
+    @GetMapping("/findid")
+    @Operation(summary = "아이디 찾기", description = "이름 + 휴대폰번호 입력 -> 가입이메일+가입경로 보여줌<br>"
+            + "가입시 이메일의 첫 2글자만 공개, 2글자 이후는 * 처리로 비공개")
+    public ResponseEntity<String> finduser(@RequestParam String unm, @RequestParam String tel) {
 
-
+        return ResponseEntity.ok(service.findUserId(unm, tel));
+    }
 
 
 
