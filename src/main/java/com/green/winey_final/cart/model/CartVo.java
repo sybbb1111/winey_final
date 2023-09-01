@@ -1,12 +1,14 @@
 package com.green.winey_final.cart.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 
 @Data
 public class CartVo {
-    private int cartId; //카트 pk
-    private int productId; //제품 pk
+    private long cartId; //카트 pk
+    private long productId; //제품 pk
     private int quantity; //수량
     private String pic; //사진
     private int salePrice; //할인가

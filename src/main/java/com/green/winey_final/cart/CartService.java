@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -21,6 +23,7 @@ import java.util.List;
 public class CartService {
     private final AuthenticationFacade facade;
     private final CartRepository rep;
+    private final CartDao dao;
     private final int CART_MAX_QUENTITY = 5;
 
     public int insCart(CartInsDto dto) { //장바구니 추가
@@ -52,15 +55,25 @@ public class CartService {
     public List<CartVo> selCart() { //장바구니 출력
         CartSelDto dto = new CartSelDto();
         dto.setUserId(facade.getLoginUserPk());
-        //return mapper.selCart(dto);
-        return null;
+
+        return dao.selCartAll(dto);
     }
 
     public int delCart(CartdelDto dto) { //장바구니 삭제
-        return 0;
+        rep.deleteById(dto.getCartId());
+        return 1;
     }
 
-    public int updCart(CartUpdDto dto) { //장바구니 업데이트
-        return 0;
+    public void updCart(CartUpdDto dto) { //장바구니 업데이트
+        if(dto.getQuantity() > CART_MAX_QUENTITY) {
+            throw new RestApiException(CartErrorCode.QUANTITY_OVER);
+        }
+        Optional<CartEntity> optCartEntity = rep.findById(dto.getCartId());
+        if(optCartEntity.isEmpty()) {
+            throw new RestApiException(CartErrorCode.NO_CART);
+        }
+        CartEntity cartEntity = optCartEntity.get();
+        cartEntity.setQuantity(dto.getQuantity());
+        rep.save(cartEntity);
     }
 }

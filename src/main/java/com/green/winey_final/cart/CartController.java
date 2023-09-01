@@ -54,11 +54,12 @@ public class CartController {
     @Operation(summary = "장바구니 수량변경", description =
             "quantity: 수량, <br>"
                     + "cartId: cart pk값 <br>")
-    public int putCart(@RequestParam int cartId, @RequestParam int quantity) {
+    public int putCart(@RequestParam long cartId, @RequestParam int quantity) {
         CartUpdDto dto = new CartUpdDto();
         dto.setCartId(cartId);
         dto.setQuantity(quantity);
-        return service.updCart(dto);
+        service.updCart(dto);
+        return 1;
     }
 
 }

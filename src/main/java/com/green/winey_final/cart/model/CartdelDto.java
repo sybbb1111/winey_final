@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class CartdelDto {
-    private int cartId; //카트pk
+    private long cartId; //카트pk
 }
