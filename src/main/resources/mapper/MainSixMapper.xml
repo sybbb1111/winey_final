@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.winey.main.six.MainSixMapper">
+
+    <select id="selWineByPrice2limit6">
+        <![CDATA[
+        SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
+        c.aroma_category_id aromaId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
+        a.promotion, a.beginner, a.alcohol, b.sale, b.sale_price salePrice, b.sale_yn saleYn
+        FROM t_product a
+        LEFT JOIN t_sale b
+        ON a.product_id = b.product_id
+        LEFT JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE price < 20000
+                GROUP BY a.product_id
+        LIMIT 6
+    ]]>
+    </select>
+
+
+    <select id="selWineByPrice25limit6">
+        <![CDATA[
+            SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
+            c.aroma_category_id aromaId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
+            a.promotion, a.beginner, a.alcohol, b.sale, b.sale_price salePrice, b.sale_yn saleYn
+            FROM t_product a
+            LEFT JOIN t_sale b
+            ON a.product_id = b.product_id
+            LEFT JOIN t_aroma c
+            ON a.product_id = c.product_id
+            WHERE price > 20000 AND price < 50000
+                    GROUP BY a.product_id
+            LIMIT 6
+        ]]>
+    </select>
+
+    <select id="selWineByPrice510limit6">
+        <![CDATA[
+            SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
+            c.aroma_category_id aromaId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
+            a.promotion, a.beginner, a.alcohol, b.sale, b.sale_price salePrice, b.sale_yn saleYn
+            FROM t_product a
+            LEFT JOIN t_sale b
+            ON a.product_id = b.product_id
+            LEFT JOIN t_aroma c
+            ON a.product_id = c.product_id
+            WHERE price > 50000 AND price < 100000
+                    GROUP BY a.product_id
+            LIMIT 6
+        ]]>
+    </select>
+
+    <select id="selWineByPrice10limit6">
+        <![CDATA[
+            SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
+            c.aroma_category_id aromaId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
+            a.promotion, a.beginner, a.alcohol, b.sale, b.sale_price salePrice, b.sale_yn saleYn
+            FROM t_product a
+            LEFT JOIN t_sale b
+            ON a.product_id = b.product_id
+            LEFT JOIN t_aroma c
+            ON a.product_id = c.product_id
+            WHERE price > 100000
+                    GROUP BY a.product_id
+            LIMIT 6
+        ]]>
+    </select>
+
+    <select id="selWineByCountrylimit6">
+        SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
+        d.aroma_category_id aromaId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
+        a.promotion, a.beginner, a.alcohol, c.sale, c.sale_price, c.sale_yn saleYn
+        FROM t_product a
+        LEFT JOIN t_country b
+        ON a.country_id = b.country_id
+        LEFT JOIN t_sale c
+        ON a.product_id = c.product_id
+        LEFT JOIN t_aroma d
+        ON a.product_id = d.product_id
+        WHERE b.country_id = #{countryId}
+        GROUP BY a.product_id
+        LIMIT 6
+    </select>
+
+    <select id="selWineByFoodlimit6">
+        SELECT DISTINCT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id
+        countryId,
+        f.aroma_category_id aromaId, d.big_category_id bigCategoryId, a.nm_kor nmKor, a.nm_eng nmEng, a.price,
+        a.quantity, a.pic,
+        a.promotion, a.beginner, a.alcohol, e.sale, e.sale_price salePrice, e.sale_yn saleYn
+        FROM t_product a
+        LEFT JOIN t_wine_pairing b
+        ON a.product_id = b.product_id
+        LEFT JOIN t_small_category c
+        ON b.small_category_id = c.small_category_id
+        LEFT JOIN t_big_category d
+        ON c.big_category_id = d.big_category_id
+        LEFT JOIN t_sale e
+        ON a.product_id = e.product_id
+        LEFT JOIN t_aroma f
+        ON a.product_id = f.product_id
+        WHERE d.big_category_id = #{bigCategoryId}
+        GROUP BY a.product_id
+        LIMIT 6
+    </select>
+
+    <select id="selWineByday">
+        SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
+        d.aroma_category_id aromaId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
+        a.promotion, a.beginner, a.alcohol, c.sale, c.sale_price salePrice, c.sale_yn saleYn
+        from t_product a
+        INNER JOIN t_user_info b
+        ON a.product_id = b.product_id
+        INNER JOIN t_sale c
+        ON a.product_id = c.product_id
+        INNER JOIN t_aroma d
+        ON a.product_id = d.product_id
+        WHERE user_id = #{userId}
+        GROUP BY a.product_id
+    </select>
+
+
+</mapper>

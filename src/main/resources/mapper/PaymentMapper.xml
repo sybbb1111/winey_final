@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.winey.payment.PaymentMapper">
+
+    <insert id="insPayment" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT into t_order
+        SET user_id = #{userId},
+            store_id = #{storeId},
+            payment = 1,
+            total_order_price = #{totalOrderPrice},
+            pickup_time = #{pickupTime},
+            order_status = 1
+    </insert>
+
+    <select id="selCartId">
+        SELECT cart_id cartId
+        FROM t_cart
+        WHERE user_id = #{userId} AND buy_yn = 1
+    </select>
+
+    <update id ="updQuantity">
+            UPDATE t_cart
+            SET quantity = #{quantity + 1}
+            WHERE product_id = #{productId} and user_id = #{userId}
+    </update>
+
+    <insert id = "insEachPayment" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT into t_order
+        SET user_id = #{userId},
+            store_id = #{storeId},
+            payment = #{payment},
+            total_order_price = #{salePrice},
+            pickup_time = #{pickupTime},
+            order_status = 1
+    </insert>
+
+    <insert id = "insOrderDetail">
+        INSERT into t_order_detail
+        SET order_id = #{orderId},
+            product_id = #{productId},
+            quantity = #{quantity},
+            sale_price = #{salePrice}
+    </insert>
+
+    <update id = "updBuy">
+        UPDATE t_cart
+        SET buy_yn = 1
+        WHERE cart_id = #{cartId}
+    </update>
+
+    <update id="updPayment">
+        UPDATE t_order
+        SET order_status = #{orderStatus}
+        WHERE payment = 1
+    </update>
+
+    <insert id ="insReview">
+       INSERT into t_review
+       SET order_detail_id = #{orderDetailId},
+           review_level = #{reviewLevel}
+    </insert>
+
+
+    <select id = "selRegion">
+        SELECT
+        u.user_id, u.region_nm_id regionNmId, r.region_nm regionNm, s.store_id storeId, s.nm , s.address
+        FROM t_user u
+        inner JOIN t_region_nm r ON u.region_nm_id = r.region_nm_id
+        inner JOIN t_store s ON u.region_nm_id = s.region_nm_id
+        WHERE user_id = #{userId}
+    </select>
+
+
+</mapper>

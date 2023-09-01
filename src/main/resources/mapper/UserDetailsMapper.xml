@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team.winey.config.security.UserDetailsMapper">
+    <insert id="save">
+        INSERT INTO t_user
+        SET email = #{email}
+        , pw = #{pw}
+        , role = #{role}
+        , nm = #{name}
+        , tel = #{tel}
+        , tos_yn= 1
+        , region_nm_id = #{regionNmId}
+        , del_yn = 0
+    </insert>
+
+    <select id="getByUid">
+        SELECT user_id userId,email,pw,role,nm name,tos_yn tosYn,tel,created_at createdAt,updated_at updatedAt,region_nm_id regionNmId,secret_key secretKey
+        FROM t_user
+        WHERE email = #{email} and del_yn=0
+    </select>
+
+    <update id="updSecretKey">
+        UPDATE t_user
+        SET secret_key = #{secretKey}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- ///////////////////////////////////////// user_token /////////-->
+    <insert id="updUserToken">
+        INSERT INTO t_user_Token
+        (user_id, ip, access_token, refresh_token)
+        VALUES
+        (#{userId}, #{ip}, #{accessToken}, #{refreshToken})
+        ON DUPLICATE KEY UPDATE <!-- 중복되는 값을 인서트 대신 업데이트 해라 -->
+        ip=#{ip}
+        ,access_token = #{accessToken}
+        , refresh_token = #{refreshToken}
+    </insert>
+
+    <select id="selUserToken">
+        SELECT user_id userId, ip, access_token accessToken, refresh_token refreshToken, created_at createdAt, updated_at updatedAt
+        FROM t_user_token
+        WHERE user_id = #{userId} AND ip = #{ip}
+    </select>
+
+
+</mapper>

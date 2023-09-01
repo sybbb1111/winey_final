@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.winey.cart.CartMapper">
+
+    <select id="selCart">
+        SELECT
+        A.cart_id cartId, A.user_id, B.product_id productId,
+        A.quantity, B.nm_kor nmKor,
+        B.nm_eng nmEng, c.sale_price salePrice,
+        IF(C.sale_yn = 1, IF(c.sale_price = 0, B.price, c.sale_price), B.price) price, B.pic
+        FROM t_cart A
+        LEFT JOIN t_product B ON A.product_id = B.product_id
+        LEFT JOIN t_sale C ON B.product_id = C.product_id
+        WHERE
+        A.user_id = #{userId} AND A.created_at >= CURDATE() AND A.buy_yn = 0
+    </select>
+
+
+<!--    <insert id="insCart" useGeneratedKeys="true" keyProperty="cartId">-->
+<!--        INSERT ignore into t_cart-->
+<!--        SET user_id = #{userId},-->
+<!--            product_id = #{productId},-->
+<!--            quantity = #{quantity},-->
+<!--            buy_yn = 0-->
+<!--    </insert>-->
+
+    <insert id="insCart">
+        SELECT A.cart_id, A.user_id, A.product_id, B.nm_kor, B.nm_eng, A.quantity
+        , B.pic, B.price
+        FROM t_cart A
+        INNER JOIN t_product B
+        ON A.product_id = B.product_id
+        INNER JOIN t_user C
+        ON A.user_id = C. user_id
+        INNER JOIN t_sale D
+        ON A.product_id = D.product_id
+        WHERE A.user_id=2 AND A.product_id=3 AND D.sale_yn=0
+    </insert>
+
+
+
+
+
+
+
+
+
+
+    <delete id="delCart">
+        DELETE from t_cart
+        WHERE cart_id = #{cartId}
+    </delete>
+
+    <update id="updCart">
+        UPDATE t_cart
+        SET quantity = #{quantity},
+            updated_at = current_timestamp()
+        WHERE cart_id = #{cartId}
+    </update>
+
+</mapper>

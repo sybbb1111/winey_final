@@ -63,7 +63,7 @@ public class AuthService {
                 .roleType(RoleType.USER)
                 .tel(dto.getTel())
                 .tosYn(dto.getTosYn())
-                .delYn(dto.getDelYn())
+                //.delYn(dto.getDelYn())
                 .regionNmEntity(regionNmEntity)
 
                 .uid(dto.getEmail()) //로컬로그인 시 email을 id로 쓸 수 있도록 등록한 email을 id컬럼에 같이 인서트
