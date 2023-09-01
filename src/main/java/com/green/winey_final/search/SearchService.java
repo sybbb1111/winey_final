@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.green.winey_final.common.entity.QProductEntity.productEntity;
-import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
-import static com.green.winey_final.common.entity.QSmallCategoryEntity.smallCategoryEntity;
-import static com.green.winey_final.common.entity.QWinePairingEntity.winePairingEntity;
+
 
 
 @Slf4j

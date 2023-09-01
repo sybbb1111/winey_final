@@ -1,54 +1,40 @@
 package com.green.winey_final.common.utils;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.UUID;
 
-@Component
 public class MyFileUtils {
-    @Value("${file.dir}")
-    private String uploadImagePath;
-
-    //폴더 만들기
-    public String makeFolders(String path) {
-        File folder = new File(uploadImagePath, path);
-        folder.mkdirs();
-        return folder.getAbsolutePath();
+    //확장자 리턴하는 메소드
+    public static String getExt(String fileNm) { // abcd.123.hhh.jpg
+        return fileNm.substring(fileNm.lastIndexOf(".") + 1);
+    }
+    //파일명만 리턴하는 메소드
+    public static String getFileNm(String fileNm) {
+        return fileNm.substring(0, fileNm.lastIndexOf("."));
+    }
+    // UUID 이용, 랜덤값 파일명 리턴
+    public static String makeRandomFileNm(String fileNm) {
+        return UUID.randomUUID() + "." +  getExt(fileNm);
+    }
+    //절대경로 리턴
+    public static String getAbsolutePath(String src) {
+        return Paths.get(src).toFile().getAbsolutePath();
     }
 
-    //랜덤 파일명 만들기
-    public String getRandomFileNm() {
-        return UUID.randomUUID().toString();
-    }
-
-    //랜덤 파일명 만들기 (with 확장자)
-    public String getRandomFileNm(String originFileNm) {
-        return getRandomFileNm() + getExt(originFileNm);
-    }
-
-    //랜덤 파일명 만들기
-    public String getRandomFileNm(MultipartFile file) {
-        return getRandomFileNm(file.getOriginalFilename());
-    }
-
-    //확장자 얻기               "aaa.jpg"
-    public String getExt(String fileNm) {
-        return fileNm.substring(fileNm.lastIndexOf("."));
-    }
-
-    public String transferTo(MultipartFile mf, String target) {
-        String fileNm = getRandomFileNm(mf); //"aslkdfjaslkf2130asdwds.jpg"
-        String basePath = makeFolders(target); //(폴더가 없을 수 있기 때문에)폴더를 만들어준다.
-        File saveFile = new File(basePath, fileNm);
-        try {
-            mf.transferTo(saveFile);
-            return fileNm;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return null;
+    //폴더 삭제
+    public static void delFolder(String path) {
+        File file = new File(path);
+        if(file.exists() && file.isDirectory()) { //파일이냐? 폴더냐 확인 있다면 true 반환
+            File[] fileArr = file.listFiles(); // listFiles() : 디렉토리의 파일목록(디렉토리 포함)을 File배열로 반환
+            for(File f : fileArr) {
+                if(f.isDirectory()) { //재귀 처리
+                    delFolder(f.getPath()); // 폴더면 delFolder() 다시 호출
+                } else { //폴더가 아니고 파일이니깐 파일 삭제
+                    f.delete();
+                }
+            }
         }
+        file.delete();
     }
 }
