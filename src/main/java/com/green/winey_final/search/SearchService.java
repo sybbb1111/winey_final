@@ -18,7 +18,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+import static com.green.winey_final.common.entity.QProductEntity.productEntity;
+import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
+import static com.green.winey_final.common.entity.QSmallCategoryEntity.smallCategoryEntity;
+import static com.green.winey_final.common.entity.QWinePairingEntity.winePairingEntity;
 
 
 @Slf4j
@@ -38,7 +41,6 @@ public class SearchService {
         int maxPage = (int) Math.ceil((double) count / dto.getRow());
         int isMore = maxPage > dto.getPage() ? 1 : 0;
 
-        Pageable pageable = PageRequest.of(dto.getPage() - 1, 9);
 
         WineSelDetailRes response = WineSelDetailRes.builder()
                 .categoryId(dto.getCategoryId())
@@ -105,9 +107,6 @@ public class SearchService {
     }
 
     public Long countLastWine(String text) {
-        QProductEntity productEntity = QProductEntity.productEntity;
-
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 
         BooleanExpression predicate = null;
 

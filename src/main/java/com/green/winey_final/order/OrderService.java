@@ -1,12 +1,12 @@
 package com.green.winey_final.order;
 
 
-import com.green.winey_final.common.entity.OrderEntity;
-import com.green.winey_final.common.entity.UserEntity;
+import com.green.winey_final.common.entity.*;
 import com.green.winey_final.order.model.DetailVo;
 import com.green.winey_final.order.model.OrderDetailVo1;
 import com.green.winey_final.order.model.OrderDetailVo2;
 import com.green.winey_final.order.model.SelOrderVo;
+import com.green.winey_final.repository.OrderRepository;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -86,6 +86,7 @@ public class OrderService {
         orderRepository.save(entity);
         return 1;
     }
+
 
     int pickupFinishOrder(Long orderId) {
         Optional<OrderEntity> optentity = orderRepository.findById(orderId);

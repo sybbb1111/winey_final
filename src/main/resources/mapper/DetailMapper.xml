@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.team.winey.detail.DetailMapper">
+<mapper namespace="com.green.winey_final.DetailMapper">
 
     <select id="selWineDetail">
         SELECT A.product_id productId, A.nm_kor nmKor, A.nm_eng nmEng, A.price, A.pic, A.promotion, A.beginner, A.alcohol, A.quantity

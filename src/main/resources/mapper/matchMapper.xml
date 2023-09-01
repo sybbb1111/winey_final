@@ -1,9 +1,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.team.winey.wine.WineMatchMapper">
+<mapper namespace="com.green.winey_final.wine.WineMatchMapper">
 
-    <select id="getAllMatches" resultType="com.team.winey.wine.model.Match">
+    <select id="getAllMatches" resultType="com.green.winey_final.wine.model.Match">
         SELECT location, bottle_large, id, name, type_id, acidity, fizziness, tannin, sweetness
         FROM wine_matches;
     </select>
