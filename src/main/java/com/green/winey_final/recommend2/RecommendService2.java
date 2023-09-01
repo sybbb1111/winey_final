@@ -1,8 +1,8 @@
 package com.green.winey_final.recommend2;
 
 
-import com.team.winey.config.security.AuthenticationFacade;
-import com.team.winey.recommend.model.*;
+import com.green.winey_final.common.config.security.AuthenticationFacade;
+import com.green.winey_final.recommend2.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ public class RecommendService2 {
     private final RecommendMapper2 mapper;
     private final AuthenticationFacade facade;
 
-    public List<Long> selRecommend(RecommendRes res) {
+    public List<Long> selRecommend(RecommendRes2 res) {
         List<Long> result = mapper.selRecommend(res);
-        UserinfoDto dto = new UserinfoDto();
+        UserinfoDto2 dto = new UserinfoDto2();
         dto.setUserId(facade.getLoginUserPk());
         dto.setProductId(result);
-        InsRecommendDto res2 = new InsRecommendDto();
+        InsRecommendDto2 res2 = new InsRecommendDto2();
         res2.setUserId(facade.getLoginUserPk());
 
 
@@ -68,8 +68,8 @@ public class RecommendService2 {
         return result;
     }
 
-    public void generateNestedLoops(int[] listSizeArr, int loopIndex, InsRecommendDto res2,
-                                    RecommendRes res) {
+    public void generateNestedLoops(int[] listSizeArr, int loopIndex, InsRecommendDto2 res2,
+                                    RecommendRes2 res) {
         if (loopIndex + 1 == listSizeArr.length) {      // 내부 루프의 가장 안쪽에서 실행될 코드
             if (listSizeArr[loopIndex] > 0) {
                 for (int i = 0; i < listSizeArr[loopIndex]; i++) {
@@ -119,26 +119,26 @@ public class RecommendService2 {
     }
 
     public int loginUserPk() {
-        UserDto dto = new UserDto();
+        UserDto2 dto = new UserDto2();
         dto.setUserId(facade.getLoginUserPk());
         return mapper.loginUserPk(dto);
     }
 
     public List<Integer> selUserinfo() {
-        SelRecommendDto dto = new SelRecommendDto();
+        SelRecommendDto2 dto = new SelRecommendDto2();
         dto.setUserId(facade.getLoginUserPk());
         return mapper.selUserinfo(dto);
     }
 
-    public RecommendVo selUserRecommend(){
-        UserDto dto =new UserDto();
+    public RecommendVo2 selUserRecommend(){
+        UserDto2 dto =new UserDto2();
         dto.setUserId(facade.getLoginUserPk());
          List<Long> categoryId=mapper.selUserCategoryId(dto);
          List<Long> countryId=mapper.selUserCountryId(dto);
          List<Long> smallCategoryId=mapper.selUserSmallCategoryId(dto);
          List<Long> priceRange=mapper.selUserPriceRange(dto);
          List<Long> aroma=mapper.selUserAroma(dto);
-        return RecommendVo.builder()
+        return RecommendVo2.builder()
                 .categoryId(categoryId)
                 .countryId(countryId)
                 .smallCategoryId(smallCategoryId)
@@ -146,16 +146,16 @@ public class RecommendService2 {
                 .aromaCategoryId(aroma)
                 .build();
     }
-    public List<Long> updRecommend(RecommendRes res) {
-        UserDto dto1 =new UserDto();
+    public List<Long> updRecommend(RecommendRes2 res) {
+        UserDto2 dto1 =new UserDto2();
         dto1.setUserId(facade.getLoginUserPk());
         mapper.delInfo(dto1);
         mapper.delUserRecommend(dto1);
         List<Long> result = mapper.selRecommend(res);
-        UserinfoDto dto = new UserinfoDto();
+        UserinfoDto2 dto = new UserinfoDto2();
         dto.setUserId(facade.getLoginUserPk());
         dto.setProductId(result);
-        InsRecommendDto res2 = new InsRecommendDto();
+        InsRecommendDto2 res2 = new InsRecommendDto2();
         res2.setUserId(facade.getLoginUserPk());
         int size =0;
         int size1 = 0;
