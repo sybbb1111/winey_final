@@ -1,4 +1,4 @@
-package com.green.winey_final.main.model;
+package com.green.winey_final.search.model;
 
 import lombok.Builder;
 import lombok.Getter;

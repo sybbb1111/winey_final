@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.winey.order.OrderMapper">
+
+
+
+    <select id="selOrder">
+        SELECT  DATE_FORMAT(A.order_date, "%Y.%m.%d") orderDate,
+        A.order_id orderId, A.user_id userId,
+        C.nm_kor nmKor, A.payment,
+        A.total_order_price totalOrderPrice,
+        D.nm storeNm, A.pickup_time pickupTime,
+        A.order_status orderStatus, COUNT(*) count
+        from t_order A
+        INNER JOIN t_order_detail B
+        ON A.order_id = B.order_id
+        INNER JOIN t_product C
+        ON B.product_id=C.product_id
+        INNER JOIN t_store D
+        ON A.store_id=D.store_id
+        WHERE A.user_id=#{userId}
+        GROUP BY A.order_id
+        ORDER BY DATE_FORMAT(A.order_date, "%Y.%m.%d") DESC, A.order_id DESC
+    </select>
+    
+    <update id="cancelOrder">
+        UPDATE t_order
+        SET order_status=6
+        WHERE order_id=#{orderId} AND user_id=#{userId}
+    </update>
+
+    <update id="pickupFinishOrder">
+        UPDATE t_order
+        SET order_status=5
+        WHERE order_id=#{orderId} AND user_id=#{userId}
+    </update>
+    
+
+
+
+
+<!--    <select id="selOrderDetail1">-->
+<!--        SELECT A.order_detail_id orderDetailId,-->
+<!--        B.nm_kor nmKor, B.nm_eng nmEng,-->
+<!--        A.sale_price salePrice, A.quantity, B.pic, B.price, B.product_id productId-->
+<!--        FROM t_order_detail A-->
+<!--        INNER JOIN t_product B-->
+<!--        ON A.product_id = B.product_id-->
+<!--        INNER JOIN t_order C-->
+<!--        ON A.order_id = C.order_id-->
+<!--        INNER JOIN t_sale D-->
+<!--        ON B.product_id = D.product_id-->
+<!--        WHERE A.order_id=#{orderId} AND C.user_id=#{userId}-->
+<!--    </select>-->
+    <!-- 수정 전, 리뷰 여부 안넣었을 때 -->
+
+
+
+    <select id="selOrderDetail1">
+        SELECT A.order_detail_id orderDetailId,
+        B.nm_kor nmKor, B.nm_eng nmEng,
+        A.sale_price salePrice, A.quantity, B.pic, B.price, B.product_id productId
+        , COUNT(E.review_id) reviewYn
+        FROM t_order_detail A
+        INNER JOIN t_product B
+        ON A.product_id = B.product_id
+        INNER JOIN t_order C
+        ON A.order_id = C.order_id
+        INNER JOIN t_sale D
+        ON B.product_id = D.product_id
+        left JOIN t_review E
+        ON A.order_detail_id = E.order_detail_id
+        WHERE A.order_id=#{orderId} AND C.user_id=#{userId}
+        GROUP BY A.order_detail_id
+
+    </select>
+
+
+    <select id="selOrderDetail2">
+        SELECT DATE_FORMAT(A.order_date, '%Y-%m-%d') orderDate, A.payment,
+        A.pickup_time pickupTime,
+        A.order_status orderStatus,
+        A.total_order_price totalOrderPrice,
+        B.nm storeNm
+        FROM t_order A
+        INNER join t_store B
+        ON A.store_id = B.store_id
+        WHERE order_id =#{orderId} AND user_id=#{userId}
+    </select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

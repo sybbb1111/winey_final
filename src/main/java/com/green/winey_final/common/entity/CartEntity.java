@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "t_cart")
@@ -16,6 +18,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@DynamicInsert
+@DynamicUpdate
 public class CartEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +35,6 @@ public class CartEntity extends BaseEntity {
     private ProductEntity productEntity;
 
     @Column(length = 11)
-    private Long quantity;
-
-    @Column(length = 11)
-    private Long buyYn; // 근데 이거 check 문 어떻게 적용시켜야 할지 몰라서...그냥 적음
-    //enum적용하세요
+    private int quantity;
 
 }

@@ -9,12 +9,9 @@ public class SignUpReqDto {
 
     private String email;
     private String upw;
-    private RoleType roleType;
-    private ProviderType providerType;
 
     private String unm;
     private String tel;
     private Long tosYn;
     private Long regionNmId;
-    private Long delYn;
 }

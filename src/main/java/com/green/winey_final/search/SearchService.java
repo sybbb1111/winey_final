@@ -1,10 +1,9 @@
 package com.green.winey_final.search;
 
-
 import com.green.winey_final.common.entity.QProductEntity;
-import com.green.winey_final.main.model.WineSearchDto;
-import com.green.winey_final.main.model.WineSelDetailRes;
-import com.green.winey_final.main.model.WineVo;
+import com.green.winey_final.search.model.WineSearchDto;
+import com.green.winey_final.search.model.WineSelDetailRes;
+import com.green.winey_final.search.model.WineVo;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 
 

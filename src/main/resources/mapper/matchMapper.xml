@@ -1,0 +1,28 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team.winey.wine.WineMatchMapper">
+
+    <select id="getAllMatches" resultType="com.team.winey.wine.model.Match">
+        SELECT location, bottle_large, id, name, type_id, acidity, fizziness, tannin, sweetness
+        FROM wine_matches;
+    </select>
+
+    <insert id="insWine">
+        INSERT INTO wine_data
+        SET location = #{location}
+        , bottle_large = #{bottle_large}
+        , id = #{id}
+        , `name` = #{name}
+        , price = #{price}
+        , type_id = #{type_id}
+        , acidity = #{acidity}
+        , fizziness = #{fizziness}
+        , tannin = #{tannin}
+        , sweetness = #{sweetness}
+
+    </insert>
+
+
+
+</mapper>

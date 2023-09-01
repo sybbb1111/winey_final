@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.winey.admin.AdminMapper">
+    <insert id="insProduct" parameterType="ProductInsDto" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO t_product
+        SET
+        category_id = #{categoryId},
+        feature_id = #{featureId},
+        country_id = #{countryId},
+        nm_kor = #{nmKor},
+        nm_eng = #{nmEng},
+        price = #{price},
+        pic = #{pic},
+        promotion = #{promotion},
+        beginner = #{beginner},
+        alcohol = #{alcohol},
+        quantity = #{quantity}
+    </insert>
+
+    <update id="updProductPic">
+        UPDATE t_product
+        SET pic = #{pic}
+        WHERE product_id = #{productId}
+    </update>
+
+    <insert id="insFeature" parameterType="ProductInsDto" useGeneratedKeys="true" keyProperty="featureId">
+        INSERT INTO t_feature
+        SET
+        sweety = #{sweety},
+        acidity = #{acidity},
+        body = #{body}
+    </insert>
+
+    <insert id="insAroma">
+        INSERT INTO t_aroma
+        SET
+        product_id = #{productId},
+        aroma_category_id = #{aromaCategoryId}
+    </insert>
+
+    <delete id="delAroma">
+        DELETE FROM t_aroma
+        WHERE product_id = #{productId}
+    </delete>
+
+    <insert id="insSale" parameterType="ProductInsDto">
+        INSERT INTO t_sale
+        SET
+        product_id = #{productId},
+        sale = #{sale},
+        sale_price = #{salePrice},
+        start_sale = #{startSale},
+        end_sale = #{endSale}
+    </insert>
+
+    <insert id="insWinePairing" parameterType="ProductInsDto">
+        INSERT INTO t_wine_pairing
+        SET
+        product_id = #{productId},
+        small_category_id = #{smallCategoryId}
+    </insert>
+
+    <update id="updProduct" parameterType="ProductUpdDto">
+        UPDATE t_product
+        SET
+        category_id = #{categoryId},
+        feature_id = #{featureId},
+        country_id = #{countryId},
+        nm_kor = #{nmKor},
+        nm_eng = #{nmEng},
+        price = #{price},
+        <if test="pic != null">
+            pic = #{pic},
+        </if>
+        promotion = #{promotion},
+        beginner = #{beginner},
+        alcohol = #{alcohol},
+        quantity = #{quantity},
+        updated_at = CURRENT_TIMESTAMP()
+
+        WHERE product_id = #{productId}
+    </update>
+
+    <update id="updFeature" parameterType="ProductUpdDto">
+        UPDATE t_feature
+        SET
+        sweety = #{sweety},
+        acidity = #{acidity},
+        body = #{body}
+        WHERE feature_id = #{featureId}
+    </update>
+
+    <update id="updAroma" parameterType="ProductAromaDto">
+        UPDATE t_aroma
+        SET
+        flower = #{flower},
+        plant = #{plant},
+        fruit = #{fruit},
+        spicy = #{spicy},
+        earth = #{earth},
+        oak = #{oak},
+        nuts = #{nuts}
+
+        WHERE product_id = #{productId}
+    </update>
+
+    <update id="updSale" parameterType="ProductUpdDto">
+        UPDATE t_sale
+        SET
+        product_id = #{productId},
+        sale = #{sale},
+        sale_price = #{salePrice},
+        start_sale = #{startSale},
+        end_sale = #{endSale},
+        sale_yn = #{saleYn}
+
+        WHERE product_id = #{productId}
+    </update>
+
+    <update id="delWinePairing" parameterType="ProductUpdDto">
+        DELETE FROM t_wine_pairing
+        WHERE product_id = #{productId}
+    </update>
+
+    <select id="selProductFk" resultType="ProductUpdDto">
+        SELECT category_id categoryId, feature_id featureId, country_id countryId
+        FROM t_product
+        WHERE product_id = #{productId}
+    </select>
+
+    <select id="selProduct" resultType="ProductVo">
+
+        <choose>
+            <when test="type == '0'.toString() and sort == '0'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'productId'.toString() and sort == 'asc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.product_id ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'productId'.toString() and sort == 'desc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.product_id DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'salePrice'.toString() and sort == 'asc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY B.sale_price ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'salePrice'.toString() and sort == 'desc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY B.sale_price DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'sale'.toString() and sort == 'asc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY B.sale ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'sale'.toString() and sort == 'desc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY B.sale DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'price'.toString() and sort == 'asc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.price ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'price'.toString() and sort == 'desc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.price DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'recommend'.toString() and sort == 'asc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.promotion AND A.beginner ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'recommend'.toString() and sort == 'desc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.promotion AND A.beginner DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'quantity'.toString() and sort == 'asc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.quantity ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'quantity'.toString() and sort == 'desc'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                ORDER BY A.quantity DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+        </choose>
+    </select>
+
+
+    <!--
+        <select id="selProduct" resultType="ProductVo">
+            SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+            FROM t_product A
+            LEFT OUTER JOIN t_sale B
+            ON A.product_id = B.product_id
+            LIMIT #{startIdx}, #{row}
+        </select>
+    -->
+
+    <!--
+        <select id="selProduct" resultType="ProductVo">
+            SELECT product_id productId, nm_kor nmKor, price, promotion, beginner, quantity
+            FROM t_product
+            LIMIT #{startIdx}, #{row}
+        </select>
+    -->
+    <select id="selProductSale" resultType="ProductSaleVo">
+        SELECT A.product_id productId, A.nm_kor nmKor, A.price, B.sale, B.sale_price salePrice, A.promotion, A.beginner, A.quantity, B.sale_yn saleYn
+        FROM t_product A
+        INNER JOIN t_sale B
+        ON A.product_id = B.product_id
+        LIMIT #{startIdx}, #{row}
+    </select>
+
+    <select id="selUserList" resultType="UserVo">
+
+        <choose>
+            <when test="type == '0'.toString() and sort == '0'.toString()">
+                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                FROM t_user
+                WHERE role = "ROLE_USER"
+                ORDER BY user_id
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'pickUp'.toString() and sort == 'asc'.toString()">
+                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                FROM t_user
+                WHERE role = "ROLE_USER"
+                ORDER BY region_nm_id ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'pickUp'.toString() and sort == 'desc'.toString()">
+                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                FROM t_user
+                WHERE role = "ROLE_USER"
+                ORDER BY region_nm_id DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'userId'.toString() and sort == 'asc'.toString()">
+                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                FROM t_user
+                WHERE role = "ROLE_USER"
+                ORDER BY user_id ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'userId'.toString() and sort == 'desc'.toString()">
+                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                FROM t_user
+                WHERE role = "ROLE_USER"
+                ORDER BY user_id DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+        </choose>
+
+    </select>
+
+    <select id="selUserOrder" resultType="UserOrderDetailVo">
+
+        <choose>
+            <when test="type == '0'.toString() and sort == '0'.toString()">
+                SELECT B.order_id orderId, DATE_FORMAT(B.order_date, '%y-%m-%d') orderDate,
+                D.nm_kor nmKor, B.total_order_price price, E.nm storeNm, B.order_status orderStatus
+                , COUNT(*) count
+                FROM t_user A
+                INNER JOIN t_order B
+                ON A.user_id = B.user_id
+                INNER JOIN t_order_detail C
+                ON B.order_id = C.order_id
+                INNER JOIN t_product D
+                ON C.product_id = D.product_id
+                INNER JOIN t_store E
+                ON B.store_id = E.store_id
+                WHERE A.user_id = #{userId}
+                GROUP BY B.order_id
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'orderDate'.toString() and sort == 'asc'.toString()">
+                SELECT B.order_id orderId, DATE_FORMAT(B.order_date, '%y-%m-%d') orderDate,
+                D.nm_kor nmKor, B.total_order_price price, E.nm storeNm, B.order_status orderStatus
+                , COUNT(*) count
+                FROM t_user A
+                INNER JOIN t_order B
+                ON A.user_id = B.user_id
+                INNER JOIN t_order_detail C
+                ON B.order_id = C.order_id
+                INNER JOIN t_product D
+                ON C.product_id = D.product_id
+                INNER JOIN t_store E
+                ON B.store_id = E.store_id
+                WHERE A.user_id = #{userId}
+                GROUP BY B.order_id
+                ORDER BY B.order_date ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'orderDate'.toString() and sort == 'desc'.toString()">
+                SELECT B.order_id orderId, DATE_FORMAT(B.order_date, '%y-%m-%d') orderDate,
+                D.nm_kor nmKor, B.total_order_price price, E.nm storeNm, B.order_status orderStatus
+                , COUNT(*) count
+                FROM t_user A
+                INNER JOIN t_order B
+                ON A.user_id = B.user_id
+                INNER JOIN t_order_detail C
+                ON B.order_id = C.order_id
+                INNER JOIN t_product D
+                ON C.product_id = D.product_id
+                INNER JOIN t_store E
+                ON B.store_id = E.store_id
+                WHERE A.user_id = #{userId}
+                GROUP BY B.order_id
+                ORDER BY B.order_date DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'storeNm'.toString() and sort == 'asc'.toString()">
+                SELECT B.order_id orderId, DATE_FORMAT(B.order_date, '%y-%m-%d') orderDate,
+                D.nm_kor nmKor, B.total_order_price price, E.nm storeNm, B.order_status orderStatus
+                , COUNT(*) count
+                FROM t_user A
+                INNER JOIN t_order B
+                ON A.user_id = B.user_id
+                INNER JOIN t_order_detail C
+                ON B.order_id = C.order_id
+                INNER JOIN t_product D
+                ON C.product_id = D.product_id
+                INNER JOIN t_store E
+                ON B.store_id = E.store_id
+                WHERE A.user_id = #{userId}
+                GROUP BY B.order_id
+                ORDER BY E.nm ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'storeNm'.toString() and sort == 'desc'.toString()">
+                SELECT B.order_id orderId, DATE_FORMAT(B.order_date, '%y-%m-%d') orderDate,
+                D.nm_kor nmKor, B.total_order_price price, E.nm storeNm, B.order_status orderStatus
+                , COUNT(*) count
+                FROM t_user A
+                INNER JOIN t_order B
+                ON A.user_id = B.user_id
+                INNER JOIN t_order_detail C
+                ON B.order_id = C.order_id
+                INNER JOIN t_product D
+                ON C.product_id = D.product_id
+                INNER JOIN t_store E
+                ON B.store_id = E.store_id
+                WHERE A.user_id = #{userId}
+                GROUP BY B.order_id
+                ORDER BY E.nm DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'orderStatus'.toString() and sort == 'asc'.toString()">
+                SELECT B.order_id orderId, DATE_FORMAT(B.order_date, '%y-%m-%d') orderDate,
+                D.nm_kor nmKor, B.total_order_price price, E.nm storeNm, B.order_status orderStatus
+                , COUNT(*) count
+                FROM t_user A
+                INNER JOIN t_order B
+                ON A.user_id = B.user_id
+                INNER JOIN t_order_detail C
+                ON B.order_id = C.order_id
+                INNER JOIN t_product D
+                ON C.product_id = D.product_id
+                INNER JOIN t_store E
+                ON B.store_id = E.store_id
+                WHERE A.user_id = 1
+                GROUP BY B.order_id
+                ORDER BY B.order_status ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'orderStatus'.toString() and sort == 'desc'.toString()">
+                SELECT B.order_id orderId, DATE_FORMAT(B.order_date, '%y-%m-%d') orderDate,
+                D.nm_kor nmKor, B.total_order_price price, E.nm storeNm, B.order_status orderStatus
+                , COUNT(*) count
+                FROM t_user A
+                INNER JOIN t_order B
+                ON A.user_id = B.user_id
+                INNER JOIN t_order_detail C
+                ON B.order_id = C.order_id
+                INNER JOIN t_product D
+                ON C.product_id = D.product_id
+                INNER JOIN t_store E
+                ON B.store_id = E.store_id
+                WHERE A.user_id = #{userId}
+                GROUP BY B.order_id
+                ORDER BY B.order_status ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+        </choose>
+    </select>
+
+    <select id="selOrder" resultType="OrderListVo">
+
+        <choose>
+            <when test="type == '0'.toString() and sort == '0'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY A.order_date DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'storeNm'.toString() and sort == 'asc'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY C.nm ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'storeNm'.toString() and sort == 'desc'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY C.nm DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'orderStatus'.toString() and sort == 'asc'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY A.order_status ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'orderStatus'.toString() and sort == 'desc'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY A.order_status DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+
+        </choose>
+    </select>
+
+    <select id="selOrderDetail1" resultType="OrderDetail1">
+        SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate, C.email, D.nm_kor nmKor, B.sale_price salePrice, B.quantity
+        FROM t_order A
+        INNER JOIN t_order_detail B
+        ON A.order_id = B.order_id
+        INNER JOIN t_user C
+        ON A.user_id = C.user_id
+        INNER JOIN t_product D
+        ON B.product_id = D.product_id
+        WHERE A.order_id = #{orderId}
+    </select>
+
+    <select id="selOrderDetail2" resultType="OrderDetail2">
+        SELECT  SUM(B.quantity) quantity, SUM(B.sale_price) salePrice, A.total_order_price totalPrice,
+        A.payment, E.nm storeNm, DATE_FORMAT(A.pickup_time, '%y-%m-%d') pickUpDate, DATE_FORMAT(A.pickup_time, '%H:%i') pickUpTime, A.order_status orderStatus
+        FROM t_order A
+        INNER JOIN t_order_detail B
+        ON A.order_id = B.order_id
+        INNER JOIN t_store E
+        ON A.store_id = E.store_id
+        WHERE A.order_id = #{orderId}
+    </select>
+
+    <!-- 미사용 -->
+    <select id="selOrderDetail" resultType="OrderDetailVo">
+        SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate, C.email, D.nm_kor nmKor, B.sale_price salePrice, B.quantity, A.total_order_price totalPrice,
+        A.payment, E.nm storeNm, DATE_FORMAT(A.pickup_time, '%y-%m-%d') pickUpDate, DATE_FORMAT(A.pickup_time, '%H:%i') pickUpTime, A.order_status orderStatus
+        FROM t_order A
+        INNER JOIN t_order_detail B
+        ON A.order_id = B.order_id
+        INNER JOIN t_user C
+        ON A.user_id = C.user_id
+        INNER JOIN t_product D
+        ON B.product_id = D.product_id
+        INNER JOIN t_store E
+        ON A.store_id = E.store_id
+        WHERE A.order_id = #{orderId}
+    </select>
+
+    <select id="selOrderRefund" resultType="OrderRefundVo">
+        SELECT refund_id refundId, order_id orderId, refund_reason refundReason, refund_yn refundYn, refund_date refundDate
+        FROM t_order_refund
+        LIMIT #{startIdx}, #{row}
+    </select>
+
+    <select id="selOrderRefundById" resultType="OrderRefundVo">
+        SELECT B.refund_id refundId, A.order_id orderId, B.refund_reason refundReason, B.refund_yn refundYn, B.refund_date refundDate
+        FROM t_order A
+        INNER JOIN t_order_refund B
+        ON A.order_id = B.order_id
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insStore" parameterType="StoreInsDto" useGeneratedKeys="true" keyProperty="storeId">
+        INSERT INTO t_store
+        SET
+        region_nm_id = #{regionNmId},
+        nm = #{nm},
+        tel = #{tel}
+    </insert>
+
+    <select id="selStore">
+        SELECT store_id storeId, region_nm_id regionNmId, nm, tel
+        FROM t_store
+        LIMIT #{startIdx}, #{row}
+    </select>
+
+    <update id="updStore" parameterType="StoreInsDto">
+        UPDATE t_store
+        SET
+        region_nm_id = #{regionNmId},
+        nm = #{nm},
+        tel = #{tel},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE store_id = #{storeId}
+    </update>
+
+    <delete id="delStore">
+        DELETE FROM t_store
+        WHERE store_id = #{storeId}
+    </delete>
+
+    <update id="updOrderStatus" parameterType="OrderStatusDto">
+        UPDATE t_order
+        SET
+        order_status = #{orderStatus}
+        WHERE order_id = #{orderId}
+    </update>
+
+    <update id="updSaleYnOn">
+        UPDATE t_sale
+        SET
+        sale_yn = 1
+        WHERE start_sale = #{startSale}
+    </update>
+
+    <update id="updSaleYnOff">
+        UPDATE t_sale
+        SET
+        sale_yn = 0
+        WHERE end_sale = #{endSale}
+    </update>
+
+    <update id="updSaleYn" parameterType="ProductSaleYnDto">
+        UPDATE t_sale
+        SET
+        sale_yn = #{saleYn}
+
+        WHERE product_id = #{productId}
+    </update>
+
+    <update id="updDelYn">
+        update t_user
+        set
+        del_yn = 1
+        where user_id = #{userId}
+    </update>
+
+    <select id="productCount">
+        SELECT COUNT(product_id)
+        FROM t_product
+    </select>
+
+    <select id="productSaleCount">
+        SELECT COUNT(sale_id)
+        FROM t_sale
+        WHERE sale_yn = 1
+    </select>
+
+    <select id="userCount">
+        SELECT COUNT(user_id)
+        FROM t_user
+        WHERE role = 'ROLE_USER'
+    </select>
+
+    <select id="userOrderCount">
+        SELECT COUNT(F.count)
+        FROM
+        (
+        SELECT COUNT(*) count
+        FROM t_user A
+        INNER JOIN t_order B
+        ON A.user_id = B.user_id
+        INNER JOIN t_order_detail C
+        ON B.order_id = C.order_id
+        INNER JOIN t_product D
+        ON C.product_id = D.product_id
+        INNER JOIN t_store E
+        ON B.store_id = E.store_id
+        WHERE A.user_id = #{userId}
+        GROUP BY B.order_id
+        ) F
+    </select>
+
+    <select id="selUserInfo">
+        SELECT A.user_id userId, A.email, A.nm, SUM(B.total_order_price) sumOrderPrice, COUNT(B.order_id) orderCount
+        FROM t_user A
+        INNER JOIN t_order B
+        ON A.user_id = B.user_id
+        WHERE A.user_id = #{userId}
+    </select>
+<!--
+    <select id="selUserRefundInfo" >
+        SELECT A.user_id userId, SUM(A.total_order_price) sumOrderPrice, COUNT(B.order_id) orderCount
+        FROM t_order A
+        INNER JOIN t_order_refund B
+        ON A.order_id = B.order_id
+        WHERE A.user_id = #{userId} AND B.refund_yn =1
+    </select>
+-->
+    <select id="selUserRefundInfo1" resultType="Integer">
+        SELECT SUM(A.total_order_price) sumOrderPrice
+        FROM t_order A
+        INNER JOIN t_order_refund B
+        ON A.order_id = B.order_id
+        WHERE A.user_id = #{userId} AND B.refund_yn =1
+    </select>
+    <select id="selUserRefundInfo2" resultType="Integer">
+        SELECT COUNT(B.order_id) orderCount
+        FROM t_order A
+        INNER JOIN t_order_refund B
+        ON A.order_id = B.order_id
+        WHERE A.user_id = #{userId} AND B.refund_yn =1
+    </select>
+
+    <select id="orderCount">
+        SELECT COUNT(F.count) count
+        FROM
+        (
+        SELECT COUNT(*) count
+        FROM t_order A
+        INNER JOIN t_user B
+        ON A.user_id = B.user_id
+        INNER JOIN t_store C
+        ON A.store_id = C.store_id
+        INNER JOIN t_order_detail D
+        ON A.order_id = D.order_id
+        INNER JOIN t_product E
+        ON D.product_id = E.product_id
+        GROUP BY A.order_id
+        ) F
+    </select>
+
+    <select id="storeCount">
+        SELECT COUNT(store_id) count
+        FROM t_store
+    </select>
+
+    <select id="serchUser">
+
+        <choose>
+            <when test="type == 'userName'.toString()">
+                SELECT A.user_id userId, A.email, A.nm, B.region_nm regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                FROM t_user A
+                INNER JOIN t_region_nm B
+                ON A.region_nm_id = B.region_nm_id
+                WHERE role = "ROLE_USER" AND nm LIKE '%${str}%'
+                ORDER BY A.user_id
+            </when>
+
+            <when test="type == 'userEmail'.toString()">
+                SELECT A.user_id userId, A.email, A.nm, B.region_nm regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                FROM t_user A
+                INNER JOIN t_region_nm B
+                ON A.region_nm_id = B.region_nm_id
+                WHERE role = "ROLE_USER" AND email LIKE '%${str}%'
+                ORDER BY A.user_id
+            </when>
+
+        </choose>
+    </select>
+
+    <select id="serchProduct">
+
+        <choose>
+            <when test="type == 'productNmKor'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                WHERE nm_kor LIKE '%${str}%'
+            </when>
+
+        </choose>
+
+    </select>
+
+    <delete id="delProduct">
+        DELETE FROM t_product
+        WHERE product_id = #{productId}
+    </delete>
+
+    <delete id="delFeature">
+        DELETE FROM t_feature
+        WHERE feature_id = #{featureId}
+    </delete>
+
+    <delete id="delSale">
+        DELETE FROM t_sale
+        WHERE product_id = #{productId}
+    </delete>
+
+</mapper>

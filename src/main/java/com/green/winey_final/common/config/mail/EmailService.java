@@ -1,6 +1,10 @@
 package com.green.winey_final.common.config.mail;
 
+import com.green.winey_final.common.config.mail.model.MailDto;
 import com.green.winey_final.common.config.redis.RedisService;
+import com.green.winey_final.common.config.security.AuthenticationFacade;
+import com.green.winey_final.common.entity.UserEntity;
+import com.green.winey_final.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -10,19 +14,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
-@PropertySource("classpath:application.properties")
+import static com.green.winey_final.common.config.security.model.ProviderType.LOCAL;
+
+@PropertySource("classpath:application.yaml")
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class EmailService {
     private final JavaMailSender javaMailSender;
     private final RedisService redisService;
+
+    private final UserRepository userRep;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationFacade facade;
+
+
+
 
     //인증번호 생성
     private final String ePw = createKey();
@@ -95,6 +110,87 @@ public class EmailService {
 
         return "1"; //ePw
     }
+
+
+
+
+
+
+    //여기서부터 로컬회원 비밀번호 찾기(임시비밀번호로 업데이트, 이메일 발송)
+
+    // 메일 내용을 생성하고 임시 비밀번호로 회원 비밀번호를 변경
+    public MailDto createMailAndChangePassword(String email) {
+        String str = getTempPassword();
+        MailDto dto =  new MailDto();
+
+        dto.setEmail(email);
+        dto.setTitle("winey 임시 비밀번호 안내 이메일 입니다.");
+        dto.setMessage("안녕하세요. winey 임시 비밀번호 안내 관련 이메일입니다.\n" +
+                "회원님의 임시 비밀번호는 " + str + " 입니다.\n" +
+                "로그인 후에 비밀번호를 변경해주세요.");
+        updatePassword(str, email);
+        return dto;
+    }
+
+    //로컬회원 - 임시 비밀번호로 업데이트
+    public void updatePassword(String str, String email) {
+        String pw = str;
+        Long userId = userRep.findByProviderTypeAndEmail(LOCAL, email).getUserId();
+
+        UserEntity userEntity = userRep.findById(userId).get();
+        userEntity.setUpw(passwordEncoder.encode(pw));
+
+        userRep.save(userEntity);
+
+
+    }
+
+
+
+    //랜덤함수로 임시 비밀번호 만들기
+    public String getTempPassword() {
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+        String str = "";
+
+        //문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
+        int idx = 0;
+        for(int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+
+    }
+
+    //메일보내기
+    public void findPwMailSend(MailDto mailDto){
+        log.info("임시 비밀번호 전송 완료");
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(mailDto.getEmail());
+        message.setSubject(mailDto.getTitle());
+        message.setText(mailDto.getMessage());
+        message.setFrom("greenwiney@naver.com");
+        message.setReplyTo("greenwiney@naver.com");
+        log.info("message" + message);
+        javaMailSender.send(message);
+
+    }
+    //비밀번호 변경
+    public void updatePassWord(String memberPassword) {
+        Long userId = facade.getLoginUser().getUserId();
+        UserEntity userEntity = userRep.findById(userId).get();
+        userEntity.setUpw(passwordEncoder.encode(memberPassword));
+
+        userRep.save(userEntity);
+    }
+
+
+
+
+
+
 
 
 

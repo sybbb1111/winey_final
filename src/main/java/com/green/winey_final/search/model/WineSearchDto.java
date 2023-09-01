@@ -1,4 +1,4 @@
-package com.green.winey_final.main.model;
+package com.green.winey_final.search.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

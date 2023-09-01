@@ -1,6 +1,6 @@
 package com.green.winey_final.main.model;
 
-import com.green.winey_final.common.entity.ProductEntity;
+import com.green.winey_final.search.model.WineVo;
 import lombok.Builder;
 import lombok.Getter;
 

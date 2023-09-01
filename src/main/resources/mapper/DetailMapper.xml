@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.winey.detail.DetailMapper">
+
+    <select id="selWineDetail">
+        SELECT A.product_id productId, A.nm_kor nmKor, A.nm_eng nmEng, A.price, A.pic, A.promotion, A.beginner, A.alcohol, A.quantity
+        , B.nm categoryNm, B.temp
+        , C.nm countryNm
+        , D.sweety, D.acidity, D.body
+                FROM t_product A
+                INNER JOIN t_category B
+                ON A.category_id = B.category_id
+                INNER JOIN t_country C
+                ON A.country_id = C.country_id
+                INNER JOIN t_feature D
+                ON A.feature_id = D.feature_id
+                WHERE A.product_id=#{productId}
+    </select>
+
+    <select id="selAroma">
+<!--        SELECT A.product_id productId,-->
+<!--        B.flower, B.plant, B.fruit,-->
+<!--        B.spicy, B.earth, B.oak, B.nuts-->
+<!--        FROM t_product A-->
+<!--        INNER JOIN t_aroma B-->
+<!--        ON A.product_id=b.product_id-->
+<!--        WHERE A.product_id=#{productId}-->
+
+        SELECT C.nm aromaNm
+        FROM t_product A
+        INNER JOIN t_aroma B
+        ON A.product_id = B.product_id
+        INNER JOIN t_aroma_category C
+        ON B.aroma_category_id = C.aroma_category_id
+        WHERE A.product_id=#{productId}
+        ORDER BY C.aroma_category_id
+
+    </select>
+
+
+    <select id="selPairing">
+        SELECT C.s_kind sKind
+                FROM t_product A
+                INNER JOIN t_wine_pairing B
+                ON A.product_id=B.product_id
+                INNER JOIN t_small_category C
+                ON B.small_category_id=C.small_category_id
+                WHERE A.product_id=#{productId}
+                ORDER BY C.small_category_id
+    </select>
+
+
+    <select id="selCount">
+        SELECT count(A.review_level) reviewCount
+        FROM t_review A
+        INNER JOIN t_order_detail B
+        ON A.order_detail_id = B.order_detail_id
+        WHERE B.product_id=#{productId} AND review_level=#{reviewLevel}
+
+    </select>
+
+
+    <select id="selSale">
+        SELECT B.sale, B.sale_price salePrice
+        FROM t_product A
+        INNER JOIN t_sale B
+        ON A.product_id = B.product_id
+        WHERE B.sale_yn=1 AND A.product_id=#{productId}
+
+    </select>
+
+
+
+
+
+
+    <select id="selKorNm">
+        SELECT product_id productId, nm_kor nmKor
+        from t_product
+        WHERE product_id=#{productId}
+
+    </select>
+
+
+
+
+
+
+
+
+
+
+</mapper>
