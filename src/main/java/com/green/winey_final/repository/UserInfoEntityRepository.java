@@ -1,4 +1,4 @@
-package com.green.winey_final.recommend;
+package com.green.winey_final.repository;
 
 import com.green.winey_final.common.entity.ProductEntity;
 import com.green.winey_final.common.entity.UserEntity;
