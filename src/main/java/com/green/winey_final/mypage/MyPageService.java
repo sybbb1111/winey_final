@@ -41,7 +41,6 @@ public class MyPageService {
                 .providerType(userEntity.getProviderType())
                 .roleType(userEntity.getRoleType())
 
-
                 .build();
 
     }
