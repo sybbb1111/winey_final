@@ -1,7 +1,7 @@
 package com.green.winey_final.search;
 
-import com.green.winey_final.main.model.WineSearchDto;
-import com.green.winey_final.main.model.WineSelDetailRes;
+import com.green.winey_final.search.model.WineSearchDto;
+import com.green.winey_final.search.model.WineSelDetailRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

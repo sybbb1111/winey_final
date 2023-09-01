@@ -1,8 +1,10 @@
-package com.green.winey_final.main.model;
+package com.green.winey_final.search.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class WineVo {
     private Long productId;
     private String nmKor;

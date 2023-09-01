@@ -3,11 +3,11 @@ app:
     header-scheme-name: authorization
     token-type: Bearer
     aceess-secret: DeaguGreenArtAcademyClass502ForJavaSpringBoot
-    accessTokenExpiry: 200000
+    accessTokenExpiry: 3600000
     refresh-secret: ForJavaSpringBootClass502DaeguGreenArtAcademy
     refreshTokenExpiry: 1296000000
-    redis-access-black-key: "Z-AT-BLACK"
-    redis-refresh-key: "Z-RT"
+    redis-access-black-key: "D-AT-BLACK"
+    redis-refresh-key: "D-RT"
   oauth2:
     authorized-redirect-uris:
       - http://localhost:8082/oauth/redirect
