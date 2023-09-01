@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "회원가입, 로그인, 로그아웃, 토큰발급")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/sign-api")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService service;
@@ -40,7 +40,7 @@ public class AuthController {
         return ResponseEntity.ok(vo);
     }
 
-    @GetMapping("/sign-out")
+    @GetMapping("/logout")
     @Operation(summary = "로그아웃")
     public ResponseEntity getSignout(@RequestParam(required = false) String accessToken
             , HttpServletRequest req
@@ -49,7 +49,7 @@ public class AuthController {
         return ResponseEntity.ok(1);
     }
 
-    @GetMapping("/refresh")
+    @GetMapping("/refresh-token")
     @Operation(summary = "리프레쉬 토큰으로 액세스 토큰 재발급 자동화")
     public ResponseEntity<AuthResVo> getRefresh(HttpServletRequest req) {
         AuthResVo vo = service.refresh(req);

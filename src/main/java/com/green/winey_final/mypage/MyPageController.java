@@ -30,7 +30,7 @@ public class MyPageController {
         return ResponseEntity.ok(service.putUserInfo(dto));
     }
 
-    @PutMapping("/deluser")
+    @PutMapping("/delUser")
     @Operation(summary = "회원 탈퇴 처리", description = "로그인되어있을때 사용하셔야합니다. 회원정보의 del_yn을 1로 수정, 탈퇴처럼 안보이게 함<br>" +
             "탈퇴처리됐을 경우 Request body 에 1로 뜸")
     public ResponseEntity<Integer> delUser() {
