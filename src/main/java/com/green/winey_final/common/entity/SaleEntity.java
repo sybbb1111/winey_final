@@ -27,14 +27,11 @@ public class SaleEntity {
     @JoinColumn(name = "productId", updatable = false, nullable = false)
     private ProductEntity productEntity;
 
-    @Column(length = 11)
-    private Long sale;
+    private int sale;
 
-    @Column(length = 11)
-    private Long salePrice;
+    private int salePrice;
 
-    @Column(length = 11)
-    private Long saleYn;
+    private int saleYn;
 
     private String startSale; //이거 두개 확인 필요 //LocalDateTime을 String으로 바꿈
     private String endSale;

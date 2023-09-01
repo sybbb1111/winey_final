@@ -13,7 +13,7 @@ public class WineVo {
     private String pic;
     private int promotion;
     private int beginner;
-    private Long sale;
-    private Long salePrice;
-    private Long saleYn;
+    private int sale;
+    private int salePrice;
+    private int saleYn;
 }
