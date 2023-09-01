@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class WineTotalVo {
+public class WineFoodVo {
+    private Long bigCategoryId;
     private Long productId;
     private Long categoryId;
     private Long featureId;
@@ -22,4 +23,7 @@ public class WineTotalVo {
     private int sale;
     private int salePrice;
     private int saleYn;
+
+
+
 }

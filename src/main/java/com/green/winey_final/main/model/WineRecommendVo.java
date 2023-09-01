@@ -1,11 +1,10 @@
 package com.green.winey_final.main.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class WineTotalVo {
+public class WineRecommendVo {
+//    private Long userId;
     private Long productId;
     private Long categoryId;
     private Long featureId;
@@ -21,5 +20,5 @@ public class WineTotalVo {
     private int alcohol;
     private int sale;
     private int salePrice;
-    private int saleYn;
+
 }

@@ -1,11 +1,11 @@
-package com.green.winey_final.main.model;
+package com.green.winey_final.main2.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class WineTotalVo {
+public class WineTotalVo2 {
     private Long productId;
     private Long categoryId;
     private Long featureId;
