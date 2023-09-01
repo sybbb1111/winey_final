@@ -41,7 +41,6 @@ public class SearchService {
         int maxPage = (int) Math.ceil((double) count / dto.getRow());
         int isMore = maxPage > dto.getPage() ? 1 : 0;
 
-        Pageable pageable = PageRequest.of(dto.getPage() - 1, 9);
 
         WineSelDetailRes response = WineSelDetailRes.builder()
                 .categoryId(dto.getCategoryId())
@@ -108,9 +107,6 @@ public class SearchService {
     }
 
     public Long countLastWine(String text) {
-        QProductEntity productEntity = QProductEntity.productEntity;
-
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 
         BooleanExpression predicate = null;
 
