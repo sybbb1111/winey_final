@@ -18,4 +18,8 @@ public class AuthenticationFacade {
         UserPrincipal userDetails = (UserPrincipal) auth.getPrincipal();
         return UserEntity.builder().userId(userDetails.getIuser()).build();
     }
+
+    public Long getLoginUserPk() {
+        return getLoginUser().getUserId();
+    }
 }

@@ -1,6 +1,5 @@
 package com.green.winey_final.search;
 
-
 import com.green.winey_final.common.entity.QProductEntity;
 import com.green.winey_final.main.model.WineSearchDto;
 import com.green.winey_final.main.model.WineSelDetailRes;
@@ -23,6 +22,7 @@ import static com.green.winey_final.common.entity.QProductEntity.productEntity;
 import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
 import static com.green.winey_final.common.entity.QSmallCategoryEntity.smallCategoryEntity;
 import static com.green.winey_final.common.entity.QWinePairingEntity.winePairingEntity;
+
 
 @Slf4j
 @Service

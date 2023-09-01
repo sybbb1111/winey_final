@@ -33,21 +33,21 @@ public class ProductEntity extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String nmEng;
 
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false)
     private int price;
 
     private String pic;
 
-    @Column(length = 3)
+    @Column
     private int promotion;
 
-    @Column(length = 3)
+    @Column
     private int beginner;
 
-    @Column(length = 11)
+    @Column
     private int alcohol;
 
-    @Column(length = 11)
+    @Column
     private int quantity;
 
     @ManyToOne
