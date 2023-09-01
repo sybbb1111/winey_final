@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
@@ -43,7 +44,7 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private String upw;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     @Size(min = 2, max = 20)
     private String unm;
 
@@ -62,7 +63,7 @@ public class UserEntity extends BaseEntity {
 
 
 
-    @Column(nullable = false, length = 11)
+    @Column(length = 11)
     private String tel;
 
 
@@ -78,6 +79,7 @@ public class UserEntity extends BaseEntity {
 
 
     @Column(length = 11)
+    @ColumnDefault("0")
     private Long delYn;
 
 
