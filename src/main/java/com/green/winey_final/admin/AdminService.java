@@ -52,8 +52,9 @@ public class AdminService {
         //t_sale 로직
         dto.setSale(param.getSale()); // t_sale
         dto.setSalePrice(param.getSalePrice()); // t_sale
+        dto.setSaleYn(param.getSaleYn());
 
-        LocalDate parseStartDate = LocalDate.parse(param.getStartSale(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String startSale을 LocalDate로 변환
+        LocalDate parseStartDate = LocalDate.parse(param.getStartSale(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String startSale을 LocalDate로 변환
         LocalDate parseEndDate = LocalDate.parse(param.getEndSale(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String endSale을 LocalDate로 변환
         LocalDate startSale = parseStartDate.withDayOfMonth(1); //할인시작월의 1일
         LocalDate endSale = parseEndDate.withDayOfMonth(parseEndDate.lengthOfMonth()); //할인종료월의 마지막 일
@@ -86,7 +87,7 @@ public class AdminService {
             //t_product에 인서트
             //사진 파일 업로드 로직 2
             int result = MAPPER.insProduct(dto); //t_product 인서트 후 pk값 productInsDto에 들어감
-            String dbFilePath = "/wine/" + dto.getProductId() + "/" + savedFileName; //db에 wine/pk값/파일명 순으로 저장하기 위한 로직
+            String dbFilePath = "wine/" + dto.getProductId() + "/" + savedFileName; //db에 wine/pk값/파일명 순으로 저장하기 위한 로직
             dto.setPic(dbFilePath); //db에 wine/pk값/파일명 순으로 저장하기 위한 로직
             MAPPER.updProductPic(dto); //db에 wine/pk값/파일명 순으로 저장하기 위한 로직
             try {
@@ -175,6 +176,7 @@ public class AdminService {
 
         dto.setSale(param.getSale()); // t_sale
         dto.setSalePrice(param.getSalePrice()); // t_sale
+        dto.setSaleYn(param.getSaleYn());
 
         LocalDate parseStartDate = LocalDate.parse(param.getStartSale(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String startSale을 LocalDate로 변환
         LocalDate parseEndDate = LocalDate.parse(param.getEndSale(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String endSale을 LocalDate로 변환
@@ -262,7 +264,7 @@ public class AdminService {
                 return 0;
             }
             if (result == 1) {
-                String targetPath = FILE_DIR + "/winey/product/" + dto.getProductId();
+                String targetPath = FILE_DIR + "/wine/" + dto.getProductId();
                 File targetDic = new File(targetPath);
                 if(!targetDic.exists()) {
                     targetDic.mkdirs();
@@ -298,7 +300,7 @@ public class AdminService {
 
     //상품 사진 삭제
     public int deleteProductPic(int productId) {
-        MyFileUtils.delFolder(FILE_DIR+"/winey/product/"+productId);
+        MyFileUtils.delFolder(FILE_DIR+"/wine/"+productId);
 
         return 200; //성공시 200 리턴
     }
@@ -445,6 +447,7 @@ public class AdminService {
         dto.setRegionNmId(param.getRegionNmId());
         dto.setNm(param.getNm());
         dto.setTel(param.getTel());
+        dto.setAddress(param.getAddress());
 
         //tel(전화번호) 유효성 검사하기
         String pattern = "(\\d{2,3})-(\\d{3,4})-(\\d{4})"; // (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자)
@@ -474,6 +477,7 @@ public class AdminService {
         dto.setRegionNmId(param.getRegionNmId());
         dto.setNm(param.getNm());
         dto.setTel(param.getTel());
+        dto.setAddress(param.getAddress());
 
         //tel(전화번호) 유효성 검사하기
         String pattern = "(\\d{2,3})-(\\d{3,4})-(\\d{4})"; // (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자)
@@ -509,6 +513,8 @@ public class AdminService {
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return MAPPER.updSaleYn(dto); // saleYn update 성공시 1, 실패시 0 리턴
     }
+
+    //회원 삭제
     public int putUserDelYn(UserDelYnUpdDto dto){
         return MAPPER.updDelYn(dto);
     }
@@ -541,5 +547,14 @@ public class AdminService {
 
     public List<ProductVo> serchProduct(AdminSerchDto dto) {
         return MAPPER.serchProduct(dto);
+    }
+
+    public AdminProductDetailVo getProductDetail(int productId) {
+        AdminProductDetailVo dto = MAPPER.selPutProductInfo1(productId);
+        List<Integer> aroma = MAPPER.selPutProductInfo2(productId);
+        List<Integer> smallCategoryId = MAPPER.selPutProductInfo3(productId);
+        dto.setAroma(aroma);
+        dto.setSmallCategoryId(smallCategoryId);
+        return dto;
     }
 }

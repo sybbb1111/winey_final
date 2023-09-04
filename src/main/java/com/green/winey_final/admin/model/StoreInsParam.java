@@ -7,4 +7,5 @@ public class StoreInsParam {
     Long regionNmId;
     String nm;
     String tel;
+    String address;
 }

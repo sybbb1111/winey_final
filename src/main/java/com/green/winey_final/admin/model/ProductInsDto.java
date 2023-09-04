@@ -31,6 +31,7 @@ public class ProductInsDto {
     private int salePrice; //할인가격
     private LocalDate startSale; //할인 시작일
     private LocalDate endSale; //할인 종료일
+    private int saleYn;
 
     //음식 페어링
     private int smallCategoryId; //1~12번까지 있음

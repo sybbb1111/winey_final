@@ -8,4 +8,5 @@ public class StoreInsDto {
     Long regionNmId;
     String nm;
     String tel;
+    String address;
 }

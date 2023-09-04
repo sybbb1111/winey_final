@@ -52,7 +52,8 @@
         sale = #{sale},
         sale_price = #{salePrice},
         start_sale = #{startSale},
-        end_sale = #{endSale}
+        end_sale = #{endSale},
+        sale_yn = #{saleYn}
     </insert>
 
     <insert id="insWinePairing" parameterType="ProductInsDto">
@@ -276,39 +277,39 @@
 
         <choose>
             <when test="type == '0'.toString() and sort == '0'.toString()">
-                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                SELECT user_id userId, email, unm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
                 FROM t_user
-                WHERE role = "ROLE_USER"
+                WHERE role_type = "USER" AND del_yn = 0
                 ORDER BY user_id
                 LIMIT #{startIdx}, #{row}
             </when>
 
             <when test="type == 'pickUp'.toString() and sort == 'asc'.toString()">
-                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                SELECT user_id userId, email, unm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
                 FROM t_user
-                WHERE role = "ROLE_USER"
+                WHERE role_type = "USER" AND del_yn = 0
                 ORDER BY region_nm_id ASC
                 LIMIT #{startIdx}, #{row}
             </when>
             <when test="type == 'pickUp'.toString() and sort == 'desc'.toString()">
-                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                SELECT user_id userId, email, unm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
                 FROM t_user
-                WHERE role = "ROLE_USER"
+                WHERE role_type = "USER" AND del_yn = 0
                 ORDER BY region_nm_id DESC
                 LIMIT #{startIdx}, #{row}
             </when>
 
             <when test="type == 'userId'.toString() and sort == 'asc'.toString()">
-                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                SELECT user_id userId, email, unm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
                 FROM t_user
-                WHERE role = "ROLE_USER"
+                WHERE role_type = "USER" AND del_yn = 0
                 ORDER BY user_id ASC
                 LIMIT #{startIdx}, #{row}
             </when>
             <when test="type == 'userId'.toString() and sort == 'desc'.toString()">
-                SELECT user_id userId, email, nm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
+                SELECT user_id userId, email, unm, region_nm_id regionNmId, DATE_FORMAT(created_at, '%y-%m-%d') createdAt
                 FROM t_user
-                WHERE role = "ROLE_USER"
+                WHERE role_type = "USER" AND del_yn = 0
                 ORDER BY user_id DESC
                 LIMIT #{startIdx}, #{row}
             </when>
@@ -600,7 +601,8 @@
         SET
         region_nm_id = #{regionNmId},
         nm = #{nm},
-        tel = #{tel}
+        tel = #{tel},
+        address = #{address}
     </insert>
 
     <select id="selStore">
@@ -615,6 +617,7 @@
         region_nm_id = #{regionNmId},
         nm = #{nm},
         tel = #{tel},
+        address = #{address},
         updated_at = CURRENT_TIMESTAMP
         WHERE store_id = #{storeId}
     </update>
@@ -674,7 +677,7 @@
     <select id="userCount">
         SELECT COUNT(user_id)
         FROM t_user
-        WHERE role = 'ROLE_USER'
+        WHERE role_type = "USER"
     </select>
 
     <select id="userOrderCount">
@@ -697,21 +700,21 @@
     </select>
 
     <select id="selUserInfo">
-        SELECT A.user_id userId, A.email, A.nm, SUM(B.total_order_price) sumOrderPrice, COUNT(B.order_id) orderCount
+        SELECT A.user_id userId, A.email, A.unm, SUM(B.total_order_price) sumOrderPrice, COUNT(B.order_id) orderCount
         FROM t_user A
         INNER JOIN t_order B
         ON A.user_id = B.user_id
         WHERE A.user_id = #{userId}
     </select>
-<!--
-    <select id="selUserRefundInfo" >
-        SELECT A.user_id userId, SUM(A.total_order_price) sumOrderPrice, COUNT(B.order_id) orderCount
-        FROM t_order A
-        INNER JOIN t_order_refund B
-        ON A.order_id = B.order_id
-        WHERE A.user_id = #{userId} AND B.refund_yn =1
-    </select>
--->
+    <!--
+        <select id="selUserRefundInfo" >
+            SELECT A.user_id userId, SUM(A.total_order_price) sumOrderPrice, COUNT(B.order_id) orderCount
+            FROM t_order A
+            INNER JOIN t_order_refund B
+            ON A.order_id = B.order_id
+            WHERE A.user_id = #{userId} AND B.refund_yn =1
+        </select>
+    -->
     <select id="selUserRefundInfo1" resultType="Integer">
         SELECT SUM(A.total_order_price) sumOrderPrice
         FROM t_order A
@@ -754,20 +757,20 @@
 
         <choose>
             <when test="type == 'userName'.toString()">
-                SELECT A.user_id userId, A.email, A.nm, B.region_nm regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                SELECT A.user_id userId, A.email, A.nm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
                 FROM t_user A
                 INNER JOIN t_region_nm B
                 ON A.region_nm_id = B.region_nm_id
-                WHERE role = "ROLE_USER" AND nm LIKE '%${str}%'
+                WHERE role_type = "USER" AND nm LIKE '%${str}%'
                 ORDER BY A.user_id
             </when>
 
             <when test="type == 'userEmail'.toString()">
-                SELECT A.user_id userId, A.email, A.nm, B.region_nm regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                SELECT A.user_id userId, A.email, A.nm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
                 FROM t_user A
                 INNER JOIN t_region_nm B
                 ON A.region_nm_id = B.region_nm_id
-                WHERE role = "ROLE_USER" AND email LIKE '%${str}%'
+                WHERE role_type = "USER" AND email LIKE '%${str}%'
                 ORDER BY A.user_id
             </when>
 
@@ -803,5 +806,27 @@
         DELETE FROM t_sale
         WHERE product_id = #{productId}
     </delete>
+
+    <select id="selPutProductInfo1">
+        SELECT A.product_id productId, A.category_id categoryId, A.feature_id featureId, A.country_id countryId, A.nm_kor nmKor, A.nm_eng nmEng, A.price, A.pic, A.promotion, A.beginner, A.alcohol, A.quantity, C.sweety, C.acidity, C.body, B.sale, B.sale_price salePrice , B.start_sale startSale, B.end_sale endSale, B.sale_yn saleYn
+        FROM t_product A
+        INNER JOIN t_sale B
+        ON A.product_id = B.product_id
+        INNER JOIN t_feature C
+        ON A.feature_id = C.feature_id
+        WHERE A.product_id = #{productId}
+    </select>
+
+    <select id="selPutProductInfo2">
+        SELECT aroma_category_id aroma
+        FROM t_aroma
+        WHERE product_id =#{productId}
+    </select>
+
+    <select id="selPutProductInfo3">
+        SELECT small_category_id smallCategoryId
+        FROM t_wine_pairing
+        WHERE product_id = #{productId}
+    </select>
 
 </mapper>

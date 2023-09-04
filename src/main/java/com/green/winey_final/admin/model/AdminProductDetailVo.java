@@ -1,11 +1,13 @@
 package com.green.winey_final.admin.model;
 
 import lombok.Data;
-import reactor.util.annotation.Nullable;
+import lombok.Getter;
 
 import java.util.List;
 @Data
-public class ProductInsParam {
+@Getter
+public class AdminProductDetailVo {
+    private int productId;
     private String nmKor;
     private String nmEng;
     private int price; //가격
@@ -13,6 +15,7 @@ public class ProductInsParam {
     private int beginner; //입문자 추천
     private int alcohol; //도수
     private int quantity; // 재고
+    private String pic;
 
     private int country; //원산지
 
@@ -28,8 +31,8 @@ public class ProductInsParam {
     private int salePrice; //할인가격
     private String startSale; //할인 시작일
     private String endSale; //할인 종료일
-//    private String saleDate;
-    private int saleYn;
+    //    private String saleDate;
+    private int saleYn; //할인여부
 
     //음식페어링
     private List<Integer> smallCategoryId; //1~12번까지 있음

@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import java.util.List;
+
 @Tag(name = "관리자 페이지")
 @RestController
 @RequestMapping("/api/admin")
@@ -23,16 +25,16 @@ public class AdminController {
     }
 
     @Operation(summary = "상품 등록", description = "성공시 코드 : 상품PK, 실패시 코드 : 0<br>"
-    +"nmKor/nmEng -> String타입<br>"
-    +"price/alcohol/quantity -> int타입<br>"
-    +"promotion -> 추천상품에 해당할 때 1, 아닐 때 0<br>"
-    +"beginner -> 입문자 추천상품일 때 1, 아닐 때 0<br>"
-    +"country -> 1(미국), 2(스페인), 3(프랑스), 4(이탈리아), 5(포르투갈), 6(칠레)<br>"
-    +"sweety/acidity/body -> 1~5<br>"
-    +"category -> 1(레드), 2(화이트), 3(스파클링), 4(기타)<br>"
-    +"aroma -> flower(1), plant(2), fruit(3), spicy(4), earth(5), oak(6), nuts(7)<br>"
-    +"saleDate -> 2023-08-01(년-월-일), 일자는 01 고정 <br>"
-    +"smallCategoryId -> steak(1), chicken(2), 샐러드(salad)(3), pork(4), oyster(5), fish(6), 튀김(fried)(7), 한식(kfood)(8), cheese(9), fruit(10), pizza(11), 디저트(dessert)(12)<br>")
+            +"nmKor/nmEng -> String타입<br>"
+            +"price/alcohol/quantity -> int타입<br>"
+            +"promotion -> 추천상품에 해당할 때 1, 아닐 때 0<br>"
+            +"beginner -> 입문자 추천상품일 때 1, 아닐 때 0<br>"
+            +"country -> 1(미국), 2(스페인), 3(프랑스), 4(이탈리아), 5(포르투갈), 6(칠레)<br>"
+            +"sweety/acidity/body -> 1~5<br>"
+            +"category -> 1(레드), 2(화이트), 3(스파클링), 4(기타)<br>"
+            +"aroma -> flower(1), plant(2), fruit(3), spicy(4), earth(5), oak(6), nuts(7)<br>"
+            +"saleDate -> 2023-08-01(년-월-일), 일자는 01 고정 <br>"
+            +"smallCategoryId -> steak(1), chicken(2), 샐러드(salad)(3), pork(4), oyster(5), fish(6), 튀김(fried)(7), 한식(kfood)(8), cheese(9), fruit(10), pizza(11), 디저트(dessert)(12)<br>")
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public int postProduct(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductInsParam param) {
         return SERVICE.postProduct(pic, param);
@@ -86,11 +88,11 @@ public class AdminController {
 
     //가입 회원 리스트 출력
     @Operation(summary = "가입 회원 리스트 (페이징처리)(피그마: 가입회원리스트 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정이 필요합니다.<br>"
-    + "type -> 기본값(0) / 픽업지역(pickUp) / 회원번호(userId)<br>"
-    + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
+            + "type -> 기본값(0) / 픽업지역(pickUp) / 회원번호(userId)<br>"
+            + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
     @GetMapping("/user/list")
     public UserList getUserList(@RequestParam(defaultValue = "1") int page,
-                                    @RequestParam(defaultValue = "15") int row,
+                                @RequestParam(defaultValue = "15") int row,
                                 @RequestParam(defaultValue = "0") String type,
                                 @RequestParam(defaultValue = "0") String sort) {
         SelListDto dto = new SelListDto();
@@ -103,12 +105,12 @@ public class AdminController {
 
     //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리
     @Operation(summary = "회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
-    + "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
-    +"type -> 기본값(0) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
-    + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
+            + "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
+            +"type -> 기본값(0) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
+            + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
     @GetMapping("/{userId}/order")
     public UserOrderDetailList getUserOrder(@PathVariable Long userId, @RequestParam(defaultValue = "1")int page,
-                                                @RequestParam(defaultValue = "15")int row,
+                                            @RequestParam(defaultValue = "15")int row,
                                             @RequestParam(defaultValue = "0") String type,
                                             @RequestParam(defaultValue = "0") String sort) {
         SelListDto dto = new SelListDto();
@@ -154,7 +156,7 @@ public class AdminController {
 
     //환불된 상품과 환불 사유 출력
     @Operation(summary = "환불 상품 내역과 환불 사유 출력", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"+
-    "userId는 입력 안하면 전체 환불 내역과 사유 출력, 입력하면 userId의 환불내역과 사유 출력")
+            "userId는 입력 안하면 전체 환불 내역과 사유 출력, 입력하면 userId의 환불내역과 사유 출력")
     @GetMapping("/order/refund")
     public List<OrderRefundVo> getOrderRefund(@RequestParam(defaultValue = "1")int page,
                                               @RequestParam(defaultValue = "15")int row,
@@ -168,7 +170,8 @@ public class AdminController {
 
     //매장 정보 등록
     @Operation(summary = "매장 정보 등록", description = "nm(매장이름)을 기존 등록된 매장이름과 중복된 이름 입력시 등록 안됨<br>"
-            +"전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0")
+            +"전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0<br>"
+            +"주소 형식 -> ex) 서울 양천구 오목로 299")
     @PostMapping("/store")
     public Long postStore(@RequestBody StoreInsParam param) {
         return SERVICE.insStore(param);
@@ -177,7 +180,7 @@ public class AdminController {
     @Operation(summary = "매장 리스트 출력P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.")
     @GetMapping("/store")
     public StoreList getStore(@RequestParam(defaultValue = "1")int page,
-                                  @RequestParam(defaultValue = "15")int row) {
+                              @RequestParam(defaultValue = "15")int row) {
         SelListDto dto = new SelListDto();
         dto.setPage(page);
         dto.setRow(row);
@@ -250,6 +253,12 @@ public class AdminController {
         dto.setStr(str);
         return SERVICE.serchProduct(dto);
     }
-}
 
+    //상품 디테일 관리자용
+    @Operation(summary = "등록 상품 디테일(상품 수정용)")
+    @GetMapping("/product/detail")
+    public AdminProductDetailVo getProductDetail(@RequestParam int productId) {
+        return SERVICE.getProductDetail(productId);
+    }
+}
 
