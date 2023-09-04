@@ -45,7 +45,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(authz ->
                         authz.requestMatchers(
-                                        "/favicon.ico", "/js/**", "/img/**", "/css/**", "/static/**", "/", "/index.html"
+                                        "/favicon.ico", "/js/**", "/images/**", "/css/**", "/static/**", "/", "/index.html"
+
                                         , "/swagger.html"
                                         , "/swagger-ui/**"
                                         , "/v3/api-docs/**"
@@ -56,6 +57,7 @@ public class SecurityConfiguration {
                                         , "/pic/**"
                                         , "/error"
                                         , "/err"
+                                    ,"/main"
 
                                         ,"/sign-api/sign-in"
                                         , "/sign-api/sign-up"
@@ -68,7 +70,6 @@ public class SecurityConfiguration {
                                         ,"/api/mypage/findid**"
                                         ,"/api/mypage/emails/**"
 
-                                //,"/**"
                                 ).permitAll()
                                 .requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
                                 .requestMatchers("**exception**").permitAll()
