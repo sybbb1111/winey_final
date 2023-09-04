@@ -45,7 +45,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(authz ->
                         authz.requestMatchers(
-                                        "/favicon.ico", "/js/**", "/images/**", "/css/**", "/static/**", "/", "/index.html"
+                                        "/favicon.ico", "/js/**", "/css/**", "/static/**", "/", "/index.html"
 
                                         , "/swagger.html"
                                         , "/swagger-ui/**"
@@ -53,6 +53,9 @@ public class SecurityConfiguration {
                                         , "/*/oauth2/code/*"
                                         , "/oauth2/**"
                                         , "/oauth/**"
+
+                                        , "/images/**", "/img/**"
+
 
                                         , "/pic/**"
                                         , "/error"
@@ -64,8 +67,6 @@ public class SecurityConfiguration {
                                         , "/sign-api/exception"
 
                                         , "/view/**"
-                                        ,"/api/**"
-
 
                                         ,"/api/mypage/findid**"
                                         ,"/api/mypage/emails/**"
