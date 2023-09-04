@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.team.winey.main.six.MainSixMapper">
+<mapper namespace="com.green.winey_final.main2.six.MainSixMapper2">
 
     <select id="selWineByPrice2limit6">
         <![CDATA[
