@@ -79,7 +79,6 @@ public class RecommendService2 {
                 }
             } else if (listSizeArr[loopIndex] == 0) {
                 System.out.printf("%d번째 list 작동안함\n", loopIndex + 1);
-                res2.setPriceRange(null);
                 mapper.insRecommend(res2);
             }
             System.out.printf("끝도착\n", loopIndex);
