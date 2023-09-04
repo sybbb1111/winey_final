@@ -63,7 +63,7 @@ public class AuthService {
                 .providerType(ProviderType.LOCAL)
                 .roleType(RoleType.USER)
                 .tel(dto.getTel())
-                .tosYn(dto.getTosYn())
+                .tosYn(1L)
                 .delYn(0L)
                 .regionNmEntity(regionNmEntity)
 
