@@ -23,6 +23,7 @@ public class UserRecommendEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long userRecommendId;
+
     @ManyToOne
     @JoinColumn(name = "userId", updatable = false, nullable = false)
     private UserEntity userEntity;
