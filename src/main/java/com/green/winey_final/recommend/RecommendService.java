@@ -65,7 +65,7 @@ public class RecommendService {
         List<Long> coulist = couList.stream().distinct().collect(Collectors.toList());
 
         for (UserRecommendEntity smallc : smallCategoryList) {
-            smallCateList.add(smallc.getSmallCateGoryId());
+            smallCateList.add(smallc.getSmallCategoryId());
         }
         List<Long> smallCatelist = smallCateList.stream().distinct().collect(Collectors.toList());
 
