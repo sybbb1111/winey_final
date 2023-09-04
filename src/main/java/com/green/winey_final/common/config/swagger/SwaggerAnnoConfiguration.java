@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(title = "winey_final"
-                , description = "와인초보자들을 위한 사이트"
+        info = @Info(title = "[ WINEY_FINAL ]"
+                , description = "와인초보자들을 위한 사이트(๑•̀∀•́ฅ ✧"
                 , version = "v0.0.1"
         ),
         security = @SecurityRequirement(name="authorization")

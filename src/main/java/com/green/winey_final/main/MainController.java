@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "메인")
+@Tag(name = "메인/연습장입니다!(◍•ᴗ•◍)♡ ✧*。")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/main")
