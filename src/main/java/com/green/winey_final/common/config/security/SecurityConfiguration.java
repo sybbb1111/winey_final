@@ -55,12 +55,11 @@ public class SecurityConfiguration {
                                         , "/oauth/**"
 
                                         , "/images/**", "/img/**"
-
-
-                                        , "/pic/**"
                                         , "/error"
                                         , "/err"
-                                    ,"/main"
+                                        ,"/main"
+
+                                        ,"/admin", "/admin**", "/admin/**"
 
                                         ,"/sign-api/sign-in"
                                         , "/sign-api/sign-up"
@@ -83,13 +82,15 @@ public class SecurityConfiguration {
 
 
                                 .requestMatchers("/api/wine/**").hasAnyRole("USER","ADMIN")
+
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
                                 .requestMatchers("/api/download/**").hasRole("ADMIN")
                                 .requestMatchers("/api/orderList/**").hasAnyRole("USER","ADMIN")
                                 .requestMatchers("/api/detail/**").hasAnyRole("USER","ADMIN")
                                 .requestMatchers("/api/payment/**").hasAnyRole("USER","ADMIN")
 
-                                //.anyRequest().authenticated()
+                                .anyRequest().permitAll()
 
 
                 ) //사용 권한 체크
