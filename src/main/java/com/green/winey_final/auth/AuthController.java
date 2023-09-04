@@ -1,9 +1,6 @@
 package com.green.winey_final.auth;
 
-import com.green.winey_final.auth.model.SignInReqDto;
-import com.green.winey_final.auth.model.AuthResVo;
-import com.green.winey_final.auth.model.SignOutReqDto;
-import com.green.winey_final.auth.model.SignUpReqDto;
+import com.green.winey_final.auth.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,13 +29,15 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
-    @Operation(summary = "로컬 로그인")
-    public ResponseEntity<AuthResVo> postSignIn(@RequestBody SignInReqDto dto
+    @Operation(summary = "로컬 로그인", description = "RuleType : 사용자일시 USER, 관리자일 시 ADMIN 으로 뜸")
+    public ResponseEntity<AuthResLoginVo> postSignIn(@RequestBody SignInReqDto dto
             , HttpServletRequest req
             , HttpServletResponse res) {
-        AuthResVo vo = service.signIn(dto, req, res);
+        AuthResLoginVo vo = service.signIn(dto, req, res);
         return ResponseEntity.ok(vo);
     }
+
+
 
     @GetMapping("/logout")
     @Operation(summary = "로그아웃")
@@ -55,5 +54,8 @@ public class AuthController {
         AuthResVo vo = service.refresh(req);
         return ResponseEntity.ok(vo);
     }
+
+
+
 
 }

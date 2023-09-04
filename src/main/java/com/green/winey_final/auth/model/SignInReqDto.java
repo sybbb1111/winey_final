@@ -7,5 +7,5 @@ public class SignInReqDto {
     private String email;
     private String upw;
 
-    private Long del_yn;
+    //private Long del_yn;
 }

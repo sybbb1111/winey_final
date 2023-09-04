@@ -1,6 +1,7 @@
 package com.green.winey_final.auth;
 
 
+import com.green.winey_final.auth.model.AuthResLoginVo;
 import com.green.winey_final.auth.model.AuthResVo;
 import com.green.winey_final.auth.model.SignInReqDto;
 import com.green.winey_final.auth.model.SignUpReqDto;
@@ -63,7 +64,7 @@ public class AuthService {
                 .roleType(RoleType.USER)
                 .tel(dto.getTel())
                 .tosYn(dto.getTosYn())
-                //.delYn(dto.getDelYn())
+                .delYn(0L)
                 .regionNmEntity(regionNmEntity)
 
                 .uid(dto.getEmail()) //로컬로그인 시 email을 id로 쓸 수 있도록 등록한 email을 id컬럼에 같이 인서트
@@ -76,7 +77,7 @@ public class AuthService {
     }
 
 
-    public AuthResVo signIn(SignInReqDto dto, HttpServletRequest req, HttpServletResponse res) {
+    public AuthResLoginVo signIn(SignInReqDto dto, HttpServletRequest req, HttpServletResponse res) {
         String ip = req.getRemoteAddr();
         log.info("local-login ip : {}", ip);
 
@@ -95,7 +96,13 @@ public class AuthService {
             redisService.deleteValues(redisRefreshTokenKey); // 삭제
         }
 
-        return processAuth(r, req, res);
+
+        return AuthResLoginVo.builder()
+                .authResVo(processAuth(r, req, res))
+                .roleType(r.getRoleType())
+                .build();
+        //로그인시 권한이 유저인지 관리자인지 구분하기 위해 롤타입 보일수 있도록 수정
+       //processAuth(r, req, res);
     }
 
     private AuthResVo processAuth(UserEntity userEntity, HttpServletRequest req, HttpServletResponse res) {
@@ -160,4 +167,10 @@ public class AuthService {
 
         return AuthResVo.builder().accessToken(at.getToken()).build();
     }
+
+
+
+
+
+
 }
