@@ -46,8 +46,8 @@ spring:
       max-request-size: 12MB
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d
-    username: root
+    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_h
+    username: team_h
     password: green502
   jpa:
     hibernate:
@@ -124,9 +124,6 @@ springdoc:
 file:
   dir: D:/home/download
 
-server:
-  port: 8082
-
 ---
 
 spring:
@@ -151,7 +148,7 @@ spring:
     redis:
       host: 192.168.0.144
   datasource:
-    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d
+    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_h
 file:
   dir: /home/download
 server:
