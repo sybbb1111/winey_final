@@ -10,5 +10,6 @@ public class StoreVo {
     private Long regionNmId;
     private String nm;
     private String tel;
+    private String address;
 
 }

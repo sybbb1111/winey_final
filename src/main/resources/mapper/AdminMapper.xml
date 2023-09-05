@@ -606,7 +606,7 @@
     </insert>
 
     <select id="selStore">
-        SELECT store_id storeId, region_nm_id regionNmId, nm, tel
+        SELECT store_id storeId, region_nm_id regionNmId, nm, tel, address
         FROM t_store
         LIMIT #{startIdx}, #{row}
     </select>
