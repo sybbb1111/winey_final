@@ -1,10 +1,10 @@
 package com.green.winey_final.detail.model;
 
-
 import lombok.Data;
 
 @Data
-public class SelWineKorNm {
+public class SelSale {
     private Long productId;
-    private String nmKor;
+    private int sale;
+    private int salePrice;
 }
