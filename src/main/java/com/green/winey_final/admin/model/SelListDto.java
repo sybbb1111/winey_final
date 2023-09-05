@@ -10,4 +10,5 @@ public class SelListDto {
 
     private String type;
     private String sort; //asc, desc
+    private String str; //검색어
 }
