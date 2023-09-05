@@ -2,12 +2,11 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.green.winey_final.DetailMapper">
+<mapper namespace="com.green.winey_final.detail.DetailMapper">
 
     <select id="selWineDetail">
         SELECT A.product_id productId, A.nm_kor nmKor, A.nm_eng nmEng, A.price, A.pic, A.promotion, A.beginner, A.alcohol, A.quantity
-        , B.nm categoryNm, B.temp
-        , C.nm countryNm
+        , B.nm categoryNm, C.nm countryNm
         , D.sweety, D.acidity, D.body
                 FROM t_product A
                 INNER JOIN t_category B
