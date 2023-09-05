@@ -4,6 +4,7 @@ package com.green.winey_final.order;
 import com.green.winey_final.order.model.DetailVo;
 import com.green.winey_final.order.model.SelOrderVo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
+@Tag(name = "order테스트중입니다요")
 public class OrderController {
     private final OrderService service;
 
