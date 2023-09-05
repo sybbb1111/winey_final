@@ -68,50 +68,87 @@
     </select>
 
 
-    <insert id="insRecommend">
-        INSERT INTO t_user_recommend
-        (user_id, category_id, country_id, small_category_id, price_range, aroma_category_id)
-        VALUES
-        (
-        #{userId},
-        #{categoryId,jdbcType=BIGINT},
-        #{countryId,jdbcType=BIGINT},
-        #{smallCategoryId,jdbcType=BIGINT},
-        #{priceRange,jdbcType=BIGINT},
-        #{aromaCategoryId,jdbcType=BIGINT}
-        )
-    </insert>
     <insert id="insUserinfo">
-        INSERT INTO t_user_info (user_id, product_id)
+        INSERT  INTO t_user_info (user_id, product_id)
         VALUES
         <foreach item="productId" collection="productId" separator=",">
             (#{userId}, #{productId})
         </foreach>
     </insert>
 
+    <insert id="insUserCategory">
+        INSERT IGNORE INTO t_user_category
+        (user_id, category_id)
+        VALUES
+        (
+        #{userId},
+        #{categoryId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserCountry">
+        INSERT IGNORE INTO t_user_country
+        (user_id, country_id)
+        VALUES
+        (
+        #{userId},
+        #{countryId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserPriceRange">
+        INSERT IGNORE INTO t_user_price_range
+        (user_id, price_range)
+        VALUES
+        (
+        #{userId},
+        #{priceRange,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserSmallCateogry">
+        INSERT IGNORE INTO t_user_small_category
+        (user_id, small_category_id)
+        VALUES
+        (
+        #{userId},
+        #{smallCategoryId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserAroma">
+        INSERT IGNORE INTO t_user_aroma
+        (user_id, aroma_category_id)
+        VALUES
+        (
+        #{userId},
+        #{aromaCategoryId,jdbcType=BIGINT}
+        )
+    </insert>
+
     <select id="selUserCategoryId">
         SELECT distinct category_id categoryId
-        FROM t_user_recommend
+        FROM t_user_category
         WHERE user_id=#{userId}
     </select>
     <select id="selUserCountryId">
         select distinct country_id countryId
-        FROM t_user_recommend
+        FROM t_user_country
         WHERE user_id=#{userId}
     </select>
     <select id="selUserSmallCategoryId">
         SELECT distinct small_category_id smallCategoryId
-        FROM t_user_recommend
+        FROM t_user_small_category
         WHERE user_id=#{userId}
     </select>
     <select id="selUserPriceRange">
         SELECT distinct price_range priceRange
-        FROM t_user_recommend
+        FROM t_user_price_range
         WHERE user_id=#{userId}
     </select>
     <select id="selUserAroma">
         select distinct aroma_category_id
-        FROM t_user_recommend
+        FROM t_user_aroma
         WHERE user_id=#{userId}
     </select>
 
@@ -131,9 +168,29 @@
         from t_user_info
         where user_id=#{userId}
     </delete>
-    <delete id="delUserRecommend">
+    <delete id="delUserCategory">
         delete
-        from t_user_recommend
+        FROM t_user_category
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserCountry">
+        delete
+        FROM t_user_country
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserPriceRange">
+        delete
+        FROM  t_user_price_range
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserSmallCategory">
+        delete
+        FROM t_user_small_category
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserAroma">
+        delete
+        FROM t_user_aroma
         where user_id=#{userId}
     </delete>
 

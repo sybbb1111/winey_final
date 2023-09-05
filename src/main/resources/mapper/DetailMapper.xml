@@ -57,7 +57,6 @@
         INNER JOIN t_order_detail B
         ON A.order_detail_id = B.order_detail_id
         WHERE B.product_id=#{productId} AND review_level=#{reviewLevel}
-
     </select>
 
 
