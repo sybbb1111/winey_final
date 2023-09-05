@@ -1,12 +1,10 @@
 package com.green.winey_final.detail.model;
 
-
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class SelWineKorNm {
+public class SelCountVo {
     private Long productId;
-    private String nmKor;
+    private int reviewLevel;
+
 }
