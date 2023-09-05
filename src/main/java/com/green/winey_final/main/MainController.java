@@ -1,21 +1,12 @@
 package com.green.winey_final.main;
 
 
-import com.green.winey_final.common.entity.CategoryEntity;
 import com.green.winey_final.common.entity.ProductEntity;
 import com.green.winey_final.common.entity.SmallCategoryEntity;
-import com.green.winey_final.common.entity.WinePairingEntity;
 import com.green.winey_final.main.model.*;
-import com.green.winey_final.search.model.WineSearchDto;
-import com.green.winey_final.search.model.WineSelDetailRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
