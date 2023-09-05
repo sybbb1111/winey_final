@@ -313,6 +313,24 @@
                 ORDER BY user_id DESC
                 LIMIT #{startIdx}, #{row}
             </when>
+            <!--serch query -->
+            <when test="type == 'serchUserName'.toString()">
+                SELECT A.user_id userId, A.email, A.unm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                FROM t_user A
+                INNER JOIN t_region_nm B
+                ON A.region_nm_id = B.region_nm_id
+                WHERE role_type = "USER" AND unm LIKE '%${str}%'
+                ORDER BY A.user_id
+            </when>
+
+            <when test="type == 'serchUserEmail'.toString()">
+                SELECT A.user_id userId, A.email, A.unm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                FROM t_user A
+                INNER JOIN t_region_nm B
+                ON A.region_nm_id = B.region_nm_id
+                WHERE role_type = "USER" AND email LIKE '%${str}%'
+                ORDER BY A.user_id
+            </when>
 
         </choose>
 
@@ -675,9 +693,40 @@
     </select>
 
     <select id="userCount">
-        SELECT COUNT(user_id)
-        FROM t_user
-        WHERE role_type = "USER"
+        <choose>
+            <when test="type == '0'.toString() or type == 'pickUp'.toString() or type == 'userId'.toString()">
+                SELECT COUNT(user_id)
+                FROM t_user
+                WHERE role_type = "USER"
+            </when>
+
+            <when test="type == 'serchUserName'.toString()">
+                SELECT COUNT(*)
+                FROM
+                (
+                SELECT A.user_id userId, A.email, A.unm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                FROM t_user A
+                INNER JOIN t_region_nm B
+                ON A.region_nm_id = B.region_nm_id
+                WHERE role_type = "USER" AND unm LIKE '%${str}%'
+                ORDER BY A.user_id
+                ) C
+            </when>
+
+            <when test="type == 'serchUserEmail'.toString()">
+                SELECT COUNT(*)
+                FROM
+                (
+                SELECT A.user_id userId, A.email, A.unm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
+                FROM t_user A
+                INNER JOIN t_region_nm B
+                ON A.region_nm_id = B.region_nm_id
+                WHERE role_type = "USER" AND email LIKE '%${str}%'
+                ORDER BY A.user_id
+                ) C
+            </when>
+
+        </choose>
     </select>
 
     <select id="userOrderCount">
