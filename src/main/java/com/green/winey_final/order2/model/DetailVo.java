@@ -1,4 +1,4 @@
-package com.green.winey_final.order.model;
+package com.green.winey_final.order2.model;
 
 import lombok.Builder;
 import lombok.Getter;

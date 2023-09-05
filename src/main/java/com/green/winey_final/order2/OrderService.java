@@ -1,8 +1,8 @@
-package com.green.winey_final.order;
+package com.green.winey_final.order2;
 
-import com.green.winey_final.order.model.OrderEntity2;
+import com.green.winey_final.order2.model.OrderEntity2;
 import com.green.winey_final.common.config.security.AuthenticationFacade;
-import com.green.winey_final.order.model.*;
+import com.green.winey_final.order2.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

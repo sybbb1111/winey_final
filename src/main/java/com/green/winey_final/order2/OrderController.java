@@ -1,7 +1,7 @@
-package com.green.winey_final.order;
+package com.green.winey_final.order2;
 
-import com.green.winey_final.order.model.OrderEntity2;
-import com.green.winey_final.order.model.DetailVo;
+import com.green.winey_final.order2.model.OrderEntity2;
+import com.green.winey_final.order2.model.DetailVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

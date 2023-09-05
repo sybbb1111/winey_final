@@ -1,6 +1,6 @@
-package com.green.winey_final.order;
+package com.green.winey_final.order2;
 
-import com.green.winey_final.order.model.*;
+import com.green.winey_final.order2.model.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
