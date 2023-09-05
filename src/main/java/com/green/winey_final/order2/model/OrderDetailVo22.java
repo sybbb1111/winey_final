@@ -3,7 +3,7 @@ package com.green.winey_final.order2.model;
 import lombok.Data;
 
 @Data
-public class OrderDetailVo2 {
+public class OrderDetailVo22 {
     private String orderDate;
     private int payment;
     private String pickupTime;

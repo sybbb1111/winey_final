@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 //@Getter
 //@AllArgsConstructor
-public class OrderDetailVo1 {
+public class OrderDetailVo12 {
     private int orderDetailId;
     private String nmKor;
     private String nmEng;

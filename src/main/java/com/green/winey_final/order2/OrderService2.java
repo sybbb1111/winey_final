@@ -16,8 +16,8 @@ import java.util.Locale;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OrderService {
-    private final OrderMapper mapper;
+public class OrderService2 {
+    private final OrderMapper2 mapper;
     private final AuthenticationFacade facade;
 
 
@@ -79,13 +79,13 @@ public class OrderService {
 
 
 
-    public DetailVo selOrderDetail(Long orderId){
+    public DetailVo3 selOrderDetail(Long orderId){
         UserIdDto dto = new UserIdDto();
         dto.setOrderId(orderId);
         dto.setUserId(facade.getLoginUserPk());
 
-        List<OrderDetailVo1> vo1 = mapper.selOrderDetail1(dto);
-        for(OrderDetailVo1 detailVo1 : vo1) {
+        List<OrderDetailVo12> vo1 = mapper.selOrderDetail1(dto);
+        for(OrderDetailVo12 detailVo1 : vo1) {
             if(detailVo1.getReviewYn() >= 1 ){
                 detailVo1.setReviewYn(1);
             }
@@ -93,7 +93,7 @@ public class OrderService {
         }
 
 
-        OrderDetailVo2 vo2 = mapper.selOrderDetail2(dto);
+        OrderDetailVo22 vo2 = mapper.selOrderDetail2(dto);
         if(vo2 != null) {
             try {
                 String strDate = vo2.getPickupTime();
@@ -116,7 +116,7 @@ public class OrderService {
         }
 
 
-        return DetailVo.builder()
+        return DetailVo3.builder()
                 .vo1(vo1)
                 .vo2(vo2)
                 .build();

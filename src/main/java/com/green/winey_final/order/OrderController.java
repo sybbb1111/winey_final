@@ -39,6 +39,4 @@ public class OrderController {
     public DetailVo selOrderDetail(@RequestParam Long orderId) {
         return service.selOrderDetail(orderId);
     }
-
-
 }

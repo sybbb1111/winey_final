@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class DetailVo {
-    private List<OrderDetailVo1> vo1;
-    private OrderDetailVo2 vo2;
+public class DetailVo3 {
+    private List<OrderDetailVo12> vo1;
+    private OrderDetailVo22 vo2;
 }
