@@ -3,14 +3,15 @@ app:
     header-scheme-name: authorization
     token-type: Bearer
     aceess-secret: DeaguGreenArtAcademyClass502ForJavaSpringBoot
-    accessTokenExpiry: 3600000 #60분
+    accessTokenExpiry: 1296000000 #86400000-1일 #3600000-60분
     refresh-secret: ForJavaSpringBootClass502DaeguGreenArtAcademy
-    refreshTokenExpiry: 1296000000 #3달
+    refreshTokenExpiry: 1296000000 #15일
     redis-access-black-key: "D-AT-BLACK"
     redis-refresh-key: "D-RT"
   oauth2:
     authorized-redirect-uris:
-      - http://localhost:8082/oauth/redirect
+      - http://localhost:8080/oauth/redirect
+      - http://localhost:8080/login/oauth2/code/kakao
       #- http://192.168.0.50:8082/oauth/redirect #원희 ip주소
       #- http://192.168.0.203:8082/oauth/redirect #서윤 ip주소
 mybatis:

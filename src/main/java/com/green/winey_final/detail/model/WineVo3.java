@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 @Getter
-public class WineVo {
+public class WineVo3 {
     private WineDetailVo wineDetailVo;
     private List<String> selPairing;
     private List<String> selReview;

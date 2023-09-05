@@ -26,5 +26,6 @@ public class CategoryEntity {
     @Column(nullable = false, length = 20)
     private String nm;
 
+
     //temp컬럼은 사용하지 않기 때문에 작성x
 }

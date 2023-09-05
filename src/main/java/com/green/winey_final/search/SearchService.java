@@ -4,6 +4,7 @@ import com.green.winey_final.common.entity.QProductEntity;
 import com.green.winey_final.search.model.WineSearchDto;
 import com.green.winey_final.search.model.WineSelDetailRes;
 import com.green.winey_final.search.model.WineVo;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -29,7 +30,6 @@ import static com.green.winey_final.common.entity.QWinePairingEntity.winePairing
 @RequiredArgsConstructor
 public class SearchService {
     private final JPAQueryFactory queryFactory;
-    private final EntityManager entityManager;
 
     public WineSelDetailRes searchWine1(WineSearchDto dto) {
 
@@ -37,7 +37,7 @@ public class SearchService {
 
         dto.setStartIdx((dto.getPage() - 1));
 
-        Long count = countLastWine(dto.getText());
+        Long count = countLastWine(dto);
         int maxPage = (int) Math.ceil((double) count / dto.getRow());
         int isMore = maxPage > dto.getPage() ? 1 : 0;
 
@@ -60,17 +60,36 @@ public class SearchService {
         return response;
     }
 
-    private List<WineVo> getWineList(WineSearchDto dto) {
-        Predicate predicate = productEntity.categoryEntity.categoryId.eq(dto.getCategoryId())
-                .and(smallCategoryEntity.bigCategoryEntity.bigCategoryId.eq(dto.getBigCategoryId()))
-                .and(productEntity.countryEntity.countryId.eq(dto.getCountryId()))
-                .and(dto.getPrice() == 0 ? productEntity.price.gt(0)
-                        : dto.getPrice() == 1 ? productEntity.price.lt(20000)
-                        : dto.getPrice() == 2 ? productEntity.price.between(20000, 50000)
-                        : dto.getPrice() == 3 ? productEntity.price.between(50000, 100000)
-                        : productEntity.price.goe(100000))
-                .and(productEntity.nmKor.likeIgnoreCase("%" + dto.getText() + "%"));
+    public List<WineVo> getWineList(WineSearchDto dto) {
+        BooleanBuilder builder = new BooleanBuilder();
 
+        if (dto.getCategoryId() != null) {
+            builder.and(productEntity.categoryEntity.categoryId.eq(dto.getCategoryId()));
+        }
+
+        if (dto.getBigCategoryId() != null) {
+            builder.and(smallCategoryEntity.bigCategoryEntity.bigCategoryId.eq(dto.getBigCategoryId()));
+        }
+
+        if (dto.getCountryId() != null) {
+            builder.and(productEntity.countryEntity.countryId.eq(dto.getCountryId()));
+        }
+
+            if (dto.getPrice() == 0) {
+                builder.and(productEntity.price.gt(0));
+            } else if (dto.getPrice() == 1) {
+                builder.and(productEntity.price.lt(20000));
+            } else if (dto.getPrice() == 2) {
+                builder.and(productEntity.price.between(20000, 50000));
+            } else if (dto.getPrice() == 3) {
+                builder.and(productEntity.price.between(50000, 100000));
+            } else {
+                builder.and(productEntity.price.goe(100000));
+            }
+
+        if (dto.getText() != null && !dto.getText().isEmpty()) {
+            builder.and(productEntity.nmKor.likeIgnoreCase("%" + dto.getText() + "%"));
+        }
         JPAQuery<WineVo> query = queryFactory.select(
                         Projections.constructor(
                                 WineVo.class,
@@ -88,7 +107,7 @@ public class SearchService {
                 .innerJoin(saleEntity).on(productEntity.productId.eq(saleEntity.productEntity.productId))
                 .innerJoin(winePairingEntity).on(winePairingEntity.productEntity.productId.eq(productEntity.productId))
                 .innerJoin(smallCategoryEntity).on(winePairingEntity.smallCategoryEntity.smallCategoryId.eq(smallCategoryEntity.smallCategoryId))
-                .where(predicate)
+                .where(builder)
                 .groupBy(productEntity.productId);
 
         if (dto.getSort() == 0) {
@@ -106,17 +125,46 @@ public class SearchService {
                 .fetch();
     }
 
-    public Long countLastWine(String text) {
+    public Long countLastWine(WineSearchDto dto) {
 
-        BooleanExpression predicate = null;
+        BooleanBuilder builder = new BooleanBuilder();
 
-        if (text != null) {
-            predicate = productEntity.nmKor.likeIgnoreCase("%" + text + "%");
+        if (dto.getCategoryId() != null) {
+            builder.and(productEntity.categoryEntity.categoryId.eq(dto.getCategoryId()));
         }
+
+        if (dto.getBigCategoryId() != null) {
+            builder.and(smallCategoryEntity.bigCategoryEntity.bigCategoryId.eq(dto.getBigCategoryId()));
+        }
+
+        if (dto.getCountryId() != null) {
+            builder.and(productEntity.countryEntity.countryId.eq(dto.getCountryId()));
+        }
+
+        if (dto.getPrice() == 0) {
+            builder.and(productEntity.price.gt(0));
+        } else if (dto.getPrice() == 1) {
+            builder.and(productEntity.price.lt(20000));
+        } else if (dto.getPrice() == 2) {
+            builder.and(productEntity.price.between(20000, 50000));
+        } else if (dto.getPrice() == 3) {
+            builder.and(productEntity.price.between(50000, 100000));
+        } else {
+            builder.and(productEntity.price.goe(100000));
+        }
+
+        if (dto.getText() != null && !dto.getText().isEmpty()) {
+            builder.and(productEntity.nmKor.likeIgnoreCase("%" + dto.getText() + "%"));
+        }
+
+        BooleanBuilder predicate = builder;
 
         return queryFactory
                 .select(productEntity.productId.count())
                 .from(productEntity)
+                .innerJoin(saleEntity).on(productEntity.productId.eq(saleEntity.productEntity.productId))
+                .innerJoin(winePairingEntity).on(winePairingEntity.productEntity.productId.eq(productEntity.productId))
+                .innerJoin(smallCategoryEntity).on(winePairingEntity.smallCategoryEntity.smallCategoryId.eq(smallCategoryEntity.smallCategoryId))
                 .where(predicate)
                 .fetchOne();
     }

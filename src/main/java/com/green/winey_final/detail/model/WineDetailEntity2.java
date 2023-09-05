@@ -1,9 +1,9 @@
-package com.green.winey_final.detail2.model;
+package com.green.winey_final.detail.model;
 
 import lombok.Data;
 
 @Data
-public class WineDetailEntity {
+public class WineDetailEntity2 {
     private Long productId;
     private Long categoryId;
     private Long featureId;

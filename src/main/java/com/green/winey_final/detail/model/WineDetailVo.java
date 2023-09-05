@@ -13,8 +13,10 @@ public class WineDetailVo {
     private int price;
     private int quantity;
     private String pic;
+
     private int promotion;
     private int beginner;
+
     private int alcohol;
     private int sweety;
     private int acidity;
