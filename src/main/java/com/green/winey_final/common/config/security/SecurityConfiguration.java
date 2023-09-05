@@ -83,7 +83,7 @@ public class SecurityConfiguration {
 
                                 .requestMatchers("/api/wine/**").hasAnyRole("USER","ADMIN")
 
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                //.requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                                 .requestMatchers("/api/download/**").hasRole("ADMIN")
                                 .requestMatchers("/api/orderList/**").hasAnyRole("USER","ADMIN")
