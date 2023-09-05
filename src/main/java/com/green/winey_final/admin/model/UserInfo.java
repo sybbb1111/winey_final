@@ -8,7 +8,7 @@ import lombok.Setter;
 public class UserInfo {
     private Long userId;
     private String email;
-    private String nm;
+    private String unm;
     private int sumOrderPrice;
     private int orderCount;
 }

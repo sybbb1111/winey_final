@@ -606,7 +606,7 @@
     </insert>
 
     <select id="selStore">
-        SELECT store_id storeId, region_nm_id regionNmId, nm, tel
+        SELECT store_id storeId, region_nm_id regionNmId, nm, tel, address
         FROM t_store
         LIMIT #{startIdx}, #{row}
     </select>
@@ -808,7 +808,7 @@
     </delete>
 
     <select id="selPutProductInfo1">
-        SELECT A.product_id productId, A.category_id categoryId, A.feature_id featureId, A.country_id countryId, A.nm_kor nmKor, A.nm_eng nmEng, A.price, A.pic, A.promotion, A.beginner, A.alcohol, A.quantity, C.sweety, C.acidity, C.body, B.sale, B.sale_price salePrice , B.start_sale startSale, B.end_sale endSale, B.sale_yn saleYn
+        SELECT A.product_id productId, A.category_id category, A.feature_id featureId, A.country_id country, A.nm_kor nmKor, A.nm_eng nmEng, A.price, A.pic, A.promotion, A.beginner, A.alcohol, A.quantity, C.sweety, C.acidity, C.body, B.sale, B.sale_price salePrice , B.start_sale startSale, B.end_sale endSale, B.sale_yn saleYn
         FROM t_product A
         INNER JOIN t_sale B
         ON A.product_id = B.product_id
