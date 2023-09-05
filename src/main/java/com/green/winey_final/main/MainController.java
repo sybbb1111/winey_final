@@ -19,24 +19,6 @@ public class MainController {
 
     private final MainService SERVICE;
 
-//    @GetMapping("/foodPairings")
-//    @Operation(summary = "페어링별 와인")
-//    public List<WinePairingEntity> getPairingWine(@RequestParam Long productId) {
-//        return SERVICE.getPairing(productId);
-//    }
-
-    @GetMapping("/foodWines")
-    @Operation(summary = "음식별 와인")
-    public List<SmallCategoryEntity> getfoodWine(@RequestParam Long bigCate) {
-        return SERVICE.getFood(bigCate);
-    }
-
-    @GetMapping("/countryWines")
-    @Operation(summary = "나라별 와인")
-    public List<ProductEntity> getCountryWine(@RequestParam Long countryId) {
-        return SERVICE.getCountry(countryId);
-    }
-
     /** 카테고리별 와인 리스트 (카테고리별, 국가별, 나라별, 금액대별, 최신등록순 어쩌고 저쩌고) */
     @GetMapping("/categoryWine")
     @Operation(summary = "항목별 와인 리스트"
@@ -68,13 +50,6 @@ public class MainController {
         dto.setPrice(price);
 
         return SERVICE.categoryWine(dto);
-    }
-
-    /** 연습용 */
-    @GetMapping("/categoryWines")
-    @Operation(summary = "연습용")
-    public List<ProductEntity> getProductsByCategoryId(@RequestParam Long categoryId) {
-        return SERVICE.getProductsByCategoryId(categoryId);
     }
 
 }
