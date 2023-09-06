@@ -86,8 +86,8 @@ spring:
               - profile_image
             client-name: Naver
           kakao:
-            client-id: b3903efc9bf7d64c7f9cb73b64c265f0
-            client-secret: vJzx3Vf8BnOhUm1vypGbDgYzgppjYEYG
+            client-id: 63c2ccf48233929cf35206dbb6fcdb14
+            client-secret: 2IMmPdp2Ngmd5AMBfMLtZf3gv2qWqww8
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
