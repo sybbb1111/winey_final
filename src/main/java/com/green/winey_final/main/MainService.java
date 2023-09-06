@@ -9,7 +9,10 @@ import com.green.winey_final.main.model.WineCategoryDetailRes;
 import com.green.winey_final.repository.ProductRepository;
 import com.green.winey_final.repository.SmallCategoryRepository;
 import com.green.winey_final.repository.WinePairingRepository;
+import com.green.winey_final.search.model.WineSearchDto;
+import com.green.winey_final.search.model.WineSelDetailRes;
 import com.green.winey_final.search.model.WineVo;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -40,7 +43,6 @@ public class MainService {
     private final SmallCategoryRepository smallCategoryRep;
     private final WinePairingRepository winePairingRep;
     private final JPAQueryFactory queryFactory;
-    private final EntityManager entityManager;
 
 
 
@@ -128,51 +130,59 @@ public class MainService {
 
 
 
-
-
-
-
-
     /** 카테고리별 와인 리스트 (카테고리별, 국가별, 나라별, 금액대별, 최신등록순 어쩌고 저쩌고) */
     public WineCategoryDetailRes categoryWine(WineCategoryDto dto) {
 
-        List<WineVo> wineList = getWineList(dto);
+        List<WineVo> wineList = getWineLists(dto);
 
         dto.setStartIdx((dto.getPage() - 1));
 
-        Long count = countLastWine();
+        Long count = countWineList(dto);
         int maxPage = (int) Math.ceil((double) count / dto.getRow());
         int isMore = maxPage > dto.getPage() ? 1 : 0;
 
-//        Pageable pageable = PageRequest.of(dto.getPage() - 1, 9);
-
-        WineCategoryDetailRes response = WineCategoryDetailRes.builder()
+        return WineCategoryDetailRes.builder()
                 .categoryId(dto.getCategoryId())
                 .bigCategoryId(dto.getBigCategoryId())
                 .countryId(dto.getCountryId())
-//                .text(dto.getText())
                 .sort(dto.getSort())
                 .price(dto.getPrice())
                 .page(dto.getPage())
                 .row(dto.getRow())
                 .isMore(isMore)
                 .maxPage(maxPage)
-                .count(wineList.size())
+                .count((int) count.longValue())
                 .wineList(wineList)
                 .build();
-
-        return response;
     }
 
-    private List<WineVo> getWineList(WineCategoryDto dto) {
-        Predicate predicate = productEntity.categoryEntity.categoryId.eq(dto.getCategoryId())
-                .and(smallCategoryEntity.bigCategoryEntity.bigCategoryId.eq(dto.getBigCategoryId()))
-                .and(productEntity.countryEntity.countryId.eq(dto.getCountryId()))
-                .and(dto.getPrice() == 0 ? productEntity.price.gt(0)
-                        : dto.getPrice() == 1 ? productEntity.price.lt(20000)
-                        : dto.getPrice() == 2 ? productEntity.price.between(20000, 50000)
-                        : dto.getPrice() == 3 ? productEntity.price.between(50000, 100000)
-                        : productEntity.price.goe(100000));
+    public List<WineVo> getWineLists(WineCategoryDto dto) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (dto.getCategoryId() != null) {
+            builder.and(productEntity.categoryEntity.categoryId.eq(dto.getCategoryId()));
+        }
+
+        if (dto.getBigCategoryId() != null) {
+            builder.and(smallCategoryEntity.bigCategoryEntity.bigCategoryId.eq(dto.getBigCategoryId()));
+        }
+
+        if (dto.getCountryId() != null) {
+            builder.and(productEntity.countryEntity.countryId.eq(dto.getCountryId()));
+        }
+
+        if (dto.getPrice() == 0) {
+            builder.and(productEntity.price.gt(0));
+        } else if (dto.getPrice() == 1) {
+            builder.and(productEntity.price.lt(20000));
+        } else if (dto.getPrice() == 2) {
+            builder.and(productEntity.price.between(20000, 50000));
+        } else if (dto.getPrice() == 3) {
+            builder.and(productEntity.price.between(50000, 100000));
+        } else {
+            builder.and(productEntity.price.goe(100000));
+        }
+
 
         JPAQuery<WineVo> query = queryFactory.select(
                         Projections.constructor(
@@ -191,7 +201,7 @@ public class MainService {
                 .innerJoin(saleEntity).on(productEntity.productId.eq(saleEntity.productEntity.productId))
                 .innerJoin(winePairingEntity).on(winePairingEntity.productEntity.productId.eq(productEntity.productId))
                 .innerJoin(smallCategoryEntity).on(winePairingEntity.smallCategoryEntity.smallCategoryId.eq(smallCategoryEntity.smallCategoryId))
-                .where(predicate)
+                .where(builder)
                 .groupBy(productEntity.productId);
 
         if (dto.getSort() == 0) {
@@ -209,19 +219,41 @@ public class MainService {
                 .fetch();
     }
 
-    public Long countLastWine() {
-        QProductEntity productEntity = QProductEntity.productEntity;
+    public Long countWineList(WineCategoryDto dto) {
+        BooleanBuilder builder = new BooleanBuilder();
 
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        if (dto.getCategoryId() != null) {
+            builder.and(productEntity.categoryEntity.categoryId.eq(dto.getCategoryId()));
+        }
 
-        BooleanExpression predicate = null;
+        if (dto.getBigCategoryId() != null) {
+            builder.and(smallCategoryEntity.bigCategoryEntity.bigCategoryId.eq(dto.getBigCategoryId()));
+        }
 
-//        BooleanExpression predicate = productEntity.productId.eq(productId).isNull();
+        if (dto.getCountryId() != null) {
+            builder.and(productEntity.countryEntity.countryId.eq(dto.getCountryId()));
+        }
+
+        if (dto.getPrice() == 0) {
+            builder.and(productEntity.price.gt(0));
+        } else if (dto.getPrice() == 1) {
+            builder.and(productEntity.price.lt(20000));
+        } else if (dto.getPrice() == 2) {
+            builder.and(productEntity.price.between(20000, 50000));
+        } else if (dto.getPrice() == 3) {
+            builder.and(productEntity.price.between(50000, 100000));
+        } else {
+            builder.and(productEntity.price.goe(100000));
+        }
+
 
         return queryFactory
-                .select(productEntity.productId.count())
+                .select(productEntity.productId.countDistinct())
                 .from(productEntity)
-                .where(predicate)
+                .innerJoin(saleEntity).on(productEntity.productId.eq(saleEntity.productEntity.productId))
+                .innerJoin(winePairingEntity).on(winePairingEntity.productEntity.productId.eq(productEntity.productId))
+                .innerJoin(smallCategoryEntity).on(winePairingEntity.smallCategoryEntity.smallCategoryId.eq(smallCategoryEntity.smallCategoryId))
+                .where(builder)
                 .fetchOne();
     }
 

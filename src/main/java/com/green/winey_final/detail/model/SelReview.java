@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
+
 public class SelReview {
     private Long productId;
-    private int reviewCount;
+    private Long reviewCount;
 }

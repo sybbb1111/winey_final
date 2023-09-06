@@ -18,104 +18,83 @@ public class RecommendService2 {
     private final AuthenticationFacade facade;
 
     public List<Long> selRecommend(RecommendRes2 res) {
+        Long user = facade.getLoginUserPk();
         List<Long> result = mapper.selRecommend(res);
         UserinfoDto2 dto = new UserinfoDto2();
-        dto.setUserId(facade.getLoginUserPk());
+        dto.setUserId(user);
         dto.setProductId(result);
         InsRecommendDto2 res2 = new InsRecommendDto2();
-        res2.setUserId(facade.getLoginUserPk());
+        res2.setUserId(user);
 
-
-        int size =0;
-        int size1 = 0;
-        int size2 = 0;
-        int size3 = 0;
-        int size4 = 0;
-        if (CollectionUtils.isEmpty(res.getCategoryId())==true) {
-             size = 0;
+        if (res.getCategoryId() != null) {
+            for (Long categoryId : res.getCategoryId()) {
+                UserCategory category = new UserCategory();
+                category.setUserId(user);
+                category.setCategoryId(categoryId);
+                mapper.insUserCategory(category);
+            }
         } else {
-            size = res.getCategoryId().size();
+            UserCategory category = new UserCategory();
+            category.setUserId(user);
+            mapper.insUserCategory(category);
         }
-        if (CollectionUtils.isEmpty(res.getCountryId())==true) {
-             size1 = 0;
-        }else {
-            size1 =res.getCountryId().size();
-        }
-        if (CollectionUtils.isEmpty(res.getSmallCategoryId())==true) {
-             size2 = 0;
-        }else {
-            size2=res.getSmallCategoryId().size();
-        }
-        if (CollectionUtils.isEmpty(res.getPriceRange())==true) {
-             size3 = 0;
-        }else{size3 = res.getPriceRange().size();}
-        if (CollectionUtils.isEmpty(res.getAromaCategoryId())==true) {
-            size4 = 0;
-        }else{size4 = res.getAromaCategoryId().size();}
 
-        //1번쨰 2번째 3번쨰
-        int[] listSizeArr = {
-                size,
-                size1,
-                size2,
-                size3,
-                size4
-        }; // 각 루프의 반복 횟수 설정
-        //첫번째에는 1번째 list의 .size 들어감
-        //두번째에는 2번째 list의 .size 들어감
-        generateNestedLoops(listSizeArr, 0, res2,res);
+        if (res.getCountryId() != null) {
+            for (Long countryId : res.getCountryId()) {
+                UserCountry country = new UserCountry();
+                country.setUserId(user);
+                country.setCountryId(countryId);
+                mapper.insUserCountry(country);
+            }
+        } else {
+            UserCountry country=new UserCountry();
+            country.setUserId(user);
+            mapper.insUserCountry(country);
+        }
+
+        if (res.getPriceRange() != null) {
+            for (Long priceRangeId : res.getCountryId()) {
+                UserPriceRange priceRange =new UserPriceRange();
+                priceRange.setUserId(user);
+                priceRange.setPriceRange(priceRangeId);
+                mapper.insUserPriceRange(priceRange);
+            }
+        } else {
+            UserPriceRange priceRange =new UserPriceRange();
+            priceRange.setUserId(user);
+            mapper.insUserPriceRange(priceRange);
+        }
+
+        if (res.getSmallCategoryId() != null) {
+            for (Long smallCategoryId : res.getSmallCategoryId()) {
+                UserSmallCategory smallCategory =new UserSmallCategory();
+                smallCategory.setUserId(user);
+                smallCategory.setSmallCategoryId(smallCategoryId);
+                mapper.insUserSmallCateogry(smallCategory);
+            }
+        } else {
+            UserSmallCategory smallCategory =new UserSmallCategory();
+            smallCategory.setUserId(user);
+            mapper.insUserSmallCateogry(smallCategory);
+        }
+
+        if (res.getAromaCategoryId() != null) {
+            for (Long aromaId : res.getAromaCategoryId()) {
+                UserAroma aroma =new UserAroma();
+                aroma.setUserId(user);
+                aroma.setAromaCategoryId(aromaId);
+                mapper.insUserAroma(aroma);
+            }
+        } else {
+            UserAroma aroma =new UserAroma();
+            aroma.setUserId(user);
+            mapper.insUserAroma(aroma);
+        }
+
         mapper.insUserinfo(dto);
         return result;
     }
 
-    public void generateNestedLoops(int[] listSizeArr, int loopIndex, InsRecommendDto2 res2,
-                                    RecommendRes2 res) {
-        if (loopIndex + 1 == listSizeArr.length) {      // 내부 루프의 가장 안쪽에서 실행될 코드
-            if (listSizeArr[loopIndex] > 0) {
-                for (int i = 0; i < listSizeArr[loopIndex]; i++) {
-                    System.out.printf("%d번째 list for문 %d번 작동\n", loopIndex + 1, i + 1);
-                    res2.setAromaCategoryId(res.getAromaCategoryId().get(i));
-                    mapper.insRecommend(res2);
-                }
-            } else if (listSizeArr[loopIndex] == 0) {
-                System.out.printf("%d번째 list 작동안함\n", loopIndex + 1);
-                mapper.insRecommend(res2);
-            }
-            System.out.printf("끝도착\n", loopIndex);
-            return;
-        }
-        if (listSizeArr[loopIndex] > 0) {
-            for (int i = 0; i < listSizeArr[loopIndex]; i++) {
-                System.out.printf("%d번째 list for문 %d번 작동\n", loopIndex + 1, i + 1);
-                if(loopIndex == 0) {
-                    res2.setCategoryId(res.getCategoryId().get(i));
-                } else if (loopIndex == 1) {
-                    res2.setCountryId(res.getCountryId().get(i));
-                } else if (loopIndex == 2) {
-                    res2.setSmallCategoryId(res.getSmallCategoryId().get(i));
-                } else if (loopIndex == 3) {
-                    res2.setPriceRange(res.getPriceRange().get(i));
-                } else if (loopIndex==4) {
-                    res2.setAromaCategoryId(res.getAromaCategoryId().get(i));
-                }
-                generateNestedLoops(listSizeArr, loopIndex + 1, res2, res); // 다음 루프로 재귀 호출
-            }
-        } else if (listSizeArr[loopIndex] == 0) {
-            System.out.printf("%d번째 list 작동안함\n", loopIndex + 1);
-            if(loopIndex == 0) {
-                res2.setCategoryId(null);
-            } else if (loopIndex == 1) {
-                res2.setCountryId(null);
-            } else if (loopIndex == 2) {
-                res2.setSmallCategoryId(null);
-            } else if (loopIndex== 3) {
-                res2.setPriceRange(null);
-            } else if (loopIndex==4){
-                res2.setAromaCategoryId(null);
-            }
-            generateNestedLoops(listSizeArr, loopIndex + 1, res2, res);
-        }
-    }
 
     public int loginUserPk() {
         UserDto2 dto = new UserDto2();
@@ -146,54 +125,87 @@ public class RecommendService2 {
                 .build();
     }
     public List<Long> updRecommend(RecommendRes2 res) {
+        Long user = facade.getLoginUserPk();
         UserDto2 dto1 =new UserDto2();
-        dto1.setUserId(facade.getLoginUserPk());
+        dto1.setUserId(user);
         mapper.delInfo(dto1);
-        mapper.delUserRecommend(dto1);
+        mapper.delUserCategory(dto1);
+        mapper.delUserCountry(dto1);
+        mapper.delUserPriceRange(dto1);
+        mapper.delUserSmallCategory(dto1);
+        mapper.delUserAroma(dto1);
         List<Long> result = mapper.selRecommend(res);
         UserinfoDto2 dto = new UserinfoDto2();
-        dto.setUserId(facade.getLoginUserPk());
+        dto.setUserId(user);
         dto.setProductId(result);
         InsRecommendDto2 res2 = new InsRecommendDto2();
-        res2.setUserId(facade.getLoginUserPk());
-        int size =0;
-        int size1 = 0;
-        int size2 = 0;
-        int size3 = 0;
-        int size4 = 0;
-        if (CollectionUtils.isEmpty(res.getCategoryId())==true) {
-            size = 0;
-        } else {
-            size = res.getCategoryId().size();
-        }
-        if (CollectionUtils.isEmpty(res.getCountryId())==true) {
-            size1 = 0;
-        }else {
-            size1 =res.getCountryId().size();
-        }
-        if (CollectionUtils.isEmpty(res.getSmallCategoryId())==true) {
-            size2 = 0;
-        }else {
-            size2=res.getSmallCategoryId().size();
-        }
-        if (CollectionUtils.isEmpty(res.getPriceRange())==true) {
-            size3 = 0;
-        }else{size3 = res.getPriceRange().size();}
-        if (CollectionUtils.isEmpty(res.getAromaCategoryId())==true) {
-            size4 = 0;
-        }else{size4 = res.getAromaCategoryId().size();}
+        res2.setUserId(user);
 
-        //1번쨰 2번째 3번쨰
-        int[] listSizeArr = {
-                size,
-                size1,
-                size2,
-                size3,
-                size4
-        }; // 각 루프의 반복 횟수 설정
-        //첫번째에는 1번째 list의 .size 들어감
-        //두번째에는 2번째 list의 .size 들어감
-        generateNestedLoops(listSizeArr, 0, res2,res);
+        if (res.getCategoryId() != null) {
+            for (Long categoryId : res.getCategoryId()) {
+                UserCategory category = new UserCategory();
+                category.setUserId(user);
+                category.setCategoryId(categoryId);
+                mapper.insUserCategory(category);
+            }
+        } else {
+            UserCategory category = new UserCategory();
+            category.setUserId(user);
+            mapper.insUserCategory(category);
+        }
+
+        if (res.getCountryId() != null) {
+            for (Long countryId : res.getCountryId()) {
+                UserCountry country = new UserCountry();
+                country.setUserId(user);
+                country.setCountryId(countryId);
+                mapper.insUserCountry(country);
+            }
+        } else {
+            UserCountry country=new UserCountry();
+            country.setUserId(user);
+            mapper.insUserCountry(country);
+        }
+
+        if (res.getPriceRange() != null) {
+            for (Long priceRangeId : res.getCountryId()) {
+                UserPriceRange priceRange =new UserPriceRange();
+                priceRange.setUserId(user);
+                priceRange.setPriceRange(priceRangeId);
+                mapper.insUserPriceRange(priceRange);
+            }
+        } else {
+            UserPriceRange priceRange =new UserPriceRange();
+            priceRange.setUserId(user);
+            mapper.insUserPriceRange(priceRange);
+        }
+
+        if (res.getSmallCategoryId() != null) {
+            for (Long smallCategoryId : res.getSmallCategoryId()) {
+                UserSmallCategory smallCategory =new UserSmallCategory();
+                smallCategory.setUserId(user);
+                smallCategory.setSmallCategoryId(smallCategoryId);
+                mapper.insUserSmallCateogry(smallCategory);
+            }
+        } else {
+            UserSmallCategory smallCategory =new UserSmallCategory();
+            smallCategory.setUserId(user);
+            mapper.insUserSmallCateogry(smallCategory);
+        }
+
+        if (res.getAromaCategoryId() != null) {
+            for (Long aromaId : res.getAromaCategoryId()) {
+                UserAroma aroma =new UserAroma();
+                aroma.setUserId(user);
+                aroma.setAromaCategoryId(aromaId);
+                mapper.insUserAroma(aroma);
+            }
+        } else {
+            UserAroma aroma =new UserAroma();
+            aroma.setUserId(user);
+            mapper.insUserAroma(aroma);
+        }
+
         mapper.insUserinfo(dto);
         return result;
     }

@@ -1,93 +1,120 @@
 package com.green.winey_final.detail;
 
+import com.green.winey_final.common.entity.*;
 import com.green.winey_final.detail.model.*;
+import com.green.winey_final.repository.ProductKorRepository;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class DetailService {
-    private final DetailMapper MAPPER;
-    private final SelReview selReview;
 
-    public WineVo3 selWineDetail(Long productId) {
+    private final ProductKorRepository productKorRepository;
+    private final EntityManager em;
+    private final JPAQueryFactory jpaQueryFactory;
+    private final QProductEntity product = QProductEntity.productEntity;
+    private final QCategoryEntity category = QCategoryEntity.categoryEntity;
+    private final QCountryEntity country = QCountryEntity.countryEntity;
+    private final QFeatureEntity feature = QFeatureEntity.featureEntity;
+    private final QWinePairingEntity winePairing = QWinePairingEntity.winePairingEntity;
+    private final QSmallCategoryEntity smallCategory = QSmallCategoryEntity.smallCategoryEntity;
+    private final QReviewEntity review =QReviewEntity.reviewEntity;
+    private final QOrderDetailEntity orderDetail = QOrderDetailEntity.orderDetailEntity;
+    private final QAromaEntity aroma =QAromaEntity.aromaEntity;
+    private final QAromaCategoryEntity aromaCategory =QAromaCategoryEntity.aromaCategoryEntity;
+    private final QSaleEntity sale = QSaleEntity.saleEntity;
 
-        WineDetailVo vo = MAPPER.selWineDetail(productId);
-        switch (vo.getTemp()) {
+    public WineVo4 selWineDetail(Long productId) {
+
+
+        WineDetailVo vo = jpaQueryFactory.select(Projections.constructor(WineDetailVo.class,
+                        product.productId, product.nmKor, product.nmEng, product.price, product.pic,
+                        product.promotion, product.beginner, product.alcohol, product.quantity, category.nm.as("categoryNm"),
+                         country.nm.as("countryNm"),feature.sweety,feature.acidity,feature.body))
+                .from(product)
+                .leftJoin(category).on(product.categoryEntity.categoryId.eq(product.productId))
+                .leftJoin(country).on(product.countryEntity.countryId.eq(country.countryId))
+                .leftJoin(feature).on(product.featureEntity.featureId.eq(feature.featureId))
+                .where(product.productId.eq(productId))
+                .fetchOne();
+
+
+        switch (vo.getTemp().intValue()) {
             case 0:
-                vo.setTemp(10);
+                vo.setTemp(10L);
                 break;
             case 1:
-                vo.setTemp(15);
+                vo.setTemp(15L);
                 break;
             default:
-                vo.setTemp(18);
+                vo.setTemp(18L);
+                break;
         }
 
-
-
-        List<String> selPairing = MAPPER.selPairing(productId);
-
+        List<String> selPairing = jpaQueryFactory.select(Projections.constructor(String.class,smallCategory.sKind.as("selReview")))
+                .from(product)
+                .leftJoin(winePairing).on(product.productId.eq(winePairing.productEntity.productId))
+                .leftJoin(smallCategory).on(winePairing.smallCategoryEntity.smallCategoryId.eq(smallCategory.smallCategoryId))
+                .where(product.productId.eq(productId))
+                .orderBy(smallCategory.smallCategoryId.desc())
+                .fetch();
 
         List<String> selCount = new ArrayList();
 
         for (int i = 1; i <= 3; i++) {
             SelCountVo selCountVo = new SelCountVo();
-            selCountVo.setReviewLevel(i);
+            selCountVo.setReviewLevel(Long.valueOf(i));
             selCountVo.setProductId(productId);
-            MAPPER.selCount(selCountVo);
-            selCount.add(MAPPER.selCount(selCountVo));
-        }
 
+           List<Long> countQuery = jpaQueryFactory.select(Projections.constructor(Long.class, review.reviewLevel.count()))
+                    .from(review)
+                    .leftJoin(orderDetail).on(orderDetail.orderDetailId.eq(review.orderDetailEntity.orderDetailId))
+                    .where(orderDetail.orderEntity.orderId.eq(productId).and(review.reviewId.eq(selCountVo.getReviewLevel())))
+                    .fetch(); // 쿼리 실행 및 결과 가져오기
+            for (Long count : countQuery) {
+                selCount.add(count.toString());
+            }}
+        List<String> selAroma = jpaQueryFactory.select(Projections.constructor(String.class, aromaCategory.nm))
+                .from(product)
+                .leftJoin(aroma).on(aroma.productEntity.productId.eq(product.productId))
+                .leftJoin(aromaCategory).on(aromaCategory.aromaCategoryId.eq(aroma.aromaCategoryEntity.aromaCategoryId))
+                .where(product.productId.eq(productId))
+                .orderBy(aromaCategory.aromaCategoryId.desc())
+                .fetch();
 
-        List<String> selAroma = MAPPER.selAroma(productId);
-
-
-        int level = 0;
-        int sum = vo.getSweety() + vo.getAcidity() + vo.getBody();
-
+        long level = 0;
+        long sum = vo.getSweety() + vo.getAcidity() + vo.getBody();
         if (sum < 8) {
-            level = 1;
+            level = 1L;
         } else if (sum >= 8 && sum < 11) {
-            level = 2;
+            level = 2L;
         } else if (sum >= 11 && sum < 16) {
-            level = 3;
+            level = 3L;
         }
 
-//        return -1;
-//        if(vo.getSweety() <= 2 && vo.getAcidity() <= 2 && vo.getBody() <= 2 ){
-//            level = 1;
-//        } else if(vo.getSweety() == 5 && vo.getAcidity() == 5 && vo.getBody() == 5 ){
-//            level = 3;
-//        } else {
-//            level = 2;
-//        }
+        SelSale selSale = jpaQueryFactory.select(Projections.constructor(SelSale.class,sale.productEntity.productId,sale.sale, sale.salePrice))
+                .from(product)
+                .leftJoin(sale).on(sale.productEntity.productId.eq(product.productId))
+                .where(product.productId.eq(productId).and(sale.saleYn.eq(1))).fetchOne();
 
 
-        SelSale selSale = MAPPER.selSale(productId);
-        if(selSale !=null){
+        if (selSale != null) {
             selSale.setProductId(productId);
-
-        } else if(selSale ==null) {
+        } else if (selSale == null) {
             selSale = null;
             log.info("할인상품아님");
-//            SelSale sale = new SelSale();
-//            sale.setProductId(productId);
-//            sale.setSalePrice(vo.getPrice());
-//            sale.setSale(0);
-//            selSale = sale; //수정후 - 세일상품아니면 세일프라이스에 원가를 넣고 할인율을 0으로 넣음
-
         }
-
-
-
-        return WineVo3.builder()
+        return WineVo4.builder()
                 .wineDetailVo(vo)
                 .selPairing(selPairing)
                 .selReview(selCount)
@@ -95,17 +122,18 @@ public class DetailService {
                 .Level(level)
                 .selSale(selSale)
                 .build();
-
     }
 
 
     public SelWineKorNm selKorNm(Long productId) {
-        return MAPPER.selKorNm(productId);
+        Optional<ProductEntity> optEntity = productKorRepository.findById(productId);
+        ProductEntity entity = optEntity.get();
+
+        return SelWineKorNm.builder()
+                .productId(entity.getProductId())
+                .nmKor(entity.getNmKor())
+                .build();
     }
-
-
-
-
 
 
 }

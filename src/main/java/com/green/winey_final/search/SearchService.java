@@ -37,7 +37,7 @@ public class SearchService {
 
         dto.setStartIdx((dto.getPage() - 1));
 
-        Long count = countLastWine(dto);
+        Long count = countWineList(dto);
         int maxPage = (int) Math.ceil((double) count / dto.getRow());
         int isMore = maxPage > dto.getPage() ? 1 : 0;
 
@@ -125,8 +125,7 @@ public class SearchService {
                 .fetch();
     }
 
-    public Long countLastWine(WineSearchDto dto) {
-
+    public Long countWineList(WineSearchDto dto) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (dto.getCategoryId() != null) {
@@ -157,15 +156,13 @@ public class SearchService {
             builder.and(productEntity.nmKor.likeIgnoreCase("%" + dto.getText() + "%"));
         }
 
-        BooleanBuilder predicate = builder;
-
         return queryFactory
-                .select(productEntity.productId.count())
+                .select(productEntity.productId.countDistinct())
                 .from(productEntity)
                 .innerJoin(saleEntity).on(productEntity.productId.eq(saleEntity.productEntity.productId))
                 .innerJoin(winePairingEntity).on(winePairingEntity.productEntity.productId.eq(productEntity.productId))
                 .innerJoin(smallCategoryEntity).on(winePairingEntity.smallCategoryEntity.smallCategoryId.eq(smallCategoryEntity.smallCategoryId))
-                .where(predicate)
+                .where(builder)
                 .fetchOne();
     }
 }
