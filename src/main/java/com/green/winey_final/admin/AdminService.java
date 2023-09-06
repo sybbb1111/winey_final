@@ -309,7 +309,7 @@ public class AdminService {
     public ProductList getProduct(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
-        int maxProduct = MAPPER.productCount();
+        int maxProduct = MAPPER.productCount(dto);
 
         PageDto pageDto = new PageDto(maxProduct, dto.getPage(), dto.getRow());
 
@@ -545,9 +545,9 @@ public class AdminService {
         return MAPPER.serchUser(dto);
     }
 
-    public List<ProductVo> serchProduct(AdminSerchDto dto) {
-        return MAPPER.serchProduct(dto);
-    }
+//    public List<ProductVo> searchProduct(AdminSerchDto dto) {
+//        return MAPPER.searchProduct(dto);
+//    }
 
     public AdminProductDetailVo getProductDetail(int productId) {
         AdminProductDetailVo dto = MAPPER.selPutProductInfo1(productId);

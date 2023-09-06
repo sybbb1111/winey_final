@@ -244,6 +244,15 @@
                 LIMIT #{startIdx}, #{row}
             </when>
 
+            <when test="type2 == 'searchProductNmKor'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                WHERE nm_kor LIKE '%${str}%'
+                LIMIT #{startIdx}, #{row}
+            </when>
+
         </choose>
     </select>
 
@@ -313,23 +322,25 @@
                 ORDER BY user_id DESC
                 LIMIT #{startIdx}, #{row}
             </when>
-            <!--serch query -->
-            <when test="type == 'serchUserName'.toString()">
+            <!--search query -->
+            <when test="type2 == 'searchUserName'.toString()">
                 SELECT A.user_id userId, A.email, A.unm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
                 FROM t_user A
                 INNER JOIN t_region_nm B
                 ON A.region_nm_id = B.region_nm_id
                 WHERE role_type = "USER" AND unm LIKE '%${str}%'
                 ORDER BY A.user_id
+                LIMIT #{startIdx}, #{row}
             </when>
 
-            <when test="type == 'serchUserEmail'.toString()">
+            <when test="type2 == 'searchUserEmail'.toString()">
                 SELECT A.user_id userId, A.email, A.unm, B.region_nm_id regionNmId, DATE_FORMAT(A.created_at, '%y-%m-%d') createdAt
                 FROM t_user A
                 INNER JOIN t_region_nm B
                 ON A.region_nm_id = B.region_nm_id
                 WHERE role_type = "USER" AND email LIKE '%${str}%'
                 ORDER BY A.user_id
+                LIMIT #{startIdx}, #{row}
             </when>
 
         </choose>
@@ -682,8 +693,28 @@
     </update>
 
     <select id="productCount">
-        SELECT COUNT(product_id)
-        FROM t_product
+        <choose>
+
+            <when test="type == '0'.toString() or type == 'productId'.toString() or type == 'salePrice'.toString() or type == 'sale'.toString()
+                        or type == 'price'.toString() or type == 'recommend'.toString() or type == 'quantity'.toString()">
+                SELECT COUNT(product_id)
+                FROM t_product
+            </when>
+
+            <when test="type == 'searchProductNmKor'.toString()">
+                SELECT COUNT(*)
+                FROM
+                (
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                WHERE nm_kor LIKE '%${str}%'
+                ) C
+            </when>
+
+        </choose>
+
     </select>
 
     <select id="productSaleCount">
@@ -700,7 +731,7 @@
                 WHERE role_type = "USER"
             </when>
 
-            <when test="type == 'serchUserName'.toString()">
+            <when test="type == 'searchUserName'.toString()">
                 SELECT COUNT(*)
                 FROM
                 (
@@ -713,7 +744,7 @@
                 ) C
             </when>
 
-            <when test="type == 'serchUserEmail'.toString()">
+            <when test="type == 'searchUserEmail'.toString()">
                 SELECT COUNT(*)
                 FROM
                 (
@@ -801,7 +832,7 @@
         SELECT COUNT(store_id) count
         FROM t_store
     </select>
-
+<!--
     <select id="serchUser">
 
         <choose>
@@ -825,8 +856,8 @@
 
         </choose>
     </select>
-
-    <select id="serchProduct">
+-->
+    <select id="searchProduct">
 
         <choose>
             <when test="type == 'productNmKor'.toString()">

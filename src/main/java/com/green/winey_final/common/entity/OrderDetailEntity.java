@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "t_order_detail")
@@ -21,7 +22,10 @@ import org.hibernate.annotations.DynamicInsert;
 public class OrderDetailEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GenericGenerator(
+            name = "seqOrderDetail"
+    )
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long orderDetailId;
 

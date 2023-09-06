@@ -11,9 +11,10 @@ app:
   oauth2:
     authorized-redirect-uris:
       - http://localhost:8080/oauth/redirect
-      - http://localhost:8080/login/oauth2/code/kakao
-      #- http://192.168.0.50:8082/oauth/redirect #원희 ip주소
-      #- http://192.168.0.203:8082/oauth/redirect #서윤 ip주소
+      - http://192.168.0.203:8080/oauth/redirect #서윤 ip주소
+      # 동은님 아이피주소: 포트번호 ~/oauth/redirect-
+      #- http://192.168.0.50:8080/oauth/redirect #원희 ip주소
+      #- http://192.168.0.203:8080/oauth/redirect #서윤 ip주소
 mybatis:
   type-aliases-package: com.green.winey_final
   mapper-locations: mapper/**/*.xml
@@ -35,19 +36,14 @@ spring:
           starttls:
             enable: true
 
-  thymeleaf:
-    check-template-location: true
-    prefix: classpath:templates/
-    suffix: .html
-    mode: HTML
-    cache: false
+
   servlet:
     multipart:
       max-file-size: 3MB
       max-request-size: 12MB
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d
+    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d?rewriteBatchedStatements=true
     username: team_d
     password: green502
   jpa:
@@ -57,6 +53,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        jdbc:
+          batch_size: 50
   data:
     redis:
       host: localhost
@@ -88,8 +86,8 @@ spring:
               - profile_image
             client-name: Naver
           kakao:
-            client-id: b3903efc9bf7d64c7f9cb73b64c265f0
-            client-secret: vJzx3Vf8BnOhUm1vypGbDgYzgppjYEYG
+            client-id: 63c2ccf48233929cf35206dbb6fcdb14
+            client-secret: 2IMmPdp2Ngmd5AMBfMLtZf3gv2qWqww8
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
@@ -149,7 +147,7 @@ spring:
     redis:
       host: 192.168.0.144
   datasource:
-    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d
+    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d?rewriteBatchedStatements=true
 file:
   dir: /home/download
 server:
