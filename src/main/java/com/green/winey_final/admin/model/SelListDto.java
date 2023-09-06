@@ -8,7 +8,8 @@ public class SelListDto {
     private int page;
     private int row;
 
-    private String type;
+    private String type; //정렬용 type
+    private String type2; //검색용 type
     private String sort; //asc, desc
     private String str; //검색어
 }

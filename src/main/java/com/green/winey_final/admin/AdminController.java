@@ -10,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import java.util.List;
-
 @Tag(name = "관리자 페이지")
 @RestController
 @RequestMapping("/api/admin")
@@ -61,17 +59,19 @@ public class AdminController {
             + "default값은 임시로 넣은 것이니 수정이 필요합니다.<br>"
             + "type -> 기본값(0) / 상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
-            + "상품 검색시<br> type -> 상품한글이름(searchProductNmKor)<br> str -> (검색어)")
+            + "상품 검색시<br> type2 -> 상품한글이름(searchProductNmKor)<br> str -> (검색어)")
     @GetMapping("/product/list")
     public ProductList getProduct(@RequestParam(defaultValue = "1")int page,
                                   @RequestParam(defaultValue = "20")int row,
-                                  @RequestParam(defaultValue = "0") String type,
-                                  @RequestParam(defaultValue = "0") String sort,
+                                  @RequestParam(required = false) String type,
+                                  @RequestParam(required = false) String sort,
+                                  @RequestParam(required = false) String type2,
                                   @RequestParam(required = false) String str) {
         SelListDto dto = new SelListDto();
         dto.setRow(row);
         dto.setPage(page);
         dto.setType(type);
+        dto.setType2(type2);
         dto.setSort(sort);
         dto.setStr(str);
         return SERVICE.getProduct(dto);
@@ -93,18 +93,20 @@ public class AdminController {
     @Operation(summary = "가입 회원 리스트 + 회원 검색 (피그마: 가입회원리스트 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정이 필요합니다.<br>"
             + "type -> 기본값(0) / 픽업지역(pickUp) / 회원번호(userId)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
-            + "회원 검색시<br> type -> 이름(searchUserName) / 이메일(searchUserEmail)<br>"
+            + "회원 검색시<br> type2 -> 이름(searchUserName) / 이메일(searchUserEmail)<br>"
             + "str -> (검색어) ")
     @GetMapping("/user/list")
     public UserList getUserList(@RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "15") int row,
-                                @RequestParam(defaultValue = "0") String type,
-                                @RequestParam(defaultValue = "0") String sort,
+                                @RequestParam(required = false) String type,
+                                @RequestParam(required = false) String sort,
+                                @RequestParam(required = false) String type2,
                                 @RequestParam(required = false) String str) {
         SelListDto dto = new SelListDto();
         dto.setPage(page);
         dto.setRow(row);
         dto.setType(type);
+        dto.setType2(type2);
         dto.setSort(sort);
         dto.setStr(str);
         return SERVICE.getUserList(dto);
