@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class SelOrderVo {
-    private LocalDateTime orderTime;
+    private LocalDateTime orderDate;
     private Long orderId;
     private Long userId;
     private String nmKor;

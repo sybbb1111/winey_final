@@ -1,11 +1,9 @@
 package com.green.winey_final.recommend;
 
-import com.green.winey_final.common.entity.UserEntity;
-import com.green.winey_final.common.entity.UserInfoEntity;
-import com.green.winey_final.common.entity.UserRecommendEntity;
+import com.green.winey_final.common.config.security.AuthenticationFacade;
+import com.green.winey_final.common.entity.*;
 import com.green.winey_final.recommend.model.RecommendVo;
-import com.green.winey_final.repository.UserInfoEntityRepository;
-import com.green.winey_final.repository.UserRecommendRepository;
+import com.green.winey_final.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,77 +16,67 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class RecommendService {
-    private final UserInfoEntityRepository wineRepository;
-    private final UserRecommendRepository userRecommendRepository;
 
-    public List<Long> selUserinfo(Long userId) {
+    private final UserInfoEntityRepository wineRepository;
+    private final AuthenticationFacade facade;
+    private final UserCategoryRepository userCategory;
+    private final UserCountryRepository userCountry;
+    private final UserPriceRangeRepository userPrice;
+    private final UserSmallCategoryRepository userSmall;
+    private final UserAromaRepository userAroma;
+
+
+    public List<Long> selUserinfo() {
+        Long userPk= facade.getLoginUserPk();
         UserEntity entity = new UserEntity();
-        entity.setUserId(userId);
+        entity.setUserId(userPk);
         List<UserInfoEntity> list = wineRepository.findByUserEntity(entity);
         List<Long> productPK = new ArrayList<>();
         for (UserInfoEntity userInfoEntity : list) {
             productPK.add(userInfoEntity.getProductEntity().getProductId());
         }
         return productPK;
-        /*
-        목표값: 1번유저의 추천상품PK값만
-        필요한값: 유저의 PK값
-        방법: 유저의 PK값을 입력하면 상품PK리스트로 값을 보여준다.
-         */
+
     }
 
-    public RecommendVo selUserRecommend(Long userId){
-            UserEntity entity =new UserEntity();
-            entity.setUserId(userId);
+    public RecommendVo selUserRecommend() {
+        Long userPk = facade.getLoginUserPk();
+        UserEntity entity = new UserEntity();
+        entity.setUserId(userPk);
 
-        List<UserRecommendEntity> categoryList = userRecommendRepository.findByUserEntity(entity);
-        List<UserRecommendEntity> countryList = userRecommendRepository.findCountryIdByUserEntity(entity);
-        List<UserRecommendEntity> smallCategoryList =userRecommendRepository.findSmallCategoryIdIdByUserEntity(entity);
-        List<UserRecommendEntity> priceRangeList=userRecommendRepository.findPriceRangeByUserEntity(entity);
-        List<UserRecommendEntity> aromaCategoryList=userRecommendRepository.findAromaCategoryIdByUserEntity(entity);
+        List<Long> catelist = userCategory.findCategoryIdByUserEntity(entity).stream()
+                .map(UserCategoryEntity::getCategoryId)
+                .distinct()
+                .collect(Collectors.toList());
 
+        List<Long> coulist = userCountry.findCountryIdByUserEntity(entity).stream()
+                .map(UserCountryEntity::getCountryId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        List<Long> cateList = new ArrayList<>();
-        List<Long> couList = new ArrayList<>();
-        List<Long> smallCateList = new ArrayList<>();
-        List<Long> priceRaList = new ArrayList<>();
-        List<Long> aromaList = new ArrayList<>();
+        List<Long> smallCatelist = userSmall.findSmallCategoryIdByUserEntity(entity).stream()
+                .map(UserSmallCategoryEntity::getSmallCategoryId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        for (UserRecommendEntity cate : categoryList) {
-            cateList.add(cate.getCategoryId());
-        }
-        List<Long> catelist = cateList.stream().distinct().collect(Collectors.toList());
+        List<Long> priceRalist = userPrice.findPriceRangeByUserEntity(entity).stream()
+                .map(UserPriceRangeEntity::getPriceRange)
+                .distinct()
+                .collect(Collectors.toList());
 
-        for (UserRecommendEntity cou : countryList) {
-            couList.add(cou.getCountryId());
-        }
-        List<Long> coulist = couList.stream().distinct().collect(Collectors.toList());
+        List<Long> aromalist = userAroma.findAromaCategoryIdByUserEntity(entity).stream()
+                .map(UserAromaEntity::getAromaCategoryId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        for (UserRecommendEntity smallc : smallCategoryList) {
-            smallCateList.add(smallc.getSmallCategoryId());
-        }
-        List<Long> smallCatelist = smallCateList.stream().distinct().collect(Collectors.toList());
-
-        for (UserRecommendEntity priceR : priceRangeList) {
-            priceRaList.add(priceR.getPriceRange());
-        }
-        List<Long> priceRalist = priceRaList.stream().distinct().collect(Collectors.toList());
-
-        for (UserRecommendEntity aroma : aromaCategoryList) {
-            aromaList.add(aroma.getAromaCategoryId());
-        }
-        List<Long> aromalist = aromaList.stream().distinct().collect(Collectors.toList());
-
-
-            return RecommendVo.builder()
-                    .categoryId(catelist)
-                    .countryId(coulist)
-                    .smallCategoryId(smallCatelist)
-                    .priceRange(priceRalist)
-                    .aromaCategoryId(aromalist)
-                    .build();
+        return RecommendVo.builder()
+                .categoryId(catelist)
+                .countryId(coulist)
+                .smallCategoryId(smallCatelist)
+                .priceRange(priceRalist)
+                .aromaCategoryId(aromalist)
+                .build();
     }
-
 //    public RecommendVo selUserRecommend(Long userId) {
 //
 ////        UserEntity entity = new UserEntity();

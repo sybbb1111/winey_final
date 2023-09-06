@@ -38,7 +38,7 @@ public class OrderEntity extends BaseEntity {
     @Column(length = 20)
     private int totalOrderPrice;
 
-    private LocalDateTime orderTime; //이거 확인 필요
+    private LocalDateTime orderDate; //이거 확인 필요
 
     @Column(length = 11)
     private int payment;
