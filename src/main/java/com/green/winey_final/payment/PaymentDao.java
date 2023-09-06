@@ -4,6 +4,7 @@ import com.green.winey_final.common.entity.QCartEntity;
 import com.green.winey_final.common.entity.QProductEntity;
 import com.green.winey_final.common.entity.QSaleEntity;
 import com.green.winey_final.payment.model.CartProductVo;
+import com.green.winey_final.payment.model.SaleProductVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPQLQuery;
@@ -36,5 +37,13 @@ public class PaymentDao {
                 .leftJoin(s).on(c.productEntity.productId.eq(s.productEntity.productId).and(s.saleYn.eq(1)))
                 .where(c.userEntity.userId.eq(userId));
         return query.fetch();
+    }
+
+    public SaleProductVo selProduct(long productId) {
+        return jpaQueryFactory.select(Projections.bean(SaleProductVo.class, new CaseBuilder().when(s.productEntity.isNotNull()).then(s.salePrice).otherwise(p.price).as("price")))
+                .from(p)
+                .leftJoin(s).on(s.productEntity.productId.eq(p.productId).and(s.saleYn.eq(1)))
+                .where(p.productId.eq(productId))
+                .fetchOne();
     }
 }

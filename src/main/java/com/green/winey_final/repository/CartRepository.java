@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CartRepository extends JpaRepository<CartEntity, Long> {
     CartEntity findByUserEntityAndProductEntity(UserEntity userEntity, ProductEntity productEntity);
+    void deleteByUserEntity(UserEntity userEntity);
 }
