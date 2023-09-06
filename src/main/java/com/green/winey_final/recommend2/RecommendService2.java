@@ -23,8 +23,7 @@ public class RecommendService2 {
         UserinfoDto2 dto = new UserinfoDto2();
         dto.setUserId(user);
         dto.setProductId(result);
-        InsRecommendDto2 res2 = new InsRecommendDto2();
-        res2.setUserId(user);
+
 
         if (res.getCategoryId() != null) {
             for (Long categoryId : res.getCategoryId()) {
@@ -138,8 +137,6 @@ public class RecommendService2 {
         UserinfoDto2 dto = new UserinfoDto2();
         dto.setUserId(user);
         dto.setProductId(result);
-        InsRecommendDto2 res2 = new InsRecommendDto2();
-        res2.setUserId(user);
 
         if (res.getCategoryId() != null) {
             for (Long categoryId : res.getCategoryId()) {
