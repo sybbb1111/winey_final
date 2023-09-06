@@ -244,6 +244,14 @@
                 LIMIT #{startIdx}, #{row}
             </when>
 
+            <when test="type == 'searchProductNmKor'.toString()">
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                WHERE nm_kor LIKE '%${str}%'
+            </when>
+
         </choose>
     </select>
 
@@ -682,8 +690,28 @@
     </update>
 
     <select id="productCount">
-        SELECT COUNT(product_id)
-        FROM t_product
+        <choose>
+
+            <when test="type == '0'.toString() or type == 'productId'.toString() or type == 'salePrice'.toString() or type == 'sale'.toString()
+                        or type == 'price'.toString() or type == 'recommend'.toString() or type == 'quantity'.toString()">
+                SELECT COUNT(product_id)
+                FROM t_product
+            </when>
+
+            <when test="type == 'searchProductNmKor'.toString()">
+                SELECT COUNT(*)
+                FROM
+                (
+                SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
+                FROM t_product A
+                LEFT OUTER JOIN t_sale B
+                ON A.product_id = B.product_id
+                WHERE nm_kor LIKE '%${str}%'
+                ) C
+            </when>
+
+        </choose>
+
     </select>
 
     <select id="productSaleCount">
@@ -801,7 +829,7 @@
         SELECT COUNT(store_id) count
         FROM t_store
     </select>
-
+<!--
     <select id="serchUser">
 
         <choose>
@@ -825,8 +853,8 @@
 
         </choose>
     </select>
-
-    <select id="serchProduct">
+-->
+    <select id="searchProduct">
 
         <choose>
             <when test="type == 'productNmKor'.toString()">
