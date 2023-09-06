@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "와인상세페이지")
+@Tag(name = "와인상세페이지2차")
 @RestController
 @RequestMapping("/api/detail")
 @RequiredArgsConstructor

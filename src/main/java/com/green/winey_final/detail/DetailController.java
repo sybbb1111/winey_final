@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+@Tag(name = "와인상세페이지 3차JPA")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/orderList")
-@Tag(name = "detail테스트중입니다요")
+@RequestMapping("/api/detail2")
 public class DetailController {
     private final DetailService service;
-
 
     @GetMapping("/{productId}")
     @Operation(summary = "와인 디테일 페이지", description =
