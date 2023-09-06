@@ -98,7 +98,7 @@ public class MainSixController2 {
         //불러온 userId값 넣어주기
         SelRecommendDto2 selRecommendDto2 = new SelRecommendDto2();
         selRecommendDto2.setUserId(userId);
-        List<Long> recommandWines = recommendService.selUserinfo(selRecommendDto2.getUserId());
+        List<Long> recommandWines = recommendService.selUserinfo();
         List<Long> getProductId = new ArrayList<>();
 
 
