@@ -4,9 +4,11 @@ package com.green.winey_final.main2.six;
 import com.green.winey_final.common.config.security.AuthenticationFacade;
 import com.green.winey_final.main2.MainMapper2;
 import com.green.winey_final.main2.model.*;
+import com.green.winey_final.recommend.RecommendService;
 import com.green.winey_final.recommend2.RecommendMapper2;
 import com.green.winey_final.recommend2.model.LoginUserDto2;
 import com.green.winey_final.recommend2.model.SelRecommendDto2;
+import com.green.winey_final.repository.UserInfoEntityRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,8 @@ public class MainSixController2 {
     private final AuthenticationFacade facade;
 
     private final RecommendMapper2 recommendMapper;
+    private final UserInfoEntityRepository userInfoEntityRep;
+    private final RecommendService recommendService;
 
     /*@GetMapping("/price")
     @Operation(summary = "가격별 와인리스트")
@@ -92,31 +96,31 @@ public class MainSixController2 {
         dto.setUserId(userId);
 
         //불러온 userId값 넣어주기
-        SelRecommendDto2 selRecommendDto = new SelRecommendDto2();
-        selRecommendDto.setUserId(userId);
-        List<Integer> recommandWines = recommendMapper.selUserinfo(selRecommendDto);
-        List<Long> getProductID = new ArrayList<>();
+        SelRecommendDto2 selRecommendDto2 = new SelRecommendDto2();
+        selRecommendDto2.setUserId(userId);
+        List<Long> recommandWines = recommendService.selUserinfo(selRecommendDto2.getUserId());
+        List<Long> getProductId = new ArrayList<>();
 
-        List<WineRecommendVo2> selectedWines = new ArrayList<>();
-        List<Integer> totalWines = recommandWines;
 
         //userId 당 해당하는 productId 담기
-        for (Integer wineId : recommandWines) {
-            getProductID.add(wineId.longValue());
+        for (Long wineId : recommandWines) {
+            getProductId.add(wineId.longValue());
         }
 
+
         //랜덤 6개 출력하기
+        List<WineRecommendVo2> selectedWines = new ArrayList<>();
         List<WineRecommendVo2> allWines = MAPPER.selWineByday(userId);
         int winesToDisplay = 6;
 
-        if (getProductID.size() <= winesToDisplay) {
+        if (getProductId.size() <= winesToDisplay) {
             selectedWines.addAll(allWines);
         } else {
             Set<Integer> selectedIndexes = new HashSet<>();
             Random random = new Random();
 
             while (selectedIndexes.size() < winesToDisplay) {
-                int randomIndex = random.nextInt(getProductID.size());
+                int randomIndex = random.nextInt(getProductId.size());
                 selectedIndexes.add(randomIndex);
             }
 

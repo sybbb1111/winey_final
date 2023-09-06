@@ -88,7 +88,7 @@ public class SearchService {
             }
 
         if (dto.getText() != null && !dto.getText().isEmpty()) {
-            builder.and(productEntity.nmKor.likeIgnoreCase("%" + dto.getText() + "%"));
+            builder.and(productEntity.nmKor.contains(dto.getText()).and(productEntity.nmEng.contains(dto.getText())));
         }
         JPAQuery<WineVo> query = queryFactory.select(
                         Projections.constructor(
@@ -153,7 +153,7 @@ public class SearchService {
         }
 
         if (dto.getText() != null && !dto.getText().isEmpty()) {
-            builder.and(productEntity.nmKor.likeIgnoreCase("%" + dto.getText() + "%"));
+            builder.and(productEntity.nmKor.contains(dto.getText()).and(productEntity.nmEng.contains(dto.getText())));
         }
 
         return queryFactory
