@@ -42,7 +42,7 @@ public class PaymentService {
 
         OrderEntity entity = OrderEntity.builder()
                 .orderStatus(1)
-                .orderTime(LocalDateTime.now())
+                .orderDate(LocalDateTime.now())
                 .payment(1)
                 .pickupTime(LocalDateTime.parse(dto.getPickupTime(), formatter))
                 .storeEntity(StoreEntity.builder().storeId(dto.getStoreId()).build())
