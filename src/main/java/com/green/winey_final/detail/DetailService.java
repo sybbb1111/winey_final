@@ -42,24 +42,13 @@ public class DetailService {
                         product.promotion, product.beginner, product.alcohol, product.quantity, category.nm.as("categoryNm"),
                          country.nm.as("countryNm"),feature.sweety,feature.acidity,feature.body))
                 .from(product)
-                .leftJoin(category).on(product.categoryEntity.categoryId.eq(product.productId))
+                .leftJoin(category).on(product.categoryEntity.categoryId.eq(category.categoryId))
                 .leftJoin(country).on(product.countryEntity.countryId.eq(country.countryId))
                 .leftJoin(feature).on(product.featureEntity.featureId.eq(feature.featureId))
                 .where(product.productId.eq(productId))
                 .fetchOne();
 
 
-        switch (vo.getTemp().intValue()) {
-            case 0:
-                vo.setTemp(10L);
-                break;
-            case 1:
-                vo.setTemp(15L);
-                break;
-            default:
-                vo.setTemp(18L);
-                break;
-        }
 
         List<String> selPairing = jpaQueryFactory.select(Projections.constructor(String.class,smallCategory.sKind.as("selReview")))
                 .from(product)

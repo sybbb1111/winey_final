@@ -20,10 +20,10 @@ public class RegionNmEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
+    @Column(updatable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long regionNmId;
 
-    @Column(nullable = false, length = 15)
+    @Column(length = 15)
     private String regionNm;
 
 

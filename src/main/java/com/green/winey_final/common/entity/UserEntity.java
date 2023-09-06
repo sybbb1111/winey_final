@@ -41,7 +41,6 @@ public class UserEntity extends BaseEntity {
     private String uid;
 
     @JsonIgnore
-    @Column(nullable = false)
     private String upw;
 
     @Column(length = 20)
@@ -50,7 +49,7 @@ public class UserEntity extends BaseEntity {
 
 
     @JsonIgnore
-    @Column(nullable = false, name = "role_type", length = 20)
+    @Column(name = "role_type", length = 20)
     @Enumerated(EnumType.STRING)
     @NotNull
     private RoleType roleType;
@@ -68,7 +67,7 @@ public class UserEntity extends BaseEntity {
 
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "region_nm_id", nullable = false)
+    @JoinColumn(name = "region_nm_id")
     private RegionNmEntity regionNmEntity;
 
 
