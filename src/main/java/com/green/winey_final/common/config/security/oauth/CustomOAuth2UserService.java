@@ -6,6 +6,7 @@ import com.green.winey_final.common.config.security.model.RoleType;
 import com.green.winey_final.common.config.security.model.UserPrincipal;
 import com.green.winey_final.common.config.security.oauth.userinfo.OAuth2UserInfo;
 import com.green.winey_final.common.config.security.oauth.userinfo.OAuth2UserInfoFactory;
+import com.green.winey_final.common.entity.RegionNmEntity;
 import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
+
         }
     }
 
@@ -59,12 +61,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private UserEntity createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
 
-        return rep.saveAndFlush(UserEntity.builder()
+        return rep.save(UserEntity.builder()
                 .providerType(providerType)
                 .uid(userInfo.getId())
                 .unm(userInfo.getName())
                 .roleType(RoleType.USER)
                 .email(userInfo.getEmail())
+                                .regionNmEntity(RegionNmEntity.builder().regionNmId(1L).build()
+                                )
                 //.pic(userInfo.getImageUrl())
                 .build());
     }
