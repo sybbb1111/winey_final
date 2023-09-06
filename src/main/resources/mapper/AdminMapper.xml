@@ -250,6 +250,7 @@
                 LEFT OUTER JOIN t_sale B
                 ON A.product_id = B.product_id
                 WHERE nm_kor LIKE '%${str}%'
+                LIMIT #{startIdx}, #{row}
             </when>
 
         </choose>
@@ -329,6 +330,7 @@
                 ON A.region_nm_id = B.region_nm_id
                 WHERE role_type = "USER" AND unm LIKE '%${str}%'
                 ORDER BY A.user_id
+                LIMIT #{startIdx}, #{row}
             </when>
 
             <when test="type == 'searchUserEmail'.toString()">
@@ -338,6 +340,7 @@
                 ON A.region_nm_id = B.region_nm_id
                 WHERE role_type = "USER" AND email LIKE '%${str}%'
                 ORDER BY A.user_id
+                LIMIT #{startIdx}, #{row}
             </when>
 
         </choose>
