@@ -5,14 +5,19 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+
 @Data
 @AllArgsConstructor
-public class OrderDetailVo2 {
+public class SelOrderVo {
     private LocalDateTime orderTime;
+    private Long orderId;
+    private Long userId;
+    private String nmKor;
     private Long payment;
+    private Long totalOrderPrice;
+    private String nm;
     private LocalDateTime pickupTime;
     private Long orderStatus;
-    private Long totalOrderPrice;
-    private String storeNm;
+    private Long count;
 
 }

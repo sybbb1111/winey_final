@@ -1,21 +1,20 @@
 package com.green.winey_final.order.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-//@Getter
-//@AllArgsConstructor
+@AllArgsConstructor
 public class OrderDetailVo1 {
-    private int orderDetailId;
+    private Long orderDetailId;
     private String nmKor;
     private String nmEng;
-    private int salePrice;
-    private int quantity;
+    private Long salePrice;
+    private Long quantity;
     private String pic;
-    private String price;
-    private int productId;
-
-    private int reviewYn;
+    private Long price;
+    private Long productId;
+    private Long reviewYn;
 
 
 }

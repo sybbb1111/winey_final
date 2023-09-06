@@ -1,13 +1,11 @@
-package com.green.winey_final.detail.model;
+package com.green.winey_final.detail2.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-public class SelAroma {
+public class SelAroma2 {
     private Long productId;
     private List<String> aromaNm;
 
