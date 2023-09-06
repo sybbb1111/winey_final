@@ -545,9 +545,9 @@ public class AdminService {
         return MAPPER.serchUser(dto);
     }
 
-    public List<ProductVo> searchProduct(AdminSerchDto dto) {
-        return MAPPER.searchProduct(dto);
-    }
+//    public List<ProductVo> searchProduct(AdminSerchDto dto) {
+//        return MAPPER.searchProduct(dto);
+//    }
 
     public AdminProductDetailVo getProductDetail(int productId) {
         AdminProductDetailVo dto = MAPPER.selPutProductInfo1(productId);
