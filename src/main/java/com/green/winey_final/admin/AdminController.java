@@ -1,9 +1,14 @@
 package com.green.winey_final.admin;
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.repository.support.PageCustom;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,9 +62,9 @@ public class AdminController {
     //등록 상품 리스트 출력 (페이징 처리)
     @Operation(summary = "등록된 상품 리스트 출력+ 등록 상품 검색(피그마: 등록상품리스트 페이지)P", description = "page값 = 1(default), row값 = 20(default)<br>"
             + "default값은 임시로 넣은 것이니 수정이 필요합니다.<br>"
-            + "type -> 기본값(0) / 상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
+            + "type -> 기본값(0) / 상품번호(productid)/세일가격(saleprice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
-            + "상품 검색시<br> type2 -> 상품한글이름(searchProductNmKor)<br> str -> (검색어)")
+            + "상품 검색시<br> type2 -> 상품한글이름(searchproductnmkor)<br> str -> (검색어)")
     @GetMapping("/product/list")
     public ProductList getProduct(@RequestParam(defaultValue = "1")int page,
                                   @RequestParam(defaultValue = "20")int row,
@@ -75,6 +80,17 @@ public class AdminController {
         dto.setSort(sort);
         dto.setStr(str);
         return SERVICE.getProduct(dto);
+    }
+    @Operation(summary = "등록된 상품 리스트 출력(피그마: 등록상품리스트 페이지)JPA", description = "정렬 안한 기본 페이지는 productId,asc 가 기본값입니다.<br>"
+            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수"
+            + "type -> 기본값(0) / 상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
+            + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
+    @GetMapping("/product/list2")
+    public PageCustom<ProductVo> getProduct2(@ParameterObject @PageableDefault(sort="productId", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                             Pageable pageable,
+                                             @RequestParam(required = false) String str) {
+
+        return SERVICE.getProduct1(pageable, str);
     }
 
     //할인률 등록 상품 리스트 출력
