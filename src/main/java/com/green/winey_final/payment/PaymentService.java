@@ -30,8 +30,8 @@ public class PaymentService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         List<CartProductVo> cartProductList = dao.selCartProduct(facade.getLoginUserPk());
-        cartProductList.stream().redu
-        long totalOrderPrice =
+        //https://velog.io/@penrose_15/MySQL%EC%97%90%EC%84%9C-Bulk-Insert%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%9C-%EB%BB%98%EC%A7%93-%EB%AA%A8%EC%9D%8C
+        long totalOrderPrice = 100L;
 
         OrderEntity entity = OrderEntity.builder()
                 .orderStatus(1L)

@@ -57,6 +57,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        jdbc:
+          batch_size: 50
   data:
     redis:
       host: localhost
