@@ -249,6 +249,8 @@ public class AdminController {
         return SERVICE.serchUserList(dto);
     }
 */
+
+
     //상품 검색
     @Operation(summary = "등록 상품 검색", description = " <br>"
             +"type(검색타입) -> 한글이름(productNmKor) <br>"
@@ -258,7 +260,7 @@ public class AdminController {
         AdminSerchDto dto = new AdminSerchDto();
         dto.setType(type);
         dto.setStr(str);
-        return SERVICE.serchProduct(dto);
+        return SERVICE.searchProduct(dto);
     }
 
     //상품 디테일 관리자용
