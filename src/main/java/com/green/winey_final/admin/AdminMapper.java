@@ -76,7 +76,7 @@ public interface AdminMapper {
 
     //검색
     List<UserVo> serchUser(AdminSerchDto dto);
-    List<ProductVo> serchProduct(AdminSerchDto dto);
+//    List<ProductVo> searchProduct(AdminSerchDto dto);
 
     //
     AdminProductDetailVo selPutProductInfo1(int userId);
