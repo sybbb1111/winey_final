@@ -71,8 +71,8 @@ public class SecurityConfiguration {
                                         ,"/api/mypage/emails/**"
 
                                 ).permitAll()
+                                .requestMatchers("**exception**") .permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
-//                                .requestMatchers("**exception**").permitAll()
 //                                .requestMatchers("/api/main/**").permitAll()// roles 값을 두개값으로 따로 check in 처럼 데이터에 제한을 두어야하는지 그냥 insert해야할지 ?
 //                                .requestMatchers("/api/recommend/**").hasAnyRole("USER","ADMIN")
 //
