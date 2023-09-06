@@ -16,13 +16,13 @@ public class RecommendController {
     private final RecommendService service;
 
     @GetMapping("/getuser")
-    public List<Long> getUserWine(@RequestParam Long userId){
-        return service.selUserinfo(userId);
+    public List<Long> getUserWine(){
+        return service.selUserinfo();
     }
 
     @GetMapping("/getuserrecommend")
-    public RecommendVo getRecommend(@RequestParam Long userId){
-        return service.selUserRecommend(userId);
+    public RecommendVo getRecommend(){
+        return service.selUserRecommend();
     }
 
 
