@@ -14,5 +14,4 @@ public class OrderDetailVo2 {
     private Integer orderStatus;
     private Integer totalOrderPrice;
     private String storeNm;
-
 }

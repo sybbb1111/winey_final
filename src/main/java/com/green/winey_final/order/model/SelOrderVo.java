@@ -13,11 +13,11 @@ public class SelOrderVo {
     private Long orderId;
     private Long userId;
     private String nmKor;
-    private Long payment;
-    private Long totalOrderPrice;
+    private Integer payment;
+    private Integer totalOrderPrice;
     private String nm;
     private LocalDateTime pickupTime;
-    private Long orderStatus;
+    private Integer orderStatus;
     private Long count;
 
 }
