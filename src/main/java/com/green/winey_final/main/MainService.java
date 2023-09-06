@@ -2,23 +2,17 @@ package com.green.winey_final.main;
 
 
 import com.green.winey_final.common.config.security.AuthenticationFacade;
-import com.green.winey_final.common.config.security.model.RoleType;
 import com.green.winey_final.common.entity.*;
 import com.green.winey_final.main.model.WineCategoryDto;
 import com.green.winey_final.main.model.WineCategoryDetailRes;
 import com.green.winey_final.repository.ProductRepository;
 import com.green.winey_final.repository.SmallCategoryRepository;
 import com.green.winey_final.repository.WinePairingRepository;
-import com.green.winey_final.search.model.WineSearchDto;
-import com.green.winey_final.search.model.WineSelDetailRes;
 import com.green.winey_final.search.model.WineVo;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -44,59 +38,6 @@ public class MainService {
     private final WinePairingRepository winePairingRep;
     private final JPAQueryFactory queryFactory;
 
-
-
-    public List<ProductEntity> getCountry(Long countryId) {
-        //페이징 처리
-        Pageable pageable = new Pageable() {
-            @Override
-            public int getPageNumber() {
-                return 0;
-            }
-
-            @Override
-            public int getPageSize() {
-                return 0;
-            }
-
-            @Override
-            public long getOffset() {
-                return 0;
-            }
-
-            @Override
-            public Sort getSort() {
-                return null;
-            }
-
-            @Override
-            public Pageable next() {
-                return null;
-            }
-
-            @Override
-            public Pageable previousOrFirst() {
-                return null;
-            }
-
-            @Override
-            public Pageable first() {
-                return null;
-            }
-
-            @Override
-            public Pageable withPage(int pageNumber) {
-                return null;
-            }
-
-            @Override
-            public boolean hasPrevious() {
-                return false;
-            }};
-        pageable = PageRequest.of(pageable.getPageNumber(), 6);
-
-        return productRep.findByCountryEntityCountryId(countryId, pageable);
-    }
 
     /** 매일 6개 랜덤 와인 추천 */
 
@@ -259,74 +200,6 @@ public class MainService {
 
     /** 카테고리별 와인 리스트 여기까지 한 묶음 */
 
-    /** 연습용 */
-    public List<ProductEntity> getProductsByCategoryId(Long categoryId) {
-        //페이징 처리
-        Pageable pageable = new Pageable() {
-            @Override
-            public int getPageNumber() {
-                return 0;
-            }
 
-            @Override
-            public int getPageSize() {
-                return 0;
-            }
-
-            @Override
-            public long getOffset() {
-                return 0;
-            }
-
-            @Override
-            public Sort getSort() {
-                return null;
-            }
-
-            @Override
-            public Pageable next() {
-                return null;
-            }
-
-            @Override
-            public Pageable previousOrFirst() {
-                return null;
-            }
-
-            @Override
-            public Pageable first() {
-                return null;
-            }
-
-            @Override
-            public Pageable withPage(int pageNumber) {
-                return null;
-            }
-
-            @Override
-            public boolean hasPrevious() {
-                return false;
-            }};
-        pageable = PageRequest.of(pageable.getPageNumber(), 9);
-
-        return productRep.findByCategoryEntityCategoryId(categoryId, pageable);
-    }
-
-    /** 음식별 와인..JPA실패 */
-    public List<SmallCategoryEntity> getFood(Long bigCate) {
-        //페이징 처리
-
-//        Pageable pageable = PageRequest.of(page - 1, 6);
-
-        return smallCategoryRep.findTop2ByBigCategoryEntity_BigCategoryId(bigCate);
-    }
-
-//    public List<WinePairingEntity> getPairing(Long productId) {
-//        //페이징 처리
-//
-////        Pageable pageable = PageRequest.of(page - 1, 6);
-//
-//        return winePairingRep.findWinePairingEntityByProductEntity_ProductIdDistinct(productId);
-//    }
 
 }
