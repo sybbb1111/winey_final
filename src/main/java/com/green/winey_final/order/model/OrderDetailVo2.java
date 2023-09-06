@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class OrderDetailVo2 {
-    private LocalDateTime orderTime;
+    private LocalDateTime orderDate;
     private Long payment;
     private LocalDateTime pickupTime;
     private Long orderStatus;

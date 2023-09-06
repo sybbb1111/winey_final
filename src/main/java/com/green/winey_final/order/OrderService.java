@@ -47,7 +47,7 @@ public class OrderService {
 
         List<SelOrderVo> result = jpaQueryFactory
                 .select(Projections.constructor(SelOrderVo.class,
-                        order.orderTime, order.orderId, order.userEntity.userId,
+                        order.orderDate, order.orderId, order.userEntity.userId,
                         product.nmKor, order.payment, order.totalOrderPrice,
                         store.nm, order.pickupTime, order.orderStatus, order.count()))
                 .from(order)
@@ -56,7 +56,7 @@ public class OrderService {
                 .leftJoin(store).on(order.storeEntity.storeId.eq(store.storeId))
                 .where(predicate)
                 .groupBy(order.orderId)
-                .orderBy(order.orderTime.desc(), order.orderId.desc())
+                .orderBy(order.orderDate.desc(), order.orderId.desc())
                 .fetch();
 
         for (SelOrderVo entity : result) {
@@ -64,7 +64,7 @@ public class OrderService {
             UserEntity entity1 = new UserEntity();
             entity1.setUserId(userPk);
 
-            entity.setOrderTime(entity.getOrderTime());
+            entity.setOrderDate(entity.getOrderDate());
             entity.setUserId(userPk);
             entity.setOrderId(entity.getOrderId());
             entity.setPayment(entity.getPayment());
@@ -132,7 +132,7 @@ public class OrderService {
         }
 
         OrderDetailVo2 vo2 = jpaQueryFactory.select(Projections.constructor(OrderDetailVo2.class,
-                        order.orderTime, order.payment, order.pickupTime,
+                        order.orderDate, order.payment, order.pickupTime,
                         order.orderStatus, order.totalOrderPrice, store.nm))
                 .from(order)
                 .leftJoin(store).on(order.storeEntity.storeId.eq(store.storeId))
