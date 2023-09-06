@@ -22,10 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class OrderDetailEntity extends BaseEntity {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @GenericGenerator(
-            name = "seqOrderDetail"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long orderDetailId;
 
@@ -38,8 +35,8 @@ public class OrderDetailEntity extends BaseEntity {
     private ProductEntity productEntity;
 
     @Column(length = 11)
-    private Long quantity;
+    private int quantity;
 
     @Column(length = 11)
-    private Long salePrice;
+    private int salePrice;
 }

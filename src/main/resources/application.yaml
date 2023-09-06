@@ -10,6 +10,7 @@ app:
     redis-refresh-key: "D-RT"
   oauth2:
     authorized-redirect-uris:
+      - http://localhost:8080/test.html
       - http://localhost:8080/oauth/redirect
       - http://192.168.0.203:8080/oauth/redirect #서윤 ip주소
       # 동은님 아이피주소: 포트번호 ~/oauth/redirect-
@@ -35,15 +36,13 @@ spring:
             trust: smtp.naver.com
           starttls:
             enable: true
-
-
   servlet:
     multipart:
       max-file-size: 3MB
       max-request-size: 12MB
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d?rewriteBatchedStatements=true
+    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_d?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
     username: team_d
     password: green502
   jpa:
@@ -55,6 +54,10 @@ spring:
         format_sql: true
         jdbc:
           batch_size: 50
+        order_updates: true
+        order_inserts: true
+        generate_statistics: true #통계를 보기 위함
+
   data:
     redis:
       host: localhost
@@ -107,6 +110,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
 
 # cors
 cors:

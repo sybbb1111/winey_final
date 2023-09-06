@@ -9,10 +9,10 @@ public class OrderDetailVo1 {
     private Long orderDetailId;
     private String nmKor;
     private String nmEng;
-    private Long salePrice;
-    private Long quantity;
+    private Integer salePrice;
+    private Integer quantity;
     private String pic;
-    private Long price;
+    private Integer price;
     private Long productId;
     private Long reviewYn;
 

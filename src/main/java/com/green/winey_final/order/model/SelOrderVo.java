@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class SelOrderVo {
-    private LocalDateTime orderTime;
+    private LocalDateTime orderDate;
     private Long orderId;
     private Long userId;
     private String nmKor;
-    private Long payment;
-    private Long totalOrderPrice;
+    private Integer payment;
+    private Integer totalOrderPrice;
     private String nm;
     private LocalDateTime pickupTime;
-    private Long orderStatus;
+    private Integer orderStatus;
     private Long count;
 
 }

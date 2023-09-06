@@ -8,11 +8,10 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class OrderDetailVo2 {
-    private LocalDateTime orderTime;
-    private Long payment;
+    private LocalDateTime orderDate;
+    private Integer payment;
     private LocalDateTime pickupTime;
-    private Long orderStatus;
-    private Long totalOrderPrice;
+    private Integer orderStatus;
+    private Integer totalOrderPrice;
     private String storeNm;
-
 }
