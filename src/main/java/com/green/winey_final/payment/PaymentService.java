@@ -22,7 +22,7 @@ import java.util.List;
 public class PaymentService {
 
     private final AuthenticationFacade facade;
-    private final PaymentRepository rep;
+    //private final PaymentRepository rep;
     private final PaymentDao dao;
 
     @Transactional
