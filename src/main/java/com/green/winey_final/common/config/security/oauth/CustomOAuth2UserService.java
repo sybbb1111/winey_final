@@ -59,7 +59,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private UserEntity createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
 
-        return rep.saveAndFlush(UserEntity.builder()
+        return rep.save(UserEntity.builder()
                 .providerType(providerType)
                 .uid(userInfo.getId())
                 .unm(userInfo.getName())

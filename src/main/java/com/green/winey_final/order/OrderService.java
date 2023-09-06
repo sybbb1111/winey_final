@@ -85,7 +85,7 @@ public class OrderService {
     public int cancelOrder(Long orderId) {
         Optional<OrderEntity> optentity = orderRepository.findById(orderId);
         OrderEntity entity = optentity.get();
-        entity.setOrderStatus(6L);
+        entity.setOrderStatus(6);
         orderRepository.save(entity);
         return 1;
     }
@@ -93,7 +93,7 @@ public class OrderService {
     int pickupFinishOrder(Long orderId) {
         Optional<OrderEntity> optentity = orderRepository.findById(orderId);
         OrderEntity entity = optentity.get();
-        entity.setOrderStatus(5L);
+        entity.setOrderStatus(5);
         orderRepository.save(entity);
         return 1;
     }

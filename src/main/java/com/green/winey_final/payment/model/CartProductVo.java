@@ -7,5 +7,4 @@ public class CartProductVo {
     private long productId;
     private int quantity;
     private int price;
-    private int promotion;
 }

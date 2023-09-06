@@ -36,16 +36,16 @@ public class OrderEntity extends BaseEntity {
     private StoreEntity storeEntity;
 
     @Column(length = 20)
-    private Long totalOrderPrice;
+    private int totalOrderPrice;
 
     private LocalDateTime orderTime; //이거 확인 필요
 
     @Column(length = 11)
-    private Long payment;
+    private int payment;
 
     private LocalDateTime pickupTime; //이거 확인 필요
 
     @Column(length = 11)
-    private Long orderStatus;
+    private int orderStatus;
 
 }
