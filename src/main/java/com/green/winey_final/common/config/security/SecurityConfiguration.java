@@ -99,26 +99,14 @@ public class SecurityConfiguration {
                 .httpBasic(http -> http.disable()) //UI 있는 시큐리티 설정을 비활성화
                 .formLogin(http -> http.disable())
 
-//                .oauth2Login(oauth2 -> oauth2.authorizationEndpoint(authorization  -> authorization.baseUri("/oauth2/authorization")
-//                                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
-//                        .redirectionEndpoint(redirection -> redirection.baseUri("/*/oauth2/code/*"))
-//                        .userInfoEndpoint(userInfo  -> userInfo.userService(oAuth2UserService))
-//                        .successHandler(oAuth2AuthenticationSuccessHandler())
-//                        .failureHandler(oAuth2AuthenticationFailureHandler())
-//                )
-//        .formLogin(form ->  form.loginPage("/user/signin")
-//                .usernameParameter("email")
-//                .passwordParameter("pw")
-//                .defaultSuccessUrl("/feed", true)
-//                .loginProcessingUrl("/user/signin")
-//
-//        )
+
+
                 .csrf(csrf -> csrf.disable()) //CSRF 보안이 필요 X, 쿠키와 세션을 이용해서 인증을 하고 있기 때문에 발생하는 일, https://kchanguk.tistory.com/197
                 .exceptionHandling(except -> {
                     except.accessDeniedHandler(tokenAccessDeniedHandler);
                     except.authenticationEntryPoint(new RestAuthenticationEntryPoint());
                 })
-                .oauth2Login(oauth2 -> oauth2.loginPage("/user/signin")
+                .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization  -> authorization.baseUri("/oauth2/authorization")
                                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository))
                         .redirectionEndpoint(redirection -> redirection.baseUri("/*/oauth2/code/*"))
