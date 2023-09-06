@@ -63,8 +63,8 @@ public class AdminController {
     @GetMapping("/product/list")
     public ProductList getProduct(@RequestParam(defaultValue = "1")int page,
                                   @RequestParam(defaultValue = "20")int row,
-                                  @RequestParam(defaultValue = "0") String type,
-                                  @RequestParam(defaultValue = "0") String sort,
+                                  @RequestParam(required = false) String type,
+                                  @RequestParam(required = false) String sort,
                                   @RequestParam(required = false) String type2,
                                   @RequestParam(required = false) String str) {
         SelListDto dto = new SelListDto();
@@ -98,8 +98,8 @@ public class AdminController {
     @GetMapping("/user/list")
     public UserList getUserList(@RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "15") int row,
-                                @RequestParam(defaultValue = "0") String type,
-                                @RequestParam(defaultValue = "0") String sort,
+                                @RequestParam(required = false) String type,
+                                @RequestParam(required = false) String sort,
                                 @RequestParam(required = false) String type2,
                                 @RequestParam(required = false) String str) {
         SelListDto dto = new SelListDto();
