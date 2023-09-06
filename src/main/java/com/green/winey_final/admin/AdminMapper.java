@@ -55,7 +55,7 @@ public interface AdminMapper {
     int updDelYn(UserDelYnUpdDto dto); //회원 탈퇴상태(del_yn) 업데이트(관리자페이지에서)
 
     //페이징 처리
-    int productCount(); //product 개수 카운트
+    int productCount(SelListDto dto); //product 개수 카운트
     int productSaleCount(); //saleYn = 1인 상품 개수
     int userCount(SelListDto dto); //가입회원 수
     int userOrderCount(Long userId); //userOrder 개수 카운트

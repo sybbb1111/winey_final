@@ -309,7 +309,7 @@ public class AdminService {
     public ProductList getProduct(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
-        int maxProduct = MAPPER.productCount();
+        int maxProduct = MAPPER.productCount(dto);
 
         PageDto pageDto = new PageDto(maxProduct, dto.getPage(), dto.getRow());
 
