@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class SelSale {
     private Long productId;
-    private Long sale;
-    private Long salePrice;
+    private Integer sale;
+    private Integer salePrice;
 }
