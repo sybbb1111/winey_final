@@ -244,7 +244,7 @@
                 LIMIT #{startIdx}, #{row}
             </when>
 
-            <when test="type == 'searchProductNmKor'.toString()">
+            <when test="type2 == 'searchProductNmKor'.toString()">
                 SELECT A.product_id productId, A.nm_kor nmKor, A.price, A.promotion, A.beginner, A.quantity, B.sale, B.sale_price salePrice
                 FROM t_product A
                 LEFT OUTER JOIN t_sale B
