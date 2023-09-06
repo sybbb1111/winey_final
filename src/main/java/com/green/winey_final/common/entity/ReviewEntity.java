@@ -27,5 +27,5 @@ public class ReviewEntity extends BaseEntity {
     private OrderDetailEntity orderDetailEntity;
 
     @Column(length = 3)
-    private Long reviewLevel;
+    private int reviewLevel;
 }
