@@ -700,7 +700,7 @@
                 WHERE role_type = "USER"
             </when>
 
-            <when test="type == 'serchUserName'.toString()">
+            <when test="type == 'searchUserName'.toString()">
                 SELECT COUNT(*)
                 FROM
                 (
@@ -713,7 +713,7 @@
                 ) C
             </when>
 
-            <when test="type == 'serchUserEmail'.toString()">
+            <when test="type == 'searchUserEmail'.toString()">
                 SELECT COUNT(*)
                 FROM
                 (
