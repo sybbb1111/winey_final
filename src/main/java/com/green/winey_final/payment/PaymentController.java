@@ -17,7 +17,7 @@ public class PaymentController {
     private final PaymentService service;
 
     @PostMapping("/cartpayment") //장바구니에 담겨있는 제품 결제
-    @Operation(summary = "결제", description =
+    @Operation(summary = "카트 결제", description =
             "<b>response data</b> : 오더 번호 <br><br>"
                     + "storeId: 매장PK값, <br>"
                     + "pickupTime: 픽업타임 <br>")

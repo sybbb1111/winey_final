@@ -31,7 +31,7 @@ public class PaymentDao {
 
     public List<CartProductVo> selCartProduct(long userId) {
         JPQLQuery<CartProductVo> query = jpaQueryFactory.select(Projections.bean(CartProductVo.class
-                        , p.productId, p.quantity
+                        , p.productId, c.quantity
                         , new CaseBuilder().when(s.productEntity.isNotNull()).then(s.salePrice).otherwise(p.price).as("price")
                 ))
                 .from(c)
