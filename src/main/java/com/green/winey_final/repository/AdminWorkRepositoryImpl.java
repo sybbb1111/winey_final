@@ -223,6 +223,56 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         return new PageCustom<StoreVo>(map.getContent(), map.getPageable(), map.getTotalElements());
     }
 
+    //상세 주문 내역1
+    @Override
+    public List<OrderDetail1> selOrderDetailByOrderId(int orderId, Pageable pageable) {
+        List<OrderDetail1> list = queryFactory
+                .select(new QOrderDetail1(orderEntity.orderId, orderEntity.orderDate.stringValue(), userEntity.email, productEntity.nmKor, orderDetailEntity.salePrice, orderDetailEntity.quantity))
+                .from(orderEntity)
+                .innerJoin(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.userId.eq(userEntity.userId))
+                .innerJoin(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity))
+                .where(orderEntity.orderId.eq((long) orderId))
+                .fetch();
+
+        return list;
+/* 추후 페이징 필요하면 사용
+        JPAQuery<Long> countQuery = queryFactory
+                .select(orderEntity.orderId.count())
+                .from(orderEntity)
+                .innerJoin(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.userId.eq(userEntity.userId))
+                .innerJoin(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity))
+                .where(orderEntity.orderId.eq((long) orderId));
+
+        Page<OrderDetail1> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<OrderDetail1>(map.getContent(), map.getPageable(), map.getTotalElements());
+ */
+    }
+
+    //상세 주문 내역2
+    @Override
+    public OrderDetail2 selOrderDetailByOrderId2(int orderId, Pageable pageable) {
+        OrderDetail2 list = queryFactory
+                .select(new QOrderDetail2(orderDetailEntity.quantity.sum(), orderDetailEntity.salePrice.sum(), orderEntity.totalOrderPrice, orderEntity.payment.stringValue(), storeEntity.nm, orderEntity.pickupTime.stringValue(), orderEntity.orderStatus))
+                .from(orderEntity)
+                .innerJoin(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .innerJoin(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .where(orderEntity.orderId.eq((long) orderId))
+                .fetchOne();
+
+        return list;
+    }
+
 
     //정렬
     private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {

@@ -211,10 +211,19 @@ public class AdminController {
 
     //상세 주문 내역 리스트 by orderId
     @Operation(summary = "상세 주문 내역 출력 by orderId(피그마:주문상세리스트)")
-    @GetMapping("/order/{orderId}")
-    public OrderDetail3 getOrderDetail(@PathVariable int orderId) {
-        return SERVICE.getOrderDetail(orderId);
+    @GetMapping("/order3/{orderId}")
+    public OrderDetail3 getOrderDetail3(@PathVariable int orderId) {
+        return SERVICE.getOrderDetail3(orderId);
     }
+
+    //상세 주문 내역 리스트 by orderId
+    @Operation(summary = "JPA상세 주문 내역 출력 by orderId(피그마:주문상세리스트)")
+    @GetMapping("/order/{orderId}")
+    public OrderDetail3 getOrderDetail(@PathVariable int orderId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                        Pageable pageable) {
+        return SERVICE.getOrderDetail(orderId, pageable);
+    }
+
 
     //환불된 상품과 환불 사유 출력
     @Operation(summary = "환불 상품 내역과 환불 사유 출력", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"+

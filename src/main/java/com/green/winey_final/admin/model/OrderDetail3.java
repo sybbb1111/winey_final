@@ -10,5 +10,5 @@ import java.util.List;
 @Builder
 public class OrderDetail3 {
     private List<OrderDetail1> list1;
-    private List<OrderDetail2> list2;
+    private OrderDetail2 list2;
 }

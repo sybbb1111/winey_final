@@ -480,16 +480,25 @@ public class AdminService {
     }
 
     //상세 주문 내역 리스트 by orderId
-    public OrderDetail3 getOrderDetail(int orderId) {
+    public OrderDetail3 getOrderDetail3(int orderId) {
         List<OrderDetail1> list1 = MAPPER.selOrderDetail1(orderId);
 
         List<OrderDetailVo> list = MAPPER.selOrderDetail(orderId);
 
-        List<OrderDetail2> list2 = MAPPER.selOrderDetail2(orderId);
+        OrderDetail2 list2 = MAPPER.selOrderDetail2(orderId);
 
         return OrderDetail3.builder()
                 .list1(list1)
                 .list2(list2)
+                .build();
+    }
+
+    //상세 주문 내역 리스트 by orderId
+    public OrderDetail3 getOrderDetail(int orderId, Pageable pageable) {
+
+        return OrderDetail3.builder()
+                .list1(adminWorkRep.selOrderDetailByOrderId(orderId, pageable))
+                .list2(adminWorkRep.selOrderDetailByOrderId2(orderId, pageable))
                 .build();
     }
 
