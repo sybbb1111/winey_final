@@ -1,13 +1,12 @@
 package com.green.winey_final.repository;
 
-import com.green.winey_final.admin.model.ProductVo;
-import com.green.winey_final.admin.model.QProductVo;
-import com.green.winey_final.admin.model.QUserVo;
-import com.green.winey_final.admin.model.UserVo;
+import com.green.winey_final.admin.model.*;
 import com.green.winey_final.repository.support.PageCustom;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,9 +20,12 @@ import org.springframework.stereotype.Repository;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.green.winey_final.common.entity.QOrderDetailEntity.orderDetailEntity;
+import static com.green.winey_final.common.entity.QOrderEntity.orderEntity;
 import static com.green.winey_final.common.entity.QProductEntity.productEntity;
 import static com.green.winey_final.common.entity.QRegionNmEntity.regionNmEntity;
 import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
+import static com.green.winey_final.common.entity.QStoreEntity.storeEntity;
 import static com.green.winey_final.common.entity.QUserEntity.userEntity;
 
 @Repository
@@ -82,6 +84,67 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         return new PageCustom<UserVo>(map.getContent(), map.getPageable(), map.getTotalElements());
     }
 
+    @Override
+    public PageCustom<UserOrderDetailVo> selUserOrderByUserId(Long userId, Pageable pageable) {
+        //데이트포맷 로직
+        //        StringTemplate formattedDate = Expressions.dateTemplate(
+//                "DATE_FORMAT({0}, {1})",
+//                UserOrderDetailVo,
+//                ConstantImpl.create("%y-%m-%d"));
+
+        List<UserOrderDetailVo> list = queryFactory
+                .select(new QUserOrderDetailVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), productEntity.nmKor, orderEntity.totalOrderPrice.intValue(), storeEntity.nm, orderEntity.orderStatus.intValue()))
+                .from(userEntity)
+                .innerJoin(orderEntity)
+                .on(userEntity.eq(orderEntity.userEntity))
+                .innerJoin(orderDetailEntity)
+                .on(orderDetailEntity.orderEntity.eq(orderEntity))
+                .innerJoin(productEntity)
+                .on(productEntity.eq(orderDetailEntity.productEntity))
+                .innerJoin(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .where(userEntity.userId.eq(userId))
+                .groupBy(orderEntity.orderId)
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+//                .select(userEntity.userId.countDistinct())// count()와 countDistinct() 차이 알기
+                .select(userEntity.userId.count())// count()와 countDistinct() 차이 알기
+                .from(userEntity)
+                .innerJoin(orderEntity)
+                .on(userEntity.userId.eq(orderEntity.orderId))
+                .innerJoin(orderDetailEntity)
+                .on(orderEntity.orderId.eq(orderDetailEntity.orderEntity.orderId))
+                .innerJoin(productEntity)
+                .on(productEntity.productId.eq(orderDetailEntity.productEntity.productId))
+                .innerJoin(storeEntity)
+                .on(orderEntity.storeEntity.storeId.eq(storeEntity.storeId))
+//                .where(userEntity.userId.eq(userId)) //이 부분 주석 풀면 안됨... 이유 찾아야함
+                .groupBy(orderEntity.orderId);
+
+        Page<UserOrderDetailVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<UserOrderDetailVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
+    @Override
+    public UserInfo selUserInfoByUserId(Long userId, Pageable pageable) {
+        UserInfo user = queryFactory.select(new QUserInfo(userEntity.userId, userEntity.email, userEntity.unm,
+                        ExpressionUtils.as(orderEntity.totalOrderPrice.sum().intValue(), "sumOrderPrice"),
+                        ExpressionUtils.as(orderEntity.orderId.count().intValue(), "orderCount") //ExpressionUtils.as(JPAExpressions.select(count(orderEntity.orderId)).from(orderEntity),"orderCount")
+                ))
+                .from(userEntity)
+                .innerJoin(orderEntity)
+                .on(userEntity.eq(orderEntity.userEntity))
+                .where(userEntity.userId.eq(userId))
+                .fetchOne();
+
+        return user;
+    }
+
 
     //정렬
     private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
@@ -106,6 +169,12 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                     //가입 회원 리스트 정렬
                     case "userid": orders.add(new OrderSpecifier(direction, userEntity.userId)); break;
                     case "pickup": orders.add(new OrderSpecifier(direction, userEntity.regionNmEntity.regionNmId)); break;
+
+                    //회원별 상세 주문 내역 정렬
+                    case "orderid": orders.add(new OrderSpecifier(direction, orderEntity.orderId)); break;
+                    case "orderdate": orders.add(new OrderSpecifier(direction, orderEntity.orderDate)); break;
+                    case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.regionNmEntity)); break;
+                    case "orderstatus": orders.add(new OrderSpecifier(direction, orderEntity.orderStatus)); break;
 
 
                 }

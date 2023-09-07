@@ -392,7 +392,7 @@ public class AdminService {
     }
 
     //가입회원 상세 주문 내역(회원pk별) +페이징 처리
-    public UserOrderDetailList getUserOrder(Long userId, SelListDto dto) {
+    public UserOrderDetailList2 getUserOrder(Long userId, SelListDto dto) {
         UserOrderDetailDto detailDto = new UserOrderDetailDto();
         detailDto.setUserId(userId);
         detailDto.setRow(dto.getRow());
@@ -407,11 +407,11 @@ public class AdminService {
 
         List<UserOrderDetailVo> list = MAPPER.selUserOrder(detailDto);
 
-        for(int i=0;i<list.size();i++) {
-            if(list.get(i).getCount()>1) {
-                list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
-            }
-        }
+//        for(int i=0;i<list.size();i++) {
+//            if(list.get(i).getCount()>1) {
+//                list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
+//            }
+//        }
         UserInfo user = MAPPER.selUserInfo(userId);
 
         //환불 금액, 횟수 구하는 로직
@@ -434,12 +434,23 @@ public class AdminService {
 //            user.setOrderCount(user.getOrderCount() - refundVo2.getOrderCount());
 //        }
 
-        return UserOrderDetailList.builder()
+        return UserOrderDetailList2.builder()
                 .page(new PageDto(maxUserOrder, dto.getPage(), dto.getRow()))
                 .userInfo(user)
                 .userOrderList(list)
                 .build();
     }
+
+    public UserOrderDetailList getUserOrder2(Long userId, Pageable pageable) {
+        PageCustom<UserOrderDetailVo> list = adminWorkRep.selUserOrderByUserId(userId, pageable);
+        UserInfo user = adminWorkRep.selUserInfoByUserId(userId, pageable);
+
+        return UserOrderDetailList.builder()
+                .userOrderList(list)
+                .userInfo(user)
+                .build();
+    }
+
     //주문 내역
     public OrderList getOrder(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();

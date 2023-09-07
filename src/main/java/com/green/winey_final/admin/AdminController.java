@@ -146,10 +146,10 @@ public class AdminController {
     //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리
     @Operation(summary = "회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
             + "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
-            +"type -> 기본값(0) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
+            + "type -> 기본값(0) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
     @GetMapping("/{userId}/order")
-    public UserOrderDetailList getUserOrder(@PathVariable Long userId, @RequestParam(defaultValue = "1")int page,
+    public UserOrderDetailList2 getUserOrder(@PathVariable Long userId, @RequestParam(defaultValue = "1")int page,
                                             @RequestParam(defaultValue = "15")int row,
                                             @RequestParam(defaultValue = "0") String type,
                                             @RequestParam(defaultValue = "0") String sort) {
@@ -159,6 +159,18 @@ public class AdminController {
         dto.setType(type);
         dto.setSort(sort);
         return SERVICE.getUserOrder(userId, dto);
+    }
+
+    @Operation(summary = "JPA회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)P", description = "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
+            + "page -> 0이 1페이지입니다.<br>"
+            + "size(row) -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort -> 입력 예시) orderDate,asc<br> - 주문번호(orderId) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
+            + "- 오름차순(asc) / 내림차순(desc)")
+    @GetMapping("/{userId}/order2")
+    public UserOrderDetailList getUserOrder2(@PathVariable Long userId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+    Pageable pageable) {
+
+        return SERVICE.getUserOrder2(userId, pageable);
     }
 
     //상품 사진 삭제
