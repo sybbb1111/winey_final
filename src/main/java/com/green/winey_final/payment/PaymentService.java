@@ -118,4 +118,8 @@ public class PaymentService {
         reviewRep.save(entity);
         return entity.getReviewId();
     }
+
+    public List<RegionSelVo> selRegion() {
+        return dao.selRegion(facade.getLoginUserPk());
+    }
 }

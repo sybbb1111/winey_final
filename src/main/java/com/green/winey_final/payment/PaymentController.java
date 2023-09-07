@@ -1,13 +1,12 @@
 package com.green.winey_final.payment;
 
-import com.green.winey_final.payment.model.EachPaymentInsDto;
-import com.green.winey_final.payment.model.PaymentInsDto;
-import com.green.winey_final.payment.model.PaymentUpdDto;
-import com.green.winey_final.payment.model.ReviewInsDto;
+import com.green.winey_final.payment.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -48,14 +47,14 @@ public class PaymentController {
 
     @PostMapping("/userreview") //리뷰 등록
     @Operation(summary = "리뷰 작성", description =
-            "<b>response data</b> : review 번호 <br><br>"
+                    "<b>response data</b> : review 번호 <br><br>"
                     + "orderDetailId: 오더 번호 <br>"
                     + "reviewLevel: (1: 좋아요, 2:보통, 3:별로)")
     public long postReview(@RequestBody ReviewInsDto dto) {
         return service.insReview(dto);
     }
 
-    /*
+
     @GetMapping("/pickregion") //픽업지역 출력
     @Operation(summary = "픽업 지역", description =
             "userId: 사용자 pk값, <br>"
@@ -64,10 +63,10 @@ public class PaymentController {
                     + "storeId: 가게 pk값 <br>"
                     + "nm: 지점명 <br>"
                     + "address: 주소")
-    public List<RegionSelVO> getRegion() {
+    public List<RegionSelVo> getRegion() {
         return service.selRegion();
     }
-*/
+
 
 }
 
