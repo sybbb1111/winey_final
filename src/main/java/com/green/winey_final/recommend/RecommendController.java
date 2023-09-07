@@ -30,6 +30,12 @@ public class RecommendController {
         return service.selRecommend(res);
     }
 
+    @GetMapping("/loginuser")
+    @Operation(summary = "로그인한 유저의 PK값")
+    public Long loginUserPk(){
+        return service.loginUserPk();
+    }
+
     @GetMapping("/getuser")
     public List<Long> getUserWine(){
         return service.selUserinfo();
