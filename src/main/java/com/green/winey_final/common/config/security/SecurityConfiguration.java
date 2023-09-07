@@ -57,9 +57,8 @@ public class SecurityConfiguration {
                                         , "/images/**", "/img/**"
                                         , "/error"
                                         , "/err"
-                                        ,"/main"
+                                        ,"/main", "api/main/**"
 
-                                        ,"/admin", "/admin**", "/admin/**"
 
                                         ,"/sign-api/sign-in"
                                         , "/sign-api/sign-up"
@@ -70,25 +69,30 @@ public class SecurityConfiguration {
                                         ,"/api/mypage/findid**"
                                         ,"/api/mypage/emails/**"
 
+                                        ,"/api/search/**", "/api/search**"
+
+                                        ,"/admin", "/admin**", "/admin/**"
+
                                 ).permitAll()
                                 .requestMatchers("**exception**") .permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
-//                                .requestMatchers("/api/main/**").permitAll()// roles 값을 두개값으로 따로 check in 처럼 데이터에 제한을 두어야하는지 그냥 insert해야할지 ?
-//                                .requestMatchers("/api/recommend/**").hasAnyRole("USER","ADMIN")
-//
-//                                .requestMatchers("/api/mypage/upduser/**").hasAnyRole("USER","ADMIN")
-//                                .requestMatchers("/api/mypage/delUser/**").hasAnyRole("USER","ADMIN")
-//                                .requestMatchers("/api/mypage/userinfo/**").hasAnyRole("USER","ADMIN")
-//
-//
-//                                .requestMatchers("/api/wine/**").hasAnyRole("USER","ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
 
-                                //.requestMatchers("/api/admin/**").hasRole("ADMIN")
+//                                .requestMatchers("/api/recommend/**").hasAnyRole("USER","ADMIN") //맞춤와인추천
+//
+//                                .requestMatchers("/api/mypage/upduser/**").hasAnyRole("USER","ADMIN") //비밀번호 변경
+//                                .requestMatchers("/api/mypage/delUser/**").hasAnyRole("USER","ADMIN") //탈퇴
+//                                .requestMatchers("/api/mypage/userinfo/**").hasAnyRole("USER","ADMIN") //회원정보
+//
+//
+//                                .requestMatchers("/api/wine/**").hasAnyRole("USER","ADMIN") //장바구니 - 회원만 이용 가능
+
+                                //.requestMatchers("/api/admin/**").hasRole("ADMIN") //관리자
+                                //.requestMatchers("/admin/**").hasRole("ADMIN")     //관리자
 
                                 //.requestMatchers("/api/download/**").hasRole("ADMIN")
-                                //.requestMatchers("/api/orderList/**").hasAnyRole("USER","ADMIN")
-                                //.requestMatchers("/api/detail/**").hasAnyRole("USER","ADMIN")
-                                //.requestMatchers("/api/payment/**").hasAnyRole("USER","ADMIN")
+                                //.requestMatchers("/api/orderList/**").hasAnyRole("USER","ADMIN") //주문내역
+                                //.requestMatchers("/api/detail/**").hasAnyRole("USER","ADMIN")  //주문상세내역
+                                //.requestMatchers("/api/payment/**").hasAnyRole("USER","ADMIN") //결제
 
                                 .anyRequest().permitAll()
 
