@@ -241,15 +241,29 @@ public class AdminController {
     }
     //매장 리스트 출력
     @Operation(summary = "매장 리스트 출력P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.")
-    @GetMapping("/store")
-    public StoreList getStore(@RequestParam(defaultValue = "1")int page,
+    @GetMapping("/store2")
+    public StoreList getStore2(@RequestParam(defaultValue = "1")int page,
                               @RequestParam(defaultValue = "15")int row) {
         SelListDto dto = new SelListDto();
         dto.setPage(page);
         dto.setRow(row);
 
-        return SERVICE.getStore(dto);
+        return SERVICE.getStore2(dto);
     }
+    //매장 리스트 출력
+    @Operation(summary = "JPA매장 리스트 출력P", description = ""
+            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) storeid,asc <br> - 매장번호(storeid) / 매장이름(storenm) / 주소(address) / 전화번호(tel) <br> - 오름차순(asc) / 내림차순(desc)<br>"
+            + "searchType(검색타입) -> storename(매장명) / storeaddress(매장주소) / storetel(매장전화번호) <br>"
+            + "str ->  검색어")
+    @GetMapping("/store")
+    public PageCustom<StoreVo> getStore(@ParameterObject @PageableDefault(sort="storeid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                         Pageable pageable,
+                                         @RequestParam(required = false)String searchType,
+                                         @RequestParam(required = false)String str) {
+        return SERVICE.getStore(pageable, searchType, str);
+    }
+
     //매장 정보 수정
     @Operation(summary = "매장 정보 수정", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
     @PutMapping("/store/{storeId}")

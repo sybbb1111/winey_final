@@ -13,4 +13,6 @@ public interface AdminQdslRepository {
     UserInfo selUserInfoByUserId(Long userId, Pageable pageable);
 
     PageCustom<OrderListVo> selOrderAll(Pageable pageable);
+
+    PageCustom<StoreVo> selStoreAll(Pageable pageable, String searchType, String str);
 }

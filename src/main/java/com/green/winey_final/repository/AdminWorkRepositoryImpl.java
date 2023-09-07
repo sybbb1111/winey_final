@@ -188,6 +188,27 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         return new PageCustom<OrderListVo>(map.getContent(), map.getPageable(), map.getTotalElements());
     }
 
+    @Override
+    public PageCustom<StoreVo> selStoreAll(Pageable pageable, String searchType, String str) {
+        List<StoreVo> list = queryFactory.select(new QStoreVo(storeEntity.storeId, regionNmEntity.regionNmId, storeEntity.nm, storeEntity.tel, storeEntity.address))
+                .from(storeEntity)
+                .where(eqStoreNm(searchType, str),
+                        eqStoreAddr(searchType, str),
+                        eqStoreTel(searchType, str))
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(storeEntity.count())
+                .from(storeEntity);
+
+        Page<StoreVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<StoreVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
 
     //정렬
     private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
@@ -216,8 +237,22 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                     //회원별 상세 주문 내역 정렬
                     case "orderid": orders.add(new OrderSpecifier(direction, orderEntity.orderId)); break;
                     case "orderdate": orders.add(new OrderSpecifier(direction, orderEntity.orderDate)); break;
-                    case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.regionNmEntity)); break;
+//                    case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.regionNmEntity)); break;
                     case "orderstatus": orders.add(new OrderSpecifier(direction, orderEntity.orderStatus)); break;
+
+                    //주문 내역 정렬
+//                    case "orderid": orders.add(new OrderSpecifier(direction, orderEntity.orderId)); break;
+//                    case "orderdate": orders.add(new OrderSpecifier(direction, orderEntity.orderDate)); break;
+//                    case "storenm": orders.add(new OrderSpecifier(direction, regionNmEntity.regionNm)); break;
+//                    case "orderstatus": orders.add(new OrderSpecifier(direction, orderEntity.orderStatus)); break;
+                    case "orderdatemonth": orders.add(new OrderSpecifier(direction, orderEntity.orderDate)); break;
+
+
+                    //매장 정렬
+                    case "storeid": orders.add(new OrderSpecifier(direction, storeEntity.storeId)); break; //주문내역과 공동
+                    case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.nm)); break; //주문내역과 공동
+                    case "address": orders.add(new OrderSpecifier(direction, storeEntity.address)); break;
+                    case "storetel": orders.add(new OrderSpecifier(direction, storeEntity.tel)); break;
 
 
                 }
@@ -250,6 +285,35 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         }
         return null;
 
+    }
+
+    //
+
+    public BooleanExpression eqStoreNm(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("storename")) {
+            return storeEntity.nm.containsIgnoreCase(str);
+        }
+        return null;
+    }
+
+    public BooleanExpression eqStoreAddr(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("storeaddress")) {
+            return storeEntity.address.containsIgnoreCase(str);
+        }
+        return null;
+    }
+
+    public BooleanExpression eqStoreTel(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("storetel")) {
+            return storeEntity.tel.containsIgnoreCase(str);
+        }
+        return null;
     }
 
 

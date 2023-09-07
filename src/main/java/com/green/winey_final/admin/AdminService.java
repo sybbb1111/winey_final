@@ -519,7 +519,7 @@ public class AdminService {
         }
         return 0L; //전화번호 유효성 검사 통과 실패
     }
-    public StoreList getStore(SelListDto dto) {
+    public StoreList getStore2(SelListDto dto) {
         int startIdx = (dto.getPage()-1) * dto.getRow();
         dto.setStartIdx(startIdx);
 
@@ -532,6 +532,11 @@ public class AdminService {
                 .list(MAPPER.selStore(dto))
                 .build();
     }
+    //매장 리스트
+    public PageCustom<StoreVo> getStore(Pageable pageable, String searchType, String str) {
+        return adminWorkRep.selStoreAll(pageable, searchType, str);
+    }
+
     public Long updStore(StoreInsParam param, Long storeId) {
         StoreInsDto dto = new StoreInsDto();
         dto.setStoreId(storeId);
