@@ -20,13 +20,19 @@ import org.springframework.stereotype.Repository;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.green.winey_final.common.entity.QAromaEntity.aromaEntity;
+import static com.green.winey_final.common.entity.QCategoryEntity.categoryEntity;
+import static com.green.winey_final.common.entity.QCountryEntity.countryEntity;
+import static com.green.winey_final.common.entity.QFeatureEntity.featureEntity;
 import static com.green.winey_final.common.entity.QOrderDetailEntity.orderDetailEntity;
 import static com.green.winey_final.common.entity.QOrderEntity.orderEntity;
 import static com.green.winey_final.common.entity.QProductEntity.productEntity;
 import static com.green.winey_final.common.entity.QRegionNmEntity.regionNmEntity;
 import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
+import static com.green.winey_final.common.entity.QSmallCategoryEntity.smallCategoryEntity;
 import static com.green.winey_final.common.entity.QStoreEntity.storeEntity;
 import static com.green.winey_final.common.entity.QUserEntity.userEntity;
+import static com.green.winey_final.common.entity.QWinePairingEntity.winePairingEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -272,6 +278,44 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 
         return list;
     }
+
+    //상품수정용 상품디테일1
+    @Override
+    public AdminProductDetailVo selPutProductInfo1(int productId) {
+        AdminProductDetailVo product = queryFactory
+                .select(new QAdminProductDetailVo(productEntity.productId.intValue(), productEntity.nmKor, productEntity.nmEng, productEntity.price, productEntity.promotion, productEntity.beginner, productEntity.alcohol, productEntity.quantity, productEntity.pic,
+                        countryEntity.countryId.intValue(), featureEntity.sweety.intValue(), featureEntity.acidity.intValue(), featureEntity.body.intValue(), categoryEntity.categoryId.intValue(), saleEntity.sale, saleEntity.salePrice, saleEntity.startSale, saleEntity.endSale, saleEntity.saleYn))
+                .from(productEntity)
+                .innerJoin(saleEntity)
+                .on(productEntity.eq(saleEntity.productEntity))
+                .innerJoin(featureEntity)
+                .on(productEntity.featureEntity.eq(featureEntity))
+                .where(productEntity.productId.eq((long) productId))
+                .fetchOne();
+
+        return product;
+    }
+    //상품수정용 상품디테일2 아로마
+    @Override
+    public List<Long> selPutProductInfo2(int productId) {
+        List<Long> aroma = queryFactory
+                .select(aromaEntity.aromaCategoryEntity.aromaCategoryId)
+                .from(aromaEntity)
+                .where(aromaEntity.productEntity.productId.eq((long) productId))
+                .fetch();
+        return aroma;
+    }
+    //상품수정용 상품디테일3 smallCategoryId 음식
+    @Override
+    public List<Long> selPutProductInfo3(int productId) {
+        List<Long> smallCategoryId = queryFactory
+                .select(smallCategoryEntity.smallCategoryId)
+                .from(winePairingEntity)
+                .where(winePairingEntity.productEntity.productId.eq((long) productId))
+                .fetch();
+        return smallCategoryId;
+    }
+
 
 
     //정렬

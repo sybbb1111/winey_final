@@ -21,4 +21,9 @@ public interface AdminQdslRepository {
     //상세 주문 내역
     List<OrderDetail1> selOrderDetailByOrderId(int orderId, Pageable pageable);
     OrderDetail2 selOrderDetailByOrderId2(int orderId, Pageable pageable);
+
+    //상품수정용 상품디테일
+    AdminProductDetailVo selPutProductInfo1(int productId);
+    List<Long> selPutProductInfo2(int productId);
+    List<Long> selPutProductInfo3(int productId);
 }

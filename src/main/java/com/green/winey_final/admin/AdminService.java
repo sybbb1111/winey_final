@@ -5,14 +5,11 @@ import com.green.winey_final.admin.model.*;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
 import com.green.winey_final.repository.support.PageCustom;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.green.winey_final.common.entity.QProductEntity.productEntity;
-import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
 
 @Slf4j
 @Service
@@ -626,8 +620,8 @@ public class AdminService {
 //        return MAPPER.searchProduct(dto);
 //    }
 
-    public AdminProductDetailVo getProductDetail(int productId) {
-        AdminProductDetailVo dto = MAPPER.selPutProductInfo1(productId);
+    public AdminProductDetailVo2 getProductDetail1(int productId) {
+        AdminProductDetailVo2 dto = MAPPER.selPutProductInfo1(productId);
         List<Integer> aroma = MAPPER.selPutProductInfo2(productId);
         List<Integer> smallCategoryId = MAPPER.selPutProductInfo3(productId);
         dto.setAroma(aroma);
@@ -635,6 +629,14 @@ public class AdminService {
         return dto;
     }
 
+    public AdminProductDetailVo3 getProductDetail(int productId) {
+
+        return AdminProductDetailVo3.builder()
+                .product(adminWorkRep.selPutProductInfo1(productId))
+                .aroma(adminWorkRep.selPutProductInfo2(productId))
+                .smallCategoryId(adminWorkRep.selPutProductInfo3(productId))
+                .build();
+    }
 
 
 }

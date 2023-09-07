@@ -343,8 +343,15 @@ public class AdminController {
 
     //상품 디테일 관리자용
     @Operation(summary = "등록 상품 디테일(상품 수정용)")
+    @GetMapping("/product/detail1")
+    public AdminProductDetailVo2 getProductDetail1(@RequestParam int productId) {
+        return SERVICE.getProductDetail1(productId);
+    }
+
+    //상품 디테일 관리자용
+    @Operation(summary = "JPA등록 상품 디테일(상품 수정용)")
     @GetMapping("/product/detail")
-    public AdminProductDetailVo getProductDetail(@RequestParam int productId) {
+    public AdminProductDetailVo3 getProductDetail(@RequestParam int productId) {
         return SERVICE.getProductDetail(productId);
     }
 }
