@@ -14,7 +14,7 @@ import java.util.List;
 @Tag(name = "사용자맞춤와인추천")
 @Slf4j
 @RestController
-@RequestMapping("/api/recommend")
+@RequestMapping("/api/recommend2")
 @RequiredArgsConstructor
 public class RecommendController2 {
     private final RecommendService2 service;

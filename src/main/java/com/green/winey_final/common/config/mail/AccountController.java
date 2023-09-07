@@ -19,7 +19,7 @@ public class AccountController {
 
     @PostMapping("/mailConfirm")
     @ResponseBody
-    @Operation(summary = "이메일로 인증코드 발송", description = "발송 성공 시 Response body에 인증코드가 뜹니당")
+    @Operation(summary = "이메일로 인증코드 발송, 네이버 메일만 가능합니다ㅠㅠ", description = "발송 성공 시 Response body에 인증코드가 뜹니당")
     public String mailConfirm(@RequestParam String email) throws Exception {
         String code = emailService.sendSimpleMessage(email);
         log.info("인증코드 : " + code);

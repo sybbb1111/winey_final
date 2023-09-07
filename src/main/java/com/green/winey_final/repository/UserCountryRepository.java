@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UserCountryRepository extends JpaRepository<UserCountryEntity,Long> {
-    UserCountryEntity findByUserEntity(UserEntity userId);
     List<UserCountryEntity> findCountryIdByUserEntity(UserEntity userId);
+    void deleteAllByUserEntity(UserEntity userId);
 }

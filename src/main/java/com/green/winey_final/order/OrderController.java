@@ -12,8 +12,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
-@Tag(name = "order테스트중입니다요")
+@RequestMapping("/api/orderList2")
+@Tag(name = "주문내역페이지 3차JPA")
 public class OrderController {
     private final OrderService service;
 

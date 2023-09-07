@@ -1,9 +1,8 @@
 package com.green.winey_final.payment;
 
-import com.green.winey_final.common.entity.QCartEntity;
-import com.green.winey_final.common.entity.QProductEntity;
-import com.green.winey_final.common.entity.QSaleEntity;
+import com.green.winey_final.common.entity.*;
 import com.green.winey_final.payment.model.CartProductVo;
+import com.green.winey_final.payment.model.RegionSelVo;
 import com.green.winey_final.payment.model.SaleProductVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -26,6 +25,9 @@ public class PaymentDao {
     private final QCartEntity c = QCartEntity.cartEntity;
     private final QProductEntity p = QProductEntity.productEntity;
     private final QSaleEntity s = QSaleEntity.saleEntity;
+    private final QUserEntity u = QUserEntity.userEntity;
+    private final QRegionNmEntity r = QRegionNmEntity.regionNmEntity;
+    private final QStoreEntity st = QStoreEntity.storeEntity;
 
     public List<CartProductVo> selCartProduct(long userId) {
         JPQLQuery<CartProductVo> query = jpaQueryFactory.select(Projections.bean(CartProductVo.class
@@ -45,5 +47,13 @@ public class PaymentDao {
                 .leftJoin(s).on(s.productEntity.productId.eq(p.productId).and(s.saleYn.eq(1)))
                 .where(p.productId.eq(productId))
                 .fetchOne();
+    }
+
+    public List<RegionSelVo> selRegion(long userId) {
+        return jpaQueryFactory.select(Projections.bean(RegionSelVo.class, r.regionNmId, r.regionNm, st.storeId, st.nm, st.address))
+                .from(st)
+                .join(st.regionNmEntity, r)
+                .join(u).on(u.regionNmEntity.regionNmId.eq(r.regionNmId))
+                .where(u.userId.eq(userId)).fetch();
     }
 }

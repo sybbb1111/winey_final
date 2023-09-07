@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UserSmallCategoryRepository extends JpaRepository<UserSmallCategoryEntity,Long> {
-    UserSmallCategoryEntity findByUserEntity(UserEntity userId);
     List<UserSmallCategoryEntity> findSmallCategoryIdByUserEntity(UserEntity userId);
+    void deleteAllByUserEntity(UserEntity userId);
 }

@@ -2,16 +2,11 @@ package com.green.winey_final.main2.six;
 
 
 import com.green.winey_final.common.config.security.AuthenticationFacade;
-import com.green.winey_final.common.entity.ProductEntity;
-import com.green.winey_final.common.entity.UserEntity;
-import com.green.winey_final.common.entity.UserInfoEntity;
 import com.green.winey_final.main2.MainMapper2;
 import com.green.winey_final.main2.model.*;
-import com.green.winey_final.recommend.RecommendService;
 import com.green.winey_final.recommend2.RecommendMapper2;
 import com.green.winey_final.recommend2.model.LoginUserDto2;
 import com.green.winey_final.recommend2.model.SelRecommendDto2;
-import com.green.winey_final.repository.UserInfoEntityRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

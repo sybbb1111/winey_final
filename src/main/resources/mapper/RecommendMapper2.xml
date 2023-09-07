@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.winey_final.recommend2.RecommendMapper2">
+
+
+    <select id="selRecommend" resultType="Long">
+        SELECT distinct B.product_id productId
+        FROM t_wine_pairing A
+        INNER JOIN t_product B ON A.product_id = B.product_id
+        INNER JOIN t_country C ON B.country_id = C.country_id
+        INNER JOIN t_category D ON B.category_id = D.category_id
+        INNER JOIN t_small_category E ON A.small_category_id = E.small_category_id
+        INNER JOIN t_aroma F on F.product_id = B.product_id
+        inner join t_aroma_category G on G.aroma_category_id = F.aroma_category_id
+        <where>
+            <if test="categoryId != null">
+                AND (
+                <foreach item="categoryId" collection="categoryId" separator=" OR " open="(" close=")">
+                    D.category_id = #{categoryId}
+                </foreach>
+                )
+            </if>
+            <if test="countryId != null">
+                AND (
+                <foreach item="countryId" collection="countryId" separator=" OR " open="(" close=")">
+                    C.country_id = #{countryId}
+                </foreach>
+                )
+            </if>
+            <if test="smallCategoryId != null">
+                AND (
+                <foreach item="smallCategoryId" collection="smallCategoryId" separator=" OR " open="(" close=")">
+                    E.small_category_id = #{smallCategoryId}
+                </foreach>
+                )
+            </if>
+            <if test="aromaCategoryId != null">
+                AND (
+                <foreach item="aromaCategoryId" collection="aromaCategoryId" separator=" OR " open="(" close=")">
+                    F.aroma_category_id = #{aromaCategoryId}
+                </foreach>
+                )
+            </if>
+            <if test="priceRange != null">
+                AND (
+                <foreach item="range" collection="priceRange" separator=" OR " open="(" close=")">
+                    <choose>
+                        <when test="range == 1">
+                            price <![CDATA[< 20000]]>
+                        </when>
+                        <when test="range == 2">
+                            price >= 20000 AND price <![CDATA[< 50000]]>
+                        </when>
+                        <when test="range == 3">
+                            price >= 50000 AND price <![CDATA[< 100000]]>
+                        </when>
+                        <when test="range == 4">
+                            price >= 100000
+                        </when>
+                    </choose>
+                </foreach>
+                )
+            </if>
+        </where>
+        ORDER BY B.product_id
+    </select>
+
+
+    <insert id="insUserinfo">
+        INSERT  INTO t_user_info (user_id, product_id)
+        VALUES
+        <foreach item="productId" collection="productId" separator=",">
+            (#{userId}, #{productId})
+        </foreach>
+    </insert>
+
+    <insert id="insUserCategory">
+        INSERT IGNORE INTO t_user_category
+        (user_id, category_id)
+        VALUES
+        (
+        #{userId},
+        #{categoryId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserCountry">
+        INSERT IGNORE INTO t_user_country
+        (user_id, country_id)
+        VALUES
+        (
+        #{userId},
+        #{countryId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserPriceRange">
+        INSERT IGNORE INTO t_user_price_range
+        (user_id, price_range)
+        VALUES
+        (
+        #{userId},
+        #{priceRange,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserSmallCateogry">
+        INSERT IGNORE INTO t_user_small_category
+        (user_id, small_category_id)
+        VALUES
+        (
+        #{userId},
+        #{smallCategoryId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insUserAroma">
+        INSERT IGNORE INTO t_user_aroma
+        (user_id, aroma_category_id)
+        VALUES
+        (
+        #{userId},
+        #{aromaCategoryId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <select id="selUserCategoryId">
+        SELECT distinct category_id categoryId
+        FROM t_user_category
+        WHERE user_id=#{userId}
+    </select>
+    <select id="selUserCountryId">
+        select distinct country_id countryId
+        FROM t_user_country
+        WHERE user_id=#{userId}
+    </select>
+    <select id="selUserSmallCategoryId">
+        SELECT distinct small_category_id smallCategoryId
+        FROM t_user_small_category
+        WHERE user_id=#{userId}
+    </select>
+    <select id="selUserPriceRange">
+        SELECT distinct price_range priceRange
+        FROM t_user_price_range
+        WHERE user_id=#{userId}
+    </select>
+    <select id="selUserAroma">
+        select distinct aroma_category_id
+        FROM t_user_aroma
+        WHERE user_id=#{userId}
+    </select>
+
+    <select id="loginUserPk">
+        select user_id userId
+        from t_user
+        where user_id=#{userId}
+    </select>
+    <select id="selUserinfo">
+        select product_id productId
+        from t_user_info
+        where user_id=#{userId}
+    </select>
+
+    <delete id="delInfo">
+        delete
+        from t_user_info
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserCategory">
+        delete
+        FROM t_user_category
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserCountry">
+        delete
+        FROM t_user_country
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserPriceRange">
+        delete
+        FROM  t_user_price_range
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserSmallCategory">
+        delete
+        FROM t_user_small_category
+        where user_id=#{userId}
+    </delete>
+    <delete id="delUserAroma">
+        delete
+        FROM t_user_aroma
+        where user_id=#{userId}
+    </delete>
+
+</mapper>
+
+
+
