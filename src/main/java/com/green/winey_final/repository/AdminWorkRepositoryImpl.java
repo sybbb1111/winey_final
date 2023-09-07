@@ -145,6 +145,49 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         return user;
     }
 
+    @Override
+    public PageCustom<OrderListVo> selOrderAll(Pageable pageable) {
+        List<OrderListVo> list = queryFactory
+                .select(new QOrderListVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), userEntity.email, productEntity.nmKor,
+                        orderDetailEntity.salePrice.sum().intValue(),
+                        orderDetailEntity.quantity.sum().intValue(),
+                        orderEntity.totalOrderPrice.intValue(),
+                        orderEntity.payment.intValue(), storeEntity.nm,
+                        orderEntity.orderStatus.intValue()))
+                .from(orderEntity)
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.eq(userEntity))
+                .join(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .join(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .join(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity))
+                .groupBy(orderEntity.orderId)
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(orderEntity.orderId.count())
+//                .select(orderEntity.orderId.countDistinct())
+                .from(orderEntity)
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.eq(userEntity))
+                .join(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .join(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .join(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity));
+//                .groupBy(orderEntity.orderId); //groupBy하면 totalElements 제대로 안나옴
+
+        Page<OrderListVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<OrderListVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
 
     //정렬
     private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {

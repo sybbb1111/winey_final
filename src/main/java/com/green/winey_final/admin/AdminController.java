@@ -199,6 +199,17 @@ public class AdminController {
 
         return SERVICE.getOrder(dto);
     }
+    //주문 내역
+    @Operation(summary = "JPA주문 내역 출력(피그마:주문내역관리 페이지)P", description = "<br>"
+            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) orderid,desc <br> - 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br> - 오름차순(asc) / 내림차순(desc)<br>")
+    @GetMapping("/order2")
+    public PageCustom<OrderListVo> getOrder2(@ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                   Pageable pageable) {
+        return SERVICE.getOrder2(pageable);
+    }
+
+
     //상세 주문 내역 리스트 by orderId
     @Operation(summary = "상세 주문 내역 출력 by orderId(피그마:주문상세리스트)")
     @GetMapping("/order/{orderId}")

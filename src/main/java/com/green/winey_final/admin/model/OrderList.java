@@ -9,5 +9,5 @@ import java.util.List;
 @Builder
 public class OrderList {
     private PageDto page;
-    private List<OrderListVo> list;
+    private List<OrderListVo2> list;
 }

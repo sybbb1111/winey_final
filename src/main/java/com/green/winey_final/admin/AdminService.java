@@ -459,7 +459,7 @@ public class AdminService {
         int maxOrder = MAPPER.orderCount();
 
         //상품명에 외 1 넣는 로직
-        List<OrderListVo> list = MAPPER.selOrder(dto);
+        List<OrderListVo2> list = MAPPER.selOrder(dto);
 
         for(int i=0;i<list.size();i++) {
             if(list.get(i).getCount()>1) {
@@ -471,6 +471,10 @@ public class AdminService {
                 .page(new PageDto(maxOrder, dto.getPage(), dto.getRow()))
                 .list(list)
                 .build();
+    }
+    //주문 내역
+    public PageCustom<OrderListVo> getOrder2(Pageable pageable) {
+        return adminWorkRep.selOrderAll(pageable);
     }
 
     //상세 주문 내역 리스트 by orderId
