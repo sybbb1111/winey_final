@@ -68,7 +68,6 @@ public class RecommendService {
         }
         userCategory.saveAll(categoryList);
 
-
         List<UserCountryEntity> countryList = new ArrayList<>();
         if (res.getCountryId() != null) {
             for (Long countryId : res.getCountryId()) {
@@ -87,7 +86,6 @@ public class RecommendService {
             userCountry.save(country);
         }
         userCountry.saveAll(countryList);
-
 
         List<UserPriceRangeEntity> priceRangeList = new ArrayList<>();
         if (res.getPriceRange() != null) {
@@ -127,7 +125,6 @@ public class RecommendService {
         }
         userSmall.saveAll(userSmallList);
 
-
         List<UserAromaEntity> aromaList = new ArrayList<>();
         if (res.getAromaCategoryId() != null) {
             for (Long aromaId : res.getAromaCategoryId()) {
@@ -147,9 +144,9 @@ public class RecommendService {
         }
         userAroma.saveAll(aromaList);
 
-
         return result;
     }
+
 
     public List<Long> selUserinfo() {
         Long userPk = facade.getLoginUserPk();
@@ -162,6 +159,7 @@ public class RecommendService {
         }
         return productPK;
     }
+
 
     public Long loginUserPk() {
         Optional<UserEntity> optentity = user.findById(facade.getLoginUserPk());
@@ -208,6 +206,8 @@ public class RecommendService {
                 .aromaCategoryId(aromalist)
                 .build();
     }
+
+
     @Transactional
     public List<Long> updRecommend(RecommendRes res) {
         long userPk = facade.getLoginUserPk();
@@ -255,7 +255,6 @@ public class RecommendService {
         }
         userCategory.saveAll(categoryList);
 
-
         List<UserCountryEntity> countryList = new ArrayList<>();
         if (res.getCountryId() != null) {
             for (Long countryId : res.getCountryId()) {
@@ -274,7 +273,6 @@ public class RecommendService {
             userCountry.save(country);
         }
         userCountry.saveAll(countryList);
-
 
         List<UserPriceRangeEntity> priceRangeList = new ArrayList<>();
         if (res.getPriceRange() != null) {
@@ -314,7 +312,6 @@ public class RecommendService {
         }
         userSmall.saveAll(userSmallList);
 
-
         List<UserAromaEntity> aromaList = new ArrayList<>();
         if (res.getAromaCategoryId() != null) {
             for (Long aromaId : res.getAromaCategoryId()) {
@@ -334,12 +331,12 @@ public class RecommendService {
         }
         userAroma.saveAll(aromaList);
 
-
         return result;
 
+    }
 
-    }
-    }
+
+}
 
 
 

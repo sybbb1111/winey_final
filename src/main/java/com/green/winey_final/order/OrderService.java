@@ -28,7 +28,6 @@ import java.util.Optional;
 @PersistenceContext
 public class OrderService {
 
-
     private final EntityManager em;
     private final JPAQueryFactory jpaQueryFactory;
     private final OrderRepository orderRepository;
@@ -40,8 +39,7 @@ public class OrderService {
         QOrderDetailEntity orderDetail = QOrderDetailEntity.orderDetailEntity;
         QProductEntity product = QProductEntity.productEntity;
         QStoreEntity store = QStoreEntity.storeEntity;
-        Long userPk= facade.getLoginUserPk();
-
+        Long userPk = facade.getLoginUserPk();
 
         Predicate predicate = user.userId.eq(userPk);
 
@@ -90,6 +88,7 @@ public class OrderService {
         return 1;
     }
 
+
     int pickupFinishOrder(Long orderId) {
         Optional<OrderEntity> optentity = orderRepository.findById(orderId);
         OrderEntity entity = optentity.get();
@@ -98,9 +97,10 @@ public class OrderService {
         return 1;
     }
 
+
     public DetailVo selOrderDetail(Long orderId) {
 
-        Long userPk= facade.getLoginUserPk();
+        Long userPk = facade.getLoginUserPk();
         QUserEntity user = QUserEntity.userEntity;
         QOrderEntity order = QOrderEntity.orderEntity;
         QOrderDetailEntity orderDetail = QOrderDetailEntity.orderDetailEntity;

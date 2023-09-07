@@ -32,11 +32,13 @@ public class RecommendController2 {
         return service.selRecommend(res);
     }
 
+
     @GetMapping("/loginuser")
     @Operation(summary = "로그인한 유저의 PK값")
     public int loginUserPk(){
         return service.loginUserPk();
     }
+
 
     @GetMapping("/getUserInfo")
     @Operation(summary = "유저와인정보")
@@ -44,9 +46,11 @@ public class RecommendController2 {
         return service.selUserinfo();
     }
 
+
     @GetMapping("/getrecommend")
     @Operation(summary = "유저가 취향선택했던 값")
     public RecommendVo2 getUserRecommend(){return service.selUserRecommend();}
+
 
     @PutMapping("/updrecommend")
     @Operation(summary = "사용자취향수정")

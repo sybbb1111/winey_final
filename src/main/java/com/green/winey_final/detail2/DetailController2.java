@@ -33,6 +33,7 @@ public class DetailController2 {
         return SERVICE.selWineDetail(productId);
     }
 
+
     @GetMapping("/korNm/{productId}")
     @Operation(summary = "와인 한글이름")
     public SelWineKorNm2 getWineKorNm(@PathVariable Long productId) {

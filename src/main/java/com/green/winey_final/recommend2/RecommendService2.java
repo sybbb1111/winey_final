@@ -24,7 +24,6 @@ public class RecommendService2 {
         dto.setUserId(user);
         dto.setProductId(result);
 
-
         if (res.getCategoryId() != null) {
             for (Long categoryId : res.getCategoryId()) {
                 UserCategory category = new UserCategory();
@@ -101,11 +100,13 @@ public class RecommendService2 {
         return mapper.loginUserPk(dto);
     }
 
+
     public List<Integer> selUserinfo() {
         SelRecommendDto2 dto = new SelRecommendDto2();
         dto.setUserId(facade.getLoginUserPk());
         return mapper.selUserinfo(dto);
     }
+
 
     public RecommendVo2 selUserRecommend(){
         UserDto2 dto =new UserDto2();
@@ -123,6 +124,8 @@ public class RecommendService2 {
                 .aromaCategoryId(aroma)
                 .build();
     }
+
+
     public List<Long> updRecommend(RecommendRes2 res) {
         Long user = facade.getLoginUserPk();
         UserDto2 dto1 =new UserDto2();

@@ -20,13 +20,12 @@ public class OrderService2 {
     private final OrderMapper2 mapper;
     private final AuthenticationFacade facade;
 
-
-    List<OrderEntity2> selOrder(){
-        UserIdDto dto =new UserIdDto();
+    List<OrderEntity2> selOrder() {
+        UserIdDto dto = new UserIdDto();
         dto.setUserId(facade.getLoginUserPk());
         List<OrderEntity2> list = mapper.selOrder(dto);
 
-        for(OrderEntity2 entity : list){
+        for (OrderEntity2 entity : list) {
             entity.setOrderDate(entity.getOrderDate());
             entity.setUserId(facade.getLoginUserPk());
             entity.setOrderId(entity.getOrderId());
@@ -51,7 +50,7 @@ public class OrderService2 {
                 e.printStackTrace();
             }
 
-            if(entity.getCount() >= 2 ){
+            if (entity.getCount() >= 2) {
                 entity.setNmKor(entity.getNmKor() + " 외 " + (entity.getCount() - 1) + "건");
             } else if (entity.getCount() == 1) {
                 entity.setNmKor(entity.getNmKor());
@@ -68,6 +67,7 @@ public class OrderService2 {
         return mapper.cancelOrder(dto);
     }
 
+
     int pickupFinishOrder(Long orderId) {
         OrderPickupFinishDto dto = new OrderPickupFinishDto();
         dto.setOrderId(orderId);
@@ -76,25 +76,21 @@ public class OrderService2 {
     }
 
 
-
-
-
-    public DetailVo3 selOrderDetail(Long orderId){
+    public DetailVo3 selOrderDetail(Long orderId) {
         UserIdDto dto = new UserIdDto();
         dto.setOrderId(orderId);
         dto.setUserId(facade.getLoginUserPk());
 
         List<OrderDetailVo12> vo1 = mapper.selOrderDetail1(dto);
-        for(OrderDetailVo12 detailVo1 : vo1) {
-            if(detailVo1.getReviewYn() >= 1 ){
+        for (OrderDetailVo12 detailVo1 : vo1) {
+            if (detailVo1.getReviewYn() >= 1) {
                 detailVo1.setReviewYn(1);
             }
 
         }
 
-
         OrderDetailVo22 vo2 = mapper.selOrderDetail2(dto);
-        if(vo2 != null) {
+        if (vo2 != null) {
             try {
                 String strDate = vo2.getPickupTime();
                 SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -115,15 +111,12 @@ public class OrderService2 {
             return null;
         }
 
-
         return DetailVo3.builder()
                 .vo1(vo1)
                 .vo2(vo2)
                 .build();
 
     }
-
-
 
 
 }

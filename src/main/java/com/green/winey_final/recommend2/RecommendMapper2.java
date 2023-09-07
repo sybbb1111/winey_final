@@ -22,13 +22,11 @@ public interface RecommendMapper2 {
     List<Long> selUserSmallCategoryId(UserDto2 dto);
     List<Long> selUserPriceRange(UserDto2 dto);
     List<Long> selUserAroma(UserDto2 dto);
-
     int delUserCategory(UserDto2 dto);
     int delUserCountry(UserDto2 dto);
     int delUserPriceRange(UserDto2 dto);
     int delUserSmallCategory(UserDto2 dto);
     int delUserAroma(UserDto2 dto);
-
     int delInfo(UserDto2 dto);
 
 
