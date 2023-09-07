@@ -5,18 +5,14 @@ import com.green.winey_final.admin.model.*;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
 import com.green.winey_final.repository.support.PageCustom;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,8 +45,10 @@ public class AdminService {
     private final SmallCategoryRepository smallCategoryRep;
     private final JPAQueryFactory queryFactory;
 
+    private final AdminWorkRepositoryImpl adminWorkRep;
+
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, ProductRepository productRep, FeatureRepository featureRep, SaleRepository saleRep, AromaRepository aromaRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, JPAQueryFactory queryFactory) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, ProductRepository productRep, FeatureRepository featureRep, SaleRepository saleRep, AromaRepository aromaRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, JPAQueryFactory queryFactory, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
         this.productRep = productRep;
@@ -63,6 +61,8 @@ public class AdminService {
         this.winePairingRep = winePairingRep;
         this.smallCategoryRep = smallCategoryRep;
         this.queryFactory = queryFactory;
+
+        this.adminWorkRep = adminWorkRep;
     }
 
     public int postProduct(MultipartFile pic, ProductInsParam param) {
@@ -342,7 +342,7 @@ public class AdminService {
     }
 
     //등록 상품 리스트 출력 (전체 상품)
-    public ProductList getProduct(SelListDto dto) {
+    public ProductList getProduct2(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
         int maxProduct = MAPPER.productCount(dto);
@@ -355,37 +355,10 @@ public class AdminService {
                 .build();
     }
 
-    public PageCustom<ProductVo> getProduct1(Pageable pageable, String str) {
+    //등록 상품 리스트 출력 (전체 상품) JPA
+    public PageCustom<ProductVo> getProduct(Pageable pageable, String str) {
 
-        BooleanBuilder whereBuilder = new BooleanBuilder();
-        if(str != null) {
-            whereBuilder.and(productEntity.nmKor.contains(str));
-        }
-
-//        if(str != null) {
-////            switch (str.equals())
-//            whereBuilder.and(productEntity.nmKor.contains(str));
-//        }
-
-        List<ProductVo> list = queryFactory.select(new QProductVo(productEntity.productId, productEntity.nmKor, productEntity.price, productEntity.promotion, productEntity.beginner, productEntity.quantity, saleEntity.sale, saleEntity.salePrice))
-                .from(productEntity)
-                .leftJoin(saleEntity)
-                .on(saleEntity.productEntity.eq(productEntity))
-                .orderBy(getAllOrderSpecifiers(pageable))
-                .where(whereBuilder)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(productEntity.count())
-                .from(productEntity)
-                .leftJoin(saleEntity)
-                .on(saleEntity.productEntity.eq(productEntity));
-
-        Page<ProductVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
-
-        return new PageCustom<ProductVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+        return adminWorkRep.selProductAll(pageable, str);
     }
 
     //할인 중인 상품 리스트 출력
@@ -630,27 +603,27 @@ public class AdminService {
 
 
 
-    private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
-//        List<OrderSpecifier> orders = new ArrayList();
-        List<OrderSpecifier> orders = new LinkedList<>();
-        if(!pageable.getSort().isEmpty()) {
-            for(Sort.Order order : pageable.getSort()) {
-                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
-                //order의 property값이 스웨거 입력칸 sort의 number
-                switch (order.getProperty().toLowerCase()) {
-                    case "productid": orders.add(new OrderSpecifier(direction, productEntity.productId)); break;
-                    case "saleprice": orders.add(new OrderSpecifier(direction, saleEntity.salePrice)); break;
-                    case "sale": orders.add(new OrderSpecifier(direction, saleEntity.sale)); break;
-                    case "price": orders.add(new OrderSpecifier(direction, productEntity.price)); break;
-                    case "recommend":
-                        orders.add(new OrderSpecifier(direction, productEntity.promotion));
-                        orders.add(new OrderSpecifier(direction, productEntity.beginner)); break; //
-                    case "quantity": orders.add(new OrderSpecifier(direction, saleEntity.sale)); break;
-                }
-            }
-        }
-        return orders.stream().toArray(OrderSpecifier[]::new);
-    }
+//    private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
+////        List<OrderSpecifier> orders = new ArrayList();
+//        List<OrderSpecifier> orders = new LinkedList<>();
+//        if(!pageable.getSort().isEmpty()) {
+//            for(Sort.Order order : pageable.getSort()) {
+//                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+//                //order의 property값이 스웨거 입력칸 sort의 number
+//                switch (order.getProperty().toLowerCase()) {
+//                    case "productid": orders.add(new OrderSpecifier(direction, productEntity.productId)); break;
+//                    case "saleprice": orders.add(new OrderSpecifier(direction, saleEntity.salePrice)); break;
+//                    case "sale": orders.add(new OrderSpecifier(direction, saleEntity.sale)); break;
+//                    case "price": orders.add(new OrderSpecifier(direction, productEntity.price)); break;
+//                    case "recommend":
+//                        orders.add(new OrderSpecifier(direction, productEntity.promotion));
+//                        orders.add(new OrderSpecifier(direction, productEntity.beginner)); break; //
+//                    case "quantity": orders.add(new OrderSpecifier(direction, saleEntity.sale)); break;
+//                }
+//            }
+//        }
+//        return orders.stream().toArray(OrderSpecifier[]::new);
+//    }
 
 
 }
