@@ -6,11 +6,15 @@ import com.green.winey_final.common.entity.*;
 import com.green.winey_final.main.model.WineCategoryDto;
 import com.green.winey_final.main.model.WineCategoryDetailRes;
 import com.green.winey_final.repository.ProductRepository;
+import com.green.winey_final.repository.SaleRepository;
 import com.green.winey_final.repository.SmallCategoryRepository;
 import com.green.winey_final.repository.WinePairingRepository;
 import com.green.winey_final.search.model.WineVo;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.green.winey_final.common.entity.QProductEntity.productEntity;
@@ -36,10 +41,13 @@ public class MainService {
     private final ProductRepository productRep;
     private final SmallCategoryRepository smallCategoryRep;
     private final WinePairingRepository winePairingRep;
+    private final SaleRepository saleRep;
     private final JPAQueryFactory queryFactory;
 
 
-    /** 매일 6개 랜덤 와인 추천 */
+    /**
+     * 매일 6개 랜덤 와인 추천
+     */
 
 
     private List<WineVo> getRandomWine(WineCategoryDto dto) {
@@ -69,9 +77,61 @@ public class MainService {
                 .fetch();
     }
 
+    /**
+     * 할인 와인 리스트
+     */
+
+    public List<WineVo> saleWineList(Pageable pageable) {
+
+        LocalDate now = LocalDate.now();
+        int year = now.getYear();
+        int startMonth = now.getMonthValue();
+//        int endMonth = now.getMonthValue();
+
+        LocalDate startOfMonth = LocalDate.of(year, startMonth, 1); // 이번 달의 시작일
+        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1); // 이번 달의 마지막 날짜
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(saleEntity.startSale.goe(String.valueOf(startOfMonth)))
+//                .and(saleEntity.endSale.loe(String.valueOf(endOfMonth)))
+//                .and(saleEntity.startSale.between(String.valueOf(saleEntity.endSale), endOfMonth.toString()))
+                .and(saleEntity.saleYn.eq(1));
+
+        JPAQuery<WineVo> query = queryFactory.select(
+                        Projections.constructor(
+                                WineVo.class,
+                                productEntity.productId,
+                                productEntity.nmKor,
+                                productEntity.nmEng,
+                                productEntity.price,
+                                productEntity.pic,
+                                productEntity.promotion,
+                                productEntity.beginner,
+                                saleEntity.sale,
+                                saleEntity.salePrice,
+                                saleEntity.saleYn,
+                                saleEntity.startSale,
+                                saleEntity.endSale))
+                .from(productEntity)
+                .innerJoin(saleEntity)
+                .on(productEntity.productId.eq(saleEntity.productEntity.productId))
+                .where(builder)
+                .groupBy(productEntity.productId)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
 
 
-    /** 카테고리별 와인 리스트 (카테고리별, 국가별, 나라별, 금액대별, 최신등록순 어쩌고 저쩌고) */
+        log.info("query : {}", query.fetch());
+
+//        return null;
+        return query.fetch();
+    }
+
+
+    /**
+     * 카테고리별 와인 리스트 (카테고리별, 국가별, 나라별, 금액대별, 최신등록순 어쩌고 저쩌고)
+     */
     public WineCategoryDetailRes categoryWine(WineCategoryDto dto) {
 
         List<WineVo> wineList = getWineLists(dto);
@@ -199,7 +259,6 @@ public class MainService {
     }
 
     /** 카테고리별 와인 리스트 여기까지 한 묶음 */
-
 
 
 }

@@ -16,4 +16,6 @@ public class WineVo {
     private int sale;
     private int salePrice;
     private int saleYn;
+    private String startSale;
+    private String endSale;
 }
