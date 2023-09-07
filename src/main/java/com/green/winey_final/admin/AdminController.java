@@ -1,9 +1,14 @@
 package com.green.winey_final.admin;
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.repository.support.PageCustom;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,11 +62,11 @@ public class AdminController {
     //등록 상품 리스트 출력 (페이징 처리)
     @Operation(summary = "등록된 상품 리스트 출력+ 등록 상품 검색(피그마: 등록상품리스트 페이지)P", description = "page값 = 1(default), row값 = 20(default)<br>"
             + "default값은 임시로 넣은 것이니 수정이 필요합니다.<br>"
-            + "type -> 기본값(0) / 상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
+            + "type -> 기본값(0) / 상품번호(productid)/세일가격(saleprice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
-            + "상품 검색시<br> type2 -> 상품한글이름(searchProductNmKor)<br> str -> (검색어)")
-    @GetMapping("/product/list")
-    public ProductList getProduct(@RequestParam(defaultValue = "1")int page,
+            + "상품 검색시<br> type2 -> 상품한글이름(searchproductnmkor)<br> str -> (검색어)")
+    @GetMapping("/product/list2")
+    public ProductList getProduct2(@RequestParam(defaultValue = "1")int page,
                                   @RequestParam(defaultValue = "20")int row,
                                   @RequestParam(required = false) String type,
                                   @RequestParam(required = false) String sort,
@@ -74,7 +79,19 @@ public class AdminController {
         dto.setType2(type2);
         dto.setSort(sort);
         dto.setStr(str);
-        return SERVICE.getProduct(dto);
+        return SERVICE.getProduct2(dto);
+    }
+    @Operation(summary = "JPA 등록된 상품 리스트 출력(피그마: 등록상품리스트 페이지)", description = "정렬 안한 기본 페이지는 productId,asc 가 기본값입니다.<br>"
+            + "page -> 0이 1페이지입니다.<br> size(row) -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) productid,asc -> 상품번호 기준으로 오름차순 정렬한다는 의미<br> 정렬기준 ->상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
+            + "정렬 ->  오름차순(asc) / 내림차순(desc)<br>"
+            + "str -> 검색어 <br>")
+    @GetMapping("/product/list")
+    public PageCustom<ProductVo> getProduct(@ParameterObject @PageableDefault(sort="productId", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                             Pageable pageable,
+                                             @RequestParam(required = false) String str) {
+
+        return SERVICE.getProduct(pageable, str);
     }
 
     //할인률 등록 상품 리스트 출력
@@ -95,7 +112,7 @@ public class AdminController {
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
             + "회원 검색시<br> type2 -> 이름(searchUserName) / 이메일(searchUserEmail)<br>"
             + "str -> (검색어) ")
-    @GetMapping("/user/list")
+    @GetMapping("/user/list2")
     public UserList getUserList(@RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "15") int row,
                                 @RequestParam(required = false) String type,
@@ -109,7 +126,21 @@ public class AdminController {
         dto.setType2(type2);
         dto.setSort(sort);
         dto.setStr(str);
-        return SERVICE.getUserList(dto);
+        return SERVICE.getUserList2(dto);
+    }
+
+    @Operation(summary = "JPA가입 회원 리스트 (피그마: 가입회원리스트 페이지)", description = "<br>"
+            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) userId,asc <br> - 입력회원번호(userId) / 픽업지역(pickUp) <br> - 오름차순(asc) / 내림차순(desc)<br>"
+            + "searchType(검색타입) -> unm(회원이름) / email(이메일) <br>"
+            + "str ->  검색어")
+    @GetMapping("/user/list")
+    public PageCustom<UserVo> getUserList2(@ParameterObject @PageableDefault(sort="userId", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                           Pageable pageable,
+                                           @RequestParam(required = false) String searchType,
+                                           @RequestParam(required = false) String str) {
+
+        return SERVICE.getUserList(pageable, searchType, str);
     }
 
     //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리

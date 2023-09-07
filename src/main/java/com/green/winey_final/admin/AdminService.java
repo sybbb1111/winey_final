@@ -3,9 +3,16 @@ package com.green.winey_final.admin;
 
 import com.green.winey_final.admin.model.*;
 import com.green.winey_final.common.utils.MyFileUtils;
+import com.green.winey_final.repository.*;
+import com.green.winey_final.repository.support.PageCustom;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,8 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static com.green.winey_final.common.entity.QProductEntity.productEntity;
+import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
 
 @Slf4j
 @Service
@@ -23,10 +34,35 @@ public class AdminService {
     private final AdminMapper MAPPER;
     private final String FILE_DIR;
 
+    private final ProductRepository productRep;
+    private final FeatureRepository featureRep;
+    private final SaleRepository saleRep;
+    private final AromaRepository aromaRep;
+    private final CountryRepository countryRep;
+    private final CategoryRepository categoryRep;
+    private final AromaCategoryRepository aromaCategoryRep;
+    private final WinePairingRepository winePairingRep;
+    private final SmallCategoryRepository smallCategoryRep;
+    private final JPAQueryFactory queryFactory;
+
+    private final AdminWorkRepositoryImpl adminWorkRep;
+
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, ProductRepository productRep, FeatureRepository featureRep, SaleRepository saleRep, AromaRepository aromaRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, JPAQueryFactory queryFactory, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
+        this.productRep = productRep;
+        this.featureRep = featureRep;
+        this.saleRep = saleRep;
+        this.aromaRep = aromaRep;
+        this.countryRep = countryRep;
+        this.categoryRep = categoryRep;
+        this.aromaCategoryRep = aromaCategoryRep;
+        this.winePairingRep = winePairingRep;
+        this.smallCategoryRep = smallCategoryRep;
+        this.queryFactory = queryFactory;
+
+        this.adminWorkRep = adminWorkRep;
     }
 
     public int postProduct(MultipartFile pic, ProductInsParam param) {
@@ -306,7 +342,7 @@ public class AdminService {
     }
 
     //등록 상품 리스트 출력 (전체 상품)
-    public ProductList getProduct(SelListDto dto) {
+    public ProductList getProduct2(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
         int maxProduct = MAPPER.productCount(dto);
@@ -317,6 +353,12 @@ public class AdminService {
                 .page(pageDto)
                 .productList(MAPPER.selProduct(dto))
                 .build();
+    }
+
+    //등록 상품 리스트 출력 (전체 상품) JPA
+    public PageCustom<ProductVo> getProduct(Pageable pageable, String str) {
+
+        return adminWorkRep.selProductAll(pageable, str);
     }
 
     //할인 중인 상품 리스트 출력
@@ -333,7 +375,7 @@ public class AdminService {
     }
 
     //가입회원 리스트
-    public UserList getUserList(SelListDto dto) {
+    public UserList getUserList2(SelListDto dto) {
         int startIdx = (dto.getPage()-1) * dto.getRow();
         dto.setStartIdx(startIdx);
 
@@ -343,6 +385,10 @@ public class AdminService {
                 .page(new PageDto(maxUser, dto.getPage(), dto.getRow()))
                 .list(MAPPER.selUserList(dto))
                 .build();
+    }
+
+    public PageCustom<UserVo> getUserList(Pageable pageable, String searchType, String str) {
+        return adminWorkRep.selUserAll(pageable, searchType, str);
     }
 
     //가입회원 상세 주문 내역(회원pk별) +페이징 처리
@@ -557,4 +603,7 @@ public class AdminService {
         dto.setSmallCategoryId(smallCategoryId);
         return dto;
     }
+
+
+
 }

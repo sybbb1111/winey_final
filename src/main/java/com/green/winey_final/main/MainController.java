@@ -1,23 +1,43 @@
 package com.green.winey_final.main;
 
 import com.green.winey_final.main.model.*;
+import com.green.winey_final.search.model.WineVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
-@Tag(name = "연습장입니다!(◍•ᴗ•◍)♡ ✧*。")
+
+//@Tag(name = "연습장입니다!(◍•ᴗ•◍)♡ ✧*。")
+@Tag(name = "월별 할인 품목")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/test")
+@RequestMapping("/api/main")
 public class MainController {
 
     private final MainService SERVICE;
 
-    /**
-     * 카테고리별 와인 리스트 (카테고리별, 국가별, 나라별, 금액대별, 최신등록순 어쩌고 저쩌고)
-     */
+    /** 할인 와인 리스트 */
+    @GetMapping("/monthSaleWine")
+    @Operation(summary = "할인 와인 리스트", description = "\"page\": [-] 페이지 0부터 시작합니다.,<br>" +
+            "\"size\": [고정 9] 와인 갯수,<br>" +
+            "\"sort\": [-] productid , price <br>" +
+            "- ASC : 오름차순<br>" +
+            "- DESC : 내림차순")
+    public List<WineVo> getCateWine(@ParameterObject @PageableDefault
+            (sort = "productid", direction = Sort.Direction.ASC, size = 9) Pageable pageable) {
+        return SERVICE.saleWineList(pageable);
+    }
+
+
+    /** 카테고리별 와인 리스트 (카테고리별, 국가별, 나라별, 금액대별, 최신등록순 어쩌고 저쩌고) */
     @GetMapping("/categoryWine")
     @Operation(summary = "항목별 와인 리스트"
             , description = "" +
@@ -30,7 +50,7 @@ public class MainController {
             "\"sort\": [1] 판매순 랭킹(0 : 오랜등록순, 0 : 최신등록순, 1: 높은가격순, 2: 낮은가격순)  <br>" +
             "\"price\": [1] 금액별 와인(0 : 2만원 이하, 1: 2~5만원 , 2: 5~10만원, 3: 10만원 이상)  <br>"
     )
-    public WineCategoryDetailRes getSearchItem(@RequestParam(value = "cate", required = false) Long cate,
+    public WineCategoryDetailRes getCateWine(@RequestParam(value = "cate", required = false) Long cate,
                                                @RequestParam(value = "bigCate", required = false) Long bigCate,
                                                @RequestParam(value = "country", required = false) Long country,
                                                @RequestParam(defaultValue = "1") int page,

@@ -2,6 +2,9 @@ package com.green.winey_final.main2.six;
 
 
 import com.green.winey_final.common.config.security.AuthenticationFacade;
+import com.green.winey_final.common.entity.ProductEntity;
+import com.green.winey_final.common.entity.UserEntity;
+import com.green.winey_final.common.entity.UserInfoEntity;
 import com.green.winey_final.main2.MainMapper2;
 import com.green.winey_final.main2.model.*;
 import com.green.winey_final.recommend.RecommendService;
@@ -32,8 +35,6 @@ public class MainSixController2 {
     private final AuthenticationFacade facade;
 
     private final RecommendMapper2 recommendMapper;
-    private final UserInfoEntityRepository userInfoEntityRep;
-    private final RecommendService recommendService;
 
     /*@GetMapping("/price")
     @Operation(summary = "가격별 와인리스트")
@@ -98,18 +99,18 @@ public class MainSixController2 {
         //불러온 userId값 넣어주기
         SelRecommendDto2 selRecommendDto2 = new SelRecommendDto2();
         selRecommendDto2.setUserId(userId);
-        List<Long> recommandWines = recommendService.selUserinfo();
+        List<Integer> recommandWines = recommendMapper.selUserinfo(selRecommendDto2);
         List<Long> getProductId = new ArrayList<>();
 
+        List<WineRecommendVo2> selectedWines = new ArrayList<>();
+        List<Integer> totalWines = recommandWines;
 
         //userId 당 해당하는 productId 담기
-        for (Long wineId : recommandWines) {
+        for (Integer wineId : recommandWines) {
             getProductId.add(wineId.longValue());
         }
 
-
         //랜덤 6개 출력하기
-        List<WineRecommendVo2> selectedWines = new ArrayList<>();
         List<WineRecommendVo2> allWines = MAPPER.selWineByday(userId);
         int winesToDisplay = 6;
 
