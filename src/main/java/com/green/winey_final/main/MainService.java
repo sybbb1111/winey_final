@@ -5,6 +5,7 @@ import com.green.winey_final.common.config.security.AuthenticationFacade;
 import com.green.winey_final.common.entity.*;
 import com.green.winey_final.main.model.WineCategoryDto;
 import com.green.winey_final.main.model.WineCategoryDetailRes;
+import com.green.winey_final.main.model.WineRes;
 import com.green.winey_final.repository.ProductRepository;
 import com.green.winey_final.repository.SaleRepository;
 import com.green.winey_final.repository.SmallCategoryRepository;
@@ -44,7 +45,9 @@ public class MainService {
     private final JPAQueryFactory queryFactory;
 
 
-    /** 매일 6개 랜덤 와인 추천 */
+    /**
+     * 매일 6개 랜덤 와인 추천
+     */
 
 
     private List<WineVo> getRandomWine(WineCategoryDto dto) {
@@ -74,7 +77,42 @@ public class MainService {
                 .fetch();
     }
 
-    /** 할인 와인 리스트 */
+    /**
+     * 할인 와인 리스트
+     */
+
+    public WineRes wineList(Pageable pageable) {
+
+        List<WineVo> list = saleWineList(pageable);
+        Long count = count();
+
+        return WineRes.builder()
+                .count(count)
+                .list(list)
+                .build();
+    }
+
+    public Long count() {
+        LocalDate now = LocalDate.now();
+        int year = now.getYear();
+        int startMonth = now.getMonthValue();
+        LocalDate startOfMonth = LocalDate.of(year, startMonth, 1); // 이번 달의 시작일
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(saleEntity.startSale.goe(String.valueOf(startOfMonth)))
+                .and(saleEntity.saleYn.eq(1));
+
+        JPAQuery<Long> query = queryFactory.select(productEntity.productId.count())
+                .from(productEntity)
+                .innerJoin(saleEntity)
+                .on(productEntity.productId.eq(saleEntity.productEntity.productId))
+                .where(builder)
+                .groupBy(productEntity.productId);
+
+        return query.stream().count();
+    }
+
 
     public List<WineVo> saleWineList(Pageable pageable) {
 
@@ -119,13 +157,17 @@ public class MainService {
 
     private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
         List<OrderSpecifier> orders = new LinkedList();
-        if(!pageable.getSort().isEmpty()) {
-            for(Sort.Order order : pageable.getSort()) {
+        if (!pageable.getSort().isEmpty()) {
+            for (Sort.Order order : pageable.getSort()) {
                 Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
 
-                switch(order.getProperty().toLowerCase()) {//사용자가 혹시 대문자로 입력했을 경우에 소문자로 변경해줌
-                    case "productid": orders.add(new OrderSpecifier(direction, productEntity.productId)); break;
-                    case "price": orders.add(new OrderSpecifier(direction, productEntity.price)); break;
+                switch (order.getProperty().toLowerCase()) {//사용자가 혹시 대문자로 입력했을 경우에 소문자로 변경해줌
+                    case "productid":
+                        orders.add(new OrderSpecifier(direction, productEntity.productId));
+                        break;
+                    case "price":
+                        orders.add(new OrderSpecifier(direction, productEntity.price));
+                        break;
                 }
             }
         }

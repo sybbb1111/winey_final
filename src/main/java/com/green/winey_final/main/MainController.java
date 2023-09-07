@@ -31,9 +31,9 @@ public class MainController {
             "\"sort\": [-] productid , price <br>" +
             "- ASC : 오름차순<br>" +
             "- DESC : 내림차순")
-    public List<WineVo> getCateWine(@ParameterObject @PageableDefault
+    public WineRes getCateWine(@ParameterObject @PageableDefault
             (sort = "productid", direction = Sort.Direction.ASC, size = 9) Pageable pageable) {
-        return SERVICE.saleWineList(pageable);
+        return SERVICE.wineList(pageable);
     }
 
 
