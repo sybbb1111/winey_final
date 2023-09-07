@@ -65,8 +65,8 @@ public class AdminController {
             + "type -> 기본값(0) / 상품번호(productid)/세일가격(saleprice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
             + "상품 검색시<br> type2 -> 상품한글이름(searchproductnmkor)<br> str -> (검색어)")
-    @GetMapping("/product/list")
-    public ProductList getProduct(@RequestParam(defaultValue = "1")int page,
+    @GetMapping("/product/list2")
+    public ProductList getProduct2(@RequestParam(defaultValue = "1")int page,
                                   @RequestParam(defaultValue = "20")int row,
                                   @RequestParam(required = false) String type,
                                   @RequestParam(required = false) String sort,
@@ -79,18 +79,19 @@ public class AdminController {
         dto.setType2(type2);
         dto.setSort(sort);
         dto.setStr(str);
-        return SERVICE.getProduct(dto);
+        return SERVICE.getProduct2(dto);
     }
-    @Operation(summary = "등록된 상품 리스트 출력(피그마: 등록상품리스트 페이지)JPA", description = "정렬 안한 기본 페이지는 productId,asc 가 기본값입니다.<br>"
-            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수"
-            + "type -> 기본값(0) / 상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
-            + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
-    @GetMapping("/product/list2")
-    public PageCustom<ProductVo> getProduct2(@ParameterObject @PageableDefault(sort="productId", direction = Sort.Direction.ASC, page = 0, size = 20)
+    @Operation(summary = "JPA 등록된 상품 리스트 출력(피그마: 등록상품리스트 페이지)", description = "정렬 안한 기본 페이지는 productId,asc 가 기본값입니다.<br>"
+            + "page -> 0이 1페이지입니다.<br> size(row) -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) productid,asc -> 상품번호 기준으로 오름차순 정렬한다는 의미<br> 정렬기준 ->상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
+            + "정렬 ->  오름차순(asc) / 내림차순(desc)<br>"
+            + "str -> 검색어 <br>")
+    @GetMapping("/product/list")
+    public PageCustom<ProductVo> getProduct(@ParameterObject @PageableDefault(sort="productId", direction = Sort.Direction.ASC, page = 0, size = 20)
                                              Pageable pageable,
                                              @RequestParam(required = false) String str) {
 
-        return SERVICE.getProduct1(pageable, str);
+        return SERVICE.getProduct(pageable, str);
     }
 
     //할인률 등록 상품 리스트 출력
