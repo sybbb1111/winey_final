@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@Tag(name = "사용자맞춤와인추천 3차JPA진행중")
+@Tag(name = "사용자맞춤와인추천 3차JPA")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/recommend")
@@ -32,28 +32,28 @@ public class RecommendController {
     }
 
 
-    @GetMapping("/loginuser")
+    @GetMapping("/show-login-userpk")
     @Operation(summary = "로그인한 유저의 PK값")
     public Long loginUserPk() {
         return service.loginUserPk();
     }
 
 
-    @GetMapping("/getUserInfo")
+    @GetMapping("/show-user-wine")
     @Operation(summary = "유저와인정보")
     public List<Long> getUserInfo() {
         return service.selUserinfo();
     }
 
 
-    @GetMapping("/getrecommend")
+    @GetMapping("/show-recommend")
     @Operation(summary = "유저가 취향선택했던 값")
     public RecommendVo getUserRecommend() {
         return service.selUserRecommend();
     }
 
 
-    @PutMapping("/updrecommend")
+    @PutMapping("/modify-recommend")
     @Operation(summary = "사용자취향수정")
     public List<Long> putRecommend(@RequestBody RecommendRes res) {
         return service.updRecommend(res);

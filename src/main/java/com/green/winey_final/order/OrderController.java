@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/orderList2")
+@RequestMapping("/api/orderlist")
 @Tag(name = "주문내역페이지 3차JPA")
 public class OrderController {
     private final OrderService service;
@@ -30,7 +30,7 @@ public class OrderController {
     }
 
 
-    @PutMapping("/pickupFinish")
+    @PutMapping("/pickup-finish")
     @Operation(summary = "픽업 완료", description = "주문상태를 픽업완료로 업데이트")
     public int pickupFinishOrder(@RequestParam Long orderId){
         return service.pickupFinishOrder(orderId);
