@@ -112,7 +112,7 @@ public class AdminController {
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
             + "회원 검색시<br> type2 -> 이름(searchUserName) / 이메일(searchUserEmail)<br>"
             + "str -> (검색어) ")
-    @GetMapping("/user/list")
+    @GetMapping("/user/list2")
     public UserList getUserList(@RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "15") int row,
                                 @RequestParam(required = false) String type,
@@ -126,7 +126,21 @@ public class AdminController {
         dto.setType2(type2);
         dto.setSort(sort);
         dto.setStr(str);
-        return SERVICE.getUserList(dto);
+        return SERVICE.getUserList2(dto);
+    }
+
+    @Operation(summary = "JPA가입 회원 리스트 (피그마: 가입회원리스트 페이지)", description = "<br>"
+            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) userId,asc <br> - 입력회원번호(userId) / 픽업지역(pickUp) <br> - 오름차순(asc) / 내림차순(desc)<br>"
+            + "searchType(검색타입) -> unm(회원이름) / email(이메일) <br>"
+            + "str ->  검색어")
+    @GetMapping("/user/list")
+    public PageCustom<UserVo> getUserList2(@ParameterObject @PageableDefault(sort="userId", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                           Pageable pageable,
+                                           @RequestParam(required = false) String searchType,
+                                           @RequestParam(required = false) String str) {
+
+        return SERVICE.getUserList(pageable, searchType, str);
     }
 
     //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리

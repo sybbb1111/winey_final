@@ -2,10 +2,13 @@ package com.green.winey_final.repository;
 
 import com.green.winey_final.admin.model.ProductVo;
 import com.green.winey_final.admin.model.QProductVo;
+import com.green.winey_final.admin.model.QUserVo;
+import com.green.winey_final.admin.model.UserVo;
 import com.green.winey_final.repository.support.PageCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.green.winey_final.common.entity.QProductEntity.productEntity;
+import static com.green.winey_final.common.entity.QRegionNmEntity.regionNmEntity;
 import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
 import static com.green.winey_final.common.entity.QUserEntity.userEntity;
 
@@ -57,6 +61,27 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         return new PageCustom<ProductVo>(map.getContent(), map.getPageable(), map.getTotalElements());
     }
 
+    @Override
+    public PageCustom<UserVo> selUserAll(Pageable pageable, String searchType, String str) {
+
+        List<UserVo> list = queryFactory.select(new QUserVo(userEntity.userId, userEntity.email, userEntity.unm, regionNmEntity.regionNmId.intValue(), userEntity.createdAt.stringValue()))
+                .from(userEntity)
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .where(eqUserName(searchType, str),
+                        eqUserEmail(searchType, str))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(userEntity.count())// count()와 countDistinct() 차이 알기
+                .from(userEntity);
+
+        Page<UserVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<UserVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
 
     //정렬
     private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
@@ -88,4 +113,33 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         }
         return orders.stream().toArray(OrderSpecifier[]::new);
     }
+
+    //동적 검색 조건
+    /*
+    equalsIgnoreCase() 대소문자 구분없이 비교
+    equals() 대소문자 구분해서 비교
+     */
+    //유저 검색 조건
+    public BooleanExpression eqUserName(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("unm")) {
+            return userEntity.unm.containsIgnoreCase(str);
+        }
+        return null;
+
+    }
+
+    public BooleanExpression eqUserEmail(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("email")) {
+            return userEntity.email.containsIgnoreCase(str);
+        }
+        return null;
+
+    }
+
+
+
 }

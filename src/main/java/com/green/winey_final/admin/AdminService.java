@@ -375,7 +375,7 @@ public class AdminService {
     }
 
     //가입회원 리스트
-    public UserList getUserList(SelListDto dto) {
+    public UserList getUserList2(SelListDto dto) {
         int startIdx = (dto.getPage()-1) * dto.getRow();
         dto.setStartIdx(startIdx);
 
@@ -385,6 +385,10 @@ public class AdminService {
                 .page(new PageDto(maxUser, dto.getPage(), dto.getRow()))
                 .list(MAPPER.selUserList(dto))
                 .build();
+    }
+
+    public PageCustom<UserVo> getUserList(Pageable pageable, String searchType, String str) {
+        return adminWorkRep.selUserAll(pageable, searchType, str);
     }
 
     //가입회원 상세 주문 내역(회원pk별) +페이징 처리
@@ -600,30 +604,6 @@ public class AdminService {
         return dto;
     }
 
-
-
-
-//    private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
-////        List<OrderSpecifier> orders = new ArrayList();
-//        List<OrderSpecifier> orders = new LinkedList<>();
-//        if(!pageable.getSort().isEmpty()) {
-//            for(Sort.Order order : pageable.getSort()) {
-//                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
-//                //order의 property값이 스웨거 입력칸 sort의 number
-//                switch (order.getProperty().toLowerCase()) {
-//                    case "productid": orders.add(new OrderSpecifier(direction, productEntity.productId)); break;
-//                    case "saleprice": orders.add(new OrderSpecifier(direction, saleEntity.salePrice)); break;
-//                    case "sale": orders.add(new OrderSpecifier(direction, saleEntity.sale)); break;
-//                    case "price": orders.add(new OrderSpecifier(direction, productEntity.price)); break;
-//                    case "recommend":
-//                        orders.add(new OrderSpecifier(direction, productEntity.promotion));
-//                        orders.add(new OrderSpecifier(direction, productEntity.beginner)); break; //
-//                    case "quantity": orders.add(new OrderSpecifier(direction, saleEntity.sale)); break;
-//                }
-//            }
-//        }
-//        return orders.stream().toArray(OrderSpecifier[]::new);
-//    }
 
 
 }
