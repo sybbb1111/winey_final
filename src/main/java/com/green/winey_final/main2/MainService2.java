@@ -17,8 +17,10 @@ public class MainService2 {
 
 
 
-    public List<WineTotalVo2> redWine(WineSelDto2 dto) {
+    public CountRes redWine(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineRed(dto);
 
         List<WineTotalVo2> wine = MAPPER.redWine(dto);
         for (WineTotalVo2 vo : wine) {
@@ -27,12 +29,18 @@ public class MainService2 {
             vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> redWineByNew(WineSelDto2 dto) {
+    public CountRes redWineByNew(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineRed(dto);
 
         List<WineTotalVo2> wine = MAPPER.redWineByNew(dto);
         for (WineTotalVo2 vo : wine) {
@@ -41,12 +49,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> redWineByExpencive(WineSelDto2 dto) {
+    public CountRes redWineByExpencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineRed(dto);
 
         List<WineTotalVo2> wine = MAPPER.redWineByExpencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -55,12 +69,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> redWineByCheap(WineSelDto2 dto) {
+    public CountRes redWineByCheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineRed(dto);
 
         List<WineTotalVo2> wine = MAPPER.redWineByCheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -69,14 +89,20 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
     //====================================================================
 
-    public List<WineTotalVo2> whiteWine(WineSelDto2 dto) {
+    public CountRes whiteWine(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineWhite(dto);
 
         List<WineTotalVo2> wine = MAPPER.whiteWine(dto);
         for (WineTotalVo2 vo : wine) {
@@ -85,12 +111,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> whiteWineByNew(WineSelDto2 dto) {
+    public CountRes whiteWineByNew(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineWhite(dto);
 
         List<WineTotalVo2> wine = MAPPER.whiteWineByNew(dto);
         for (WineTotalVo2 vo : wine) {
@@ -99,12 +130,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> whiteWineByExpencive(WineSelDto2 dto) {
+    public CountRes whiteWineByExpencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineWhite(dto);
 
         List<WineTotalVo2> wine = MAPPER.whiteWineByExpencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -113,12 +149,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> whiteWineByCheap(WineSelDto2 dto) {
+    public CountRes whiteWineByCheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineWhite(dto);
 
         List<WineTotalVo2> wine = MAPPER.whiteWineByCheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -127,14 +168,19 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
     //====================================================================
 
-    public List<WineTotalVo2> sparklingWine(WineSelDto2 dto) {
+    public CountRes sparklingWine(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSparkling(dto);
 
         List<WineTotalVo2> wine = MAPPER.sparklingWine(dto);
         for (WineTotalVo2 vo : wine) {
@@ -143,11 +189,16 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
     }
 
-    public List<WineTotalVo2> sparklingWineByNew(WineSelDto2 dto) {
+    public CountRes sparklingWineByNew(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSparkling(dto);
 
         List<WineTotalVo2> wine = MAPPER.sparklingWineByNew(dto);
         for (WineTotalVo2 vo : wine) {
@@ -156,12 +207,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> sparklingWineByExpencive(WineSelDto2 dto) {
+    public CountRes sparklingWineByExpencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSparkling(dto);
 
         List<WineTotalVo2> wine = MAPPER.sparklingWineByExpencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -170,12 +226,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> sparklingWineByCheap(WineSelDto2 dto) {
+    public CountRes sparklingWineByCheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSparkling(dto);
 
         List<WineTotalVo2> wine = MAPPER.sparklingWineByCheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -184,14 +245,19 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
     //====================================================================
 
-    public List<WineTotalVo2> otherWine(WineSelDto2 dto) {
+    public CountRes otherWine(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineOther(dto);
 
         List<WineTotalVo2> wine = MAPPER.otherWine(dto);
         for (WineTotalVo2 vo : wine) {
@@ -200,12 +266,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> otherWineByNew(WineSelDto2 dto) {
+    public CountRes otherWineByNew(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineOther(dto);
 
         List<WineTotalVo2> wine = MAPPER.otherWineByNew(dto);
         for (WineTotalVo2 vo : wine) {
@@ -214,12 +285,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> otherWineByExpencive(WineSelDto2 dto) {
+    public CountRes otherWineByExpencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineOther(dto);
 
         List<WineTotalVo2> wine = MAPPER.otherWineByExpencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -228,12 +304,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> otherWineByCheap(WineSelDto2 dto) {
+    public CountRes otherWineByCheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineOther(dto);
 
         List<WineTotalVo2> wine = MAPPER.otherWineByCheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -242,7 +323,10 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
     }
 
     //====================================================================
@@ -282,10 +366,12 @@ public class MainService2 {
 
         return MAPPER.selWinePrice();
     }
+//====================================================================
 
-
-    public List<WineTotalVo2> selWine(WineSelDto2 dto) {
+    public CountRes selWine(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWine(dto);
         for (WineTotalVo2 vo : wine) {
@@ -294,13 +380,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
 
-    public List<WineTotalVo2> selWineByNew(WineSelDto2 dto) {
+    public CountRes selWineByNew(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByNew(dto);
         for (WineTotalVo2 vo : wine) {
@@ -309,12 +400,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByExpencive(WineSelDto2 dto) {
+    public CountRes selWineByExpencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByExpencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -323,12 +419,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByCheap(WineSelDto2 dto) {
+    public CountRes selWineByCheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByCheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -337,7 +438,10 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
@@ -350,8 +454,10 @@ public class MainService2 {
     }
     //====================================================================
 
-    public List<WineTotalVo2> selWineByPrice2(WineSelDto2 dto) {
+    public CountRes selWineByPrice2(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel2(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice2(dto);
         for (WineTotalVo2 vo : wine) {
@@ -360,12 +466,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice2New(WineSelDto2 dto) {
+    public CountRes selWineByPrice2New(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel2(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice2New(dto);
         for (WineTotalVo2 vo : wine) {
@@ -374,12 +485,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice2Expencive(WineSelDto2 dto) {
+    public CountRes selWineByPrice2Expencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel2(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice2Expencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -388,12 +504,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice2Cheap(WineSelDto2 dto) {
+    public CountRes selWineByPrice2Cheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel2(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice2Cheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -402,12 +523,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
     }
     //====================================================================
 
-    public List<WineTotalVo2> selWineByPrice25(WineSelDto2 dto) {
+    public CountRes selWineByPrice25(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel25(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice25(dto);
         for (WineTotalVo2 vo : wine) {
@@ -416,11 +542,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
     }
 
-    public List<WineTotalVo2> selWineByPrice25New(WineSelDto2 dto) {
+    public CountRes selWineByPrice25New(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel25(dto);
+
         List<WineTotalVo2> wine = MAPPER.selWineByPrice25New(dto);
         for (WineTotalVo2 vo : wine) {
              if(vo.getSaleYn() == 0){
@@ -428,12 +560,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice25Expencive(WineSelDto2 dto) {
+    public CountRes selWineByPrice25Expencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel25(dto);
+
         List<WineTotalVo2> wine = MAPPER.selWineByPrice25Expencive(dto);
         for (WineTotalVo2 vo : wine) {
              if(vo.getSaleYn() == 0){
@@ -441,12 +579,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice25Cheap(WineSelDto2 dto) {
+    public CountRes selWineByPrice25Cheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel25(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice25Cheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -455,13 +598,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
     //====================================================================
 
-    public List<WineTotalVo2> selWineByPrice510(WineSelDto2 dto) {
+    public CountRes selWineByPrice510(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel510(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice510(dto);
         for (WineTotalVo2 vo : wine) {
@@ -470,12 +618,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice510New(WineSelDto2 dto) {
+    public CountRes selWineByPrice510New(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel510(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice510New(dto);
         for (WineTotalVo2 vo : wine) {
@@ -484,12 +637,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice510Expencive(WineSelDto2 dto) {
+    public CountRes selWineByPrice510Expencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel510(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice510Expencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -498,12 +656,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice510Cheap(WineSelDto2 dto) {
+    public CountRes selWineByPrice510Cheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel510(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice510Cheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -512,14 +675,19 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
     //====================================================================
 
-    public List<WineTotalVo2> selWineByPrice10(WineSelDto2 dto) {
+    public CountRes selWineByPrice10(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel10(dto);
 
         List<WineTotalVo2> wine =  MAPPER.selWineByPrice10(dto);
         for (WineTotalVo2 vo : wine) {
@@ -528,12 +696,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice10New(WineSelDto2 dto) {
+    public CountRes selWineByPrice10New(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel10(dto);
+
         List<WineTotalVo2> wine = MAPPER.selWineByPrice10New(dto);
         for (WineTotalVo2 vo : wine) {
              if(vo.getSaleYn() == 0){
@@ -541,12 +715,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice10Expencive(WineSelDto2 dto) {
+    public CountRes selWineByPrice10Expencive(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel10(dto);
+
         List<WineTotalVo2> wine = MAPPER.selWineByPrice10Expencive(dto);
         for (WineTotalVo2 vo : wine) {
              if(vo.getSaleYn() == 0){
@@ -554,12 +734,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByPrice10Cheap(WineSelDto2 dto) {
+    public CountRes selWineByPrice10Cheap(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineSel10(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByPrice10Cheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -568,13 +753,18 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
     //===================================================================================
-    public List<WineTotalVo2> selWineByCountry(WineSelByCountryDto2 dto) {
+    public CountRes selWineByCountry(WineSelByCountryDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineCountry(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByCountry(dto);
         for (WineTotalVo2 vo : wine) {
@@ -583,12 +773,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByCountryNew(WineSelByCountryDto2 dto) {
+    public CountRes selWineByCountryNew(WineSelByCountryDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineCountry(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByCountryNew(dto);
         for (WineTotalVo2 vo : wine) {
@@ -597,12 +792,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineTotalVo2> selWineByCountryExpencive(WineSelByCountryDto2 dto) {
+    public CountRes selWineByCountryExpencive(WineSelByCountryDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineCountry(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByCountryExpencive(dto);
         for (WineTotalVo2 vo : wine) {
@@ -611,11 +811,16 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
     }
 
-    public List<WineTotalVo2> selWineByCountryCheap(WineSelByCountryDto2 dto) {
+    public CountRes selWineByCountryCheap(WineSelByCountryDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineCountry(dto);
 
         List<WineTotalVo2> wine = MAPPER.selWineByCountryCheap(dto);
         for (WineTotalVo2 vo : wine) {
@@ -624,14 +829,19 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
 //===================================================================================
 
-    public List<WineFoodVo2> selWineByFood(WineSelByFoodDto2 dto) {
+    public CountFoodRes selWineByFood(WineSelByFoodDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineFood(dto);
 
         List<WineFoodVo2> wine = MAPPER.selWineByFood(dto);
         for (WineFoodVo2 vo : wine) {
@@ -640,12 +850,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountFoodRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineFoodVo2> selWineByFoodNew(WineSelByFoodDto2 dto) {
+    public CountFoodRes selWineByFoodNew(WineSelByFoodDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineFood(dto);
 
         List<WineFoodVo2> wine = MAPPER.selWineByFoodNew(dto);
         for (WineFoodVo2 vo : wine) {
@@ -654,12 +869,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountFoodRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineFoodVo2> selWineByFoodExpencive(WineSelByFoodDto2 dto) {
+    public CountFoodRes selWineByFoodExpencive(WineSelByFoodDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineFood(dto);
 
         List<WineFoodVo2> wine = MAPPER.selWineByFoodExpencive(dto);
         for (WineFoodVo2 vo : wine) {
@@ -668,12 +888,17 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountFoodRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
 
     }
 
-    public List<WineFoodVo2> selWineByFoodCheap(WineSelByFoodDto2 dto) {
+    public CountFoodRes selWineByFoodCheap(WineSelByFoodDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
+
+        int result = MAPPER.countWineFood(dto);
 
         List<WineFoodVo2> wine = MAPPER.selWineByFoodCheap(dto);
         for (WineFoodVo2 vo : wine) {
@@ -682,6 +907,9 @@ public class MainService2 {
                 vo.setSalePrice(vo.getPrice());
             }
         }
-        return wine;
+        return CountFoodRes.builder()
+                .count(result)
+                .wineList(wine)
+                .build();
     }
 }
