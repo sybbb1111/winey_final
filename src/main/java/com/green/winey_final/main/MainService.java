@@ -12,6 +12,8 @@ import com.green.winey_final.repository.WinePairingRepository;
 import com.green.winey_final.search.model.WineVo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.green.winey_final.common.entity.QProductEntity.productEntity;
@@ -118,6 +121,7 @@ public class MainService {
                 .on(productEntity.productId.eq(saleEntity.productEntity.productId))
                 .where(builder)
                 .groupBy(productEntity.productId)
+                .orderBy(getAllOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
@@ -126,6 +130,21 @@ public class MainService {
 
 //        return null;
         return query.fetch();
+    }
+
+    private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
+        List<OrderSpecifier> orders = new LinkedList();
+        if(!pageable.getSort().isEmpty()) {
+            for(Sort.Order order : pageable.getSort()) {
+                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+
+                switch(order.getProperty().toLowerCase()) {//사용자가 혹시 대문자로 입력했을 경우에 소문자로 변경해줌
+                    case "productid": orders.add(new OrderSpecifier(direction, productEntity.productId)); break;
+                    case "price": orders.add(new OrderSpecifier(direction, productEntity.price)); break;
+                }
+            }
+        }
+        return orders.stream().toArray(OrderSpecifier[]::new);
     }
 
 

@@ -19,20 +19,20 @@ import java.util.List;
 @Tag(name = "월별 할인 품목")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/test")
+@RequestMapping("/api/main")
 public class MainController {
 
     private final MainService SERVICE;
 
     /** 할인 와인 리스트 */
     @GetMapping("/monthSaleWine")
-    @Operation(summary = "할인 와인 리스트", description = "월별 할인 품목")
-    public List<WineVo> getCateWine(@ParameterObject @PageableDefault(size = 9)
-                                        @SortDefault.SortDefaults({
-                                                @SortDefault(sort = "productId", direction = Sort.Direction.ASC),
-                                                @SortDefault(sort = "price", direction = Sort.Direction.DESC)
-                                        })
-                                        Pageable pageable) {
+    @Operation(summary = "할인 와인 리스트", description = "\"page\": [-] 페이지 0부터 시작합니다.,<br>" +
+            "\"size\": [고정 9] 와인 갯수,<br>" +
+            "\"sort\": [-] productid , price <br>" +
+            "- ASC : 오름차순<br>" +
+            "- DESC : 내림차순")
+    public List<WineVo> getCateWine(@ParameterObject @PageableDefault
+            (sort = "productid", direction = Sort.Direction.ASC, size = 9) Pageable pageable) {
         return SERVICE.saleWineList(pageable);
     }
 
