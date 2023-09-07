@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UserAromaRepository extends JpaRepository<UserAromaEntity,Long> {
-    UserAromaEntity findByUserEntity(UserEntity userId);
     List<UserAromaEntity> findAromaCategoryIdByUserEntity(UserEntity userId);
+    void deleteAllByUserEntity(UserEntity userId);
 
 
 }

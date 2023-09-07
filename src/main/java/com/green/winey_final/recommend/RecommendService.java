@@ -2,13 +2,13 @@ package com.green.winey_final.recommend;
 
 import com.green.winey_final.common.config.security.AuthenticationFacade;
 import com.green.winey_final.common.entity.*;
+import com.green.winey_final.recommend.model.RecommendRes;
 import com.green.winey_final.recommend.model.RecommendVo;
-import com.green.winey_final.recommend2.model.RecommendRes2;
-import com.green.winey_final.recommend2.model.UserinfoDto2;
 import com.green.winey_final.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RecommendService {
 
-    private final UserInfoEntityRepository wineRepository;
+    private final UserInfoRepository wineRepository;
     private final AuthenticationFacade facade;
     private final UserCategoryRepository userCategory;
     private final UserCountryRepository userCountry;
@@ -28,18 +28,19 @@ public class RecommendService {
     private final UserSmallCategoryRepository userSmall;
     private final UserAromaRepository userAroma;
     private final RecommendMapper mapper;
-    private final UserInfoEntityRepository userinfo;
     private final UserRepository user;
+    private final UserInfoRepository userinfo;
 
-    public List<Long> selRecommend(RecommendRes2 res) {
-        Long user = facade.getLoginUserPk();
+    public List<Long> selRecommend(RecommendRes res) {
+        Long userPk = facade.getLoginUserPk();
         List<Long> result = mapper.selRecommend(res);
+
         List<UserInfoEntity> userInfoEntity = new ArrayList<>();
 
         for (Long userinfoId : result) {
             UserInfoEntity userinfo = new UserInfoEntity();
             userinfo.setUserEntity(UserEntity.builder()
-                    .userId(user)
+                    .userId(userPk)
                     .build());
             userinfo.setProductEntity(ProductEntity.builder()
                     .productId(userinfoId)
@@ -48,13 +49,12 @@ public class RecommendService {
         }
         userinfo.saveAll(userInfoEntity);
 
-
         List<UserCategoryEntity> categoryList = new ArrayList<>();
         if (res.getCategoryId() != null) {
             for (Long categoryId : res.getCategoryId()) {
                 UserCategoryEntity category = new UserCategoryEntity();
                 category.setUserEntity(UserEntity.builder()
-                        .userId(user)
+                        .userId(userPk)
                         .build());
                 category.setCategoryId(categoryId);
                 categoryList.add(category);
@@ -62,7 +62,7 @@ public class RecommendService {
         } else {
             UserCategoryEntity category = new UserCategoryEntity();
             category.setUserEntity(UserEntity.builder()
-                    .userId(user)
+                    .userId(userPk)
                     .build());
             userCategory.save(category);
         }
@@ -74,7 +74,7 @@ public class RecommendService {
             for (Long countryId : res.getCountryId()) {
                 UserCountryEntity country = new UserCountryEntity();
                 country.setUserEntity(UserEntity.builder()
-                        .userId(user)
+                        .userId(userPk)
                         .build());
                 country.setCountryId(countryId);
                 countryList.add(country);
@@ -82,7 +82,7 @@ public class RecommendService {
         } else {
             UserCountryEntity country = new UserCountryEntity();
             country.setUserEntity(UserEntity.builder()
-                    .userId(user)
+                    .userId(userPk)
                     .build());
             userCountry.save(country);
         }
@@ -92,37 +92,36 @@ public class RecommendService {
         List<UserPriceRangeEntity> priceRangeList = new ArrayList<>();
         if (res.getPriceRange() != null) {
             for (Long priceR : res.getPriceRange()) {
-                UserPriceRangeEntity priceRange =new UserPriceRangeEntity();
+                UserPriceRangeEntity priceRange = new UserPriceRangeEntity();
                 priceRange.setUserEntity(UserEntity.builder()
-                        .userId(user)
+                        .userId(userPk)
                         .build());
                 priceRange.setPriceRange(priceR);
                 priceRangeList.add(priceRange);
             }
         } else {
-            UserPriceRangeEntity priceRange =new UserPriceRangeEntity();
+            UserPriceRangeEntity priceRange = new UserPriceRangeEntity();
             priceRange.setUserEntity(UserEntity.builder()
-                    .userId(user)
+                    .userId(userPk)
                     .build());
             userPrice.save(priceRange);
         }
         userPrice.saveAll(priceRangeList);
 
-
         List<UserSmallCategoryEntity> userSmallList = new ArrayList<>();
         if (res.getSmallCategoryId() != null) {
             for (Long smallId : res.getSmallCategoryId()) {
-                UserSmallCategoryEntity smallCategory=new UserSmallCategoryEntity();
+                UserSmallCategoryEntity smallCategory = new UserSmallCategoryEntity();
                 smallCategory.setUserEntity(UserEntity.builder()
-                        .userId(user)
+                        .userId(userPk)
                         .build());
                 smallCategory.setSmallCategoryId(smallId);
                 userSmallList.add(smallCategory);
             }
         } else {
-            UserSmallCategoryEntity smallCategory=new UserSmallCategoryEntity();
+            UserSmallCategoryEntity smallCategory = new UserSmallCategoryEntity();
             smallCategory.setUserEntity(UserEntity.builder()
-                    .userId(user)
+                    .userId(userPk)
                     .build());
             userSmall.save(smallCategory);
         }
@@ -134,7 +133,7 @@ public class RecommendService {
             for (Long aromaId : res.getAromaCategoryId()) {
                 UserAromaEntity aroma = new UserAromaEntity();
                 aroma.setUserEntity(UserEntity.builder()
-                        .userId(user)
+                        .userId(userPk)
                         .build());
                 aroma.setAromaCategoryId(aromaId);
                 aromaList.add(aroma);
@@ -142,7 +141,7 @@ public class RecommendService {
         } else {
             UserAromaEntity aroma = new UserAromaEntity();
             aroma.setUserEntity(UserEntity.builder()
-                    .userId(user)
+                    .userId(userPk)
                     .build());
             userAroma.save(aroma);
         }
@@ -163,11 +162,13 @@ public class RecommendService {
         }
         return productPK;
     }
+
     public Long loginUserPk() {
         Optional<UserEntity> optentity = user.findById(facade.getLoginUserPk());
         UserEntity entity = optentity.get();
         return entity.getUserId();
     }
+
 
     public RecommendVo selUserRecommend() {
         Long userPk = facade.getLoginUserPk();
@@ -207,7 +208,137 @@ public class RecommendService {
                 .aromaCategoryId(aromalist)
                 .build();
     }
+    @Transactional
+    public List<Long> updRecommend(RecommendRes res) {
+        long userPk = facade.getLoginUserPk();
+        UserEntity entity = new UserEntity();
+        entity.setUserId(userPk);
+        userinfo.deleteAllByUserEntity(entity);
+        userCategory.deleteAllByUserEntity(entity);
+        userCountry.deleteAllByUserEntity(entity);
+        userPrice.deleteAllByUserEntity(entity);
+        userSmall.deleteAllByUserEntity(entity);
+        userAroma.deleteAllByUserEntity(entity);
 
+        List<Long> result = mapper.selRecommend(res);
+
+        List<UserInfoEntity> userInfoEntity = new ArrayList<>();
+
+        for (Long userinfoId : result) {
+            UserInfoEntity userinfo = new UserInfoEntity();
+            userinfo.setUserEntity(UserEntity.builder()
+                    .userId(userPk)
+                    .build());
+            userinfo.setProductEntity(ProductEntity.builder()
+                    .productId(userinfoId)
+                    .build());
+            userInfoEntity.add(userinfo);
+        }
+        userinfo.saveAll(userInfoEntity);
+
+        List<UserCategoryEntity> categoryList = new ArrayList<>();
+        if (res.getCategoryId() != null) {
+            for (Long categoryId : res.getCategoryId()) {
+                UserCategoryEntity category = new UserCategoryEntity();
+                category.setUserEntity(UserEntity.builder()
+                        .userId(userPk)
+                        .build());
+                category.setCategoryId(categoryId);
+                categoryList.add(category);
+            }
+        } else {
+            UserCategoryEntity category = new UserCategoryEntity();
+            category.setUserEntity(UserEntity.builder()
+                    .userId(userPk)
+                    .build());
+            userCategory.save(category);
+        }
+        userCategory.saveAll(categoryList);
+
+
+        List<UserCountryEntity> countryList = new ArrayList<>();
+        if (res.getCountryId() != null) {
+            for (Long countryId : res.getCountryId()) {
+                UserCountryEntity country = new UserCountryEntity();
+                country.setUserEntity(UserEntity.builder()
+                        .userId(userPk)
+                        .build());
+                country.setCountryId(countryId);
+                countryList.add(country);
+            }
+        } else {
+            UserCountryEntity country = new UserCountryEntity();
+            country.setUserEntity(UserEntity.builder()
+                    .userId(userPk)
+                    .build());
+            userCountry.save(country);
+        }
+        userCountry.saveAll(countryList);
+
+
+        List<UserPriceRangeEntity> priceRangeList = new ArrayList<>();
+        if (res.getPriceRange() != null) {
+            for (Long priceR : res.getPriceRange()) {
+                UserPriceRangeEntity priceRange = new UserPriceRangeEntity();
+                priceRange.setUserEntity(UserEntity.builder()
+                        .userId(userPk)
+                        .build());
+                priceRange.setPriceRange(priceR);
+                priceRangeList.add(priceRange);
+            }
+        } else {
+            UserPriceRangeEntity priceRange = new UserPriceRangeEntity();
+            priceRange.setUserEntity(UserEntity.builder()
+                    .userId(userPk)
+                    .build());
+            userPrice.save(priceRange);
+        }
+        userPrice.saveAll(priceRangeList);
+
+        List<UserSmallCategoryEntity> userSmallList = new ArrayList<>();
+        if (res.getSmallCategoryId() != null) {
+            for (Long smallId : res.getSmallCategoryId()) {
+                UserSmallCategoryEntity smallCategory = new UserSmallCategoryEntity();
+                smallCategory.setUserEntity(UserEntity.builder()
+                        .userId(userPk)
+                        .build());
+                smallCategory.setSmallCategoryId(smallId);
+                userSmallList.add(smallCategory);
+            }
+        } else {
+            UserSmallCategoryEntity smallCategory = new UserSmallCategoryEntity();
+            smallCategory.setUserEntity(UserEntity.builder()
+                    .userId(userPk)
+                    .build());
+            userSmall.save(smallCategory);
+        }
+        userSmall.saveAll(userSmallList);
+
+
+        List<UserAromaEntity> aromaList = new ArrayList<>();
+        if (res.getAromaCategoryId() != null) {
+            for (Long aromaId : res.getAromaCategoryId()) {
+                UserAromaEntity aroma = new UserAromaEntity();
+                aroma.setUserEntity(UserEntity.builder()
+                        .userId(userPk)
+                        .build());
+                aroma.setAromaCategoryId(aromaId);
+                aromaList.add(aroma);
+            }
+        } else {
+            UserAromaEntity aroma = new UserAromaEntity();
+            aroma.setUserEntity(UserEntity.builder()
+                    .userId(userPk)
+                    .build());
+            userAroma.save(aroma);
+        }
+        userAroma.saveAll(aromaList);
+
+
+        return result;
+
+
+    }
     }
 
 

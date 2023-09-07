@@ -1,5 +1,6 @@
 package com.green.winey_final.recommend;
 
+import com.green.winey_final.recommend.model.RecommendRes;
 import com.green.winey_final.recommend.model.RecommendVo;
 import com.green.winey_final.recommend2.model.RecommendRes2;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,30 +27,32 @@ public class RecommendController {
                     "priceRange: 가격범위 입력시 1번부터 4번까지 있으며 입력시에 .1:2만원미만, 2:2만원이상 5만원미만, 3:5만원이상 10만원미만, 4:10만원이상,  ex) 3 " +
                     "aromaCategoryId:향 또한 스킵이 가능하고 입력시에는 1~7번까지있으며 1.flower 2.plant 3.fruit 4.spicy 5.earth 6.oak 7.nut ex) 1,2 " +
                     "주의사항: 로그인이 되어있을때 사용하셔야합니다. <br>")
-    public List<Long> recommendations(@RequestBody RecommendRes2 res) {
+    public List<Long> recommendations(@RequestBody RecommendRes res) {
         return service.selRecommend(res);
     }
 
     @GetMapping("/loginuser")
     @Operation(summary = "로그인한 유저의 PK값")
-    public Long loginUserPk(){
+    public Long loginUserPk() {
         return service.loginUserPk();
     }
 
-    @GetMapping("/getuser")
-    public List<Long> getUserWine(){
+    @GetMapping("/getUserInfo")
+    @Operation(summary = "유저와인정보")
+    public List<Long> getUserInfo() {
         return service.selUserinfo();
     }
 
-    @GetMapping("/getuserrecommend")
-    public RecommendVo getRecommend(){
+    @GetMapping("/getrecommend")
+    @Operation(summary = "유저가 취향선택했던 값")
+    public RecommendVo getUserRecommend() {
         return service.selUserRecommend();
     }
 
-
-
-
-
-
+    @PutMapping("/updrecommend")
+    @Operation(summary = "사용자취향수정")
+    public List<Long> putRecommend(@RequestBody RecommendRes res) {
+        return service.updRecommend(res);
+    }
 
 }
