@@ -26,16 +26,16 @@
                 AND a.country_id = #{countryId}
             </if>
             <if test="price == 0">
-                AND a.price <![CDATA[< 20000]]>
+                AND b.sale_price <![CDATA[< 20000]]>
             </if>
             <if test="price == 1">
-                AND a.price >= 20000 AND a.price <![CDATA[< 50000]]>
+                AND b.sale_price >= 20000 AND a.price <![CDATA[< 50000]]>
             </if>
             <if test="price == 2">
-                AND price >= 50000 AND price <![CDATA[< 100000]]>
+                AND b.sale_price >= 50000 AND price <![CDATA[< 100000]]>
             </if>
             <if test="price == 3">
-                AND a.price >= 100000
+                AND b.sale_price >= 100000
             </if>
             <if test="text != null">
                 AND a.nm_kor LIKE CONCAT('%', #{text}, '%')
@@ -46,10 +46,10 @@
             ORDER BY a.product_id DESC
         </if>
         <if test="sort == 1">
-            ORDER BY a.price DESC
+            ORDER BY b.sale_price DESC
         </if>
         <if test="sort == 2">
-            ORDER BY a.price
+            ORDER BY b.sale_price
         </if>
         LIMIT #{startIdx}, #{row}
     </select>
@@ -65,6 +65,18 @@
                 and `nm_kor` LIKE CONCAT('%',#{text},'%')
             </if>
         </where>
+    </select>
+
+    <select id="countWineRed">
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+                FROM t_product a
+                INNER JOIN t_sale b
+                ON a.product_id = b.product_id
+                INNER JOIN t_aroma c
+                ON a.product_id = c.product_id
+                WHERE a.category_id = 1
+                GROUP BY a.product_id) a
     </select>
 
     <select id="redWine">
@@ -107,7 +119,7 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 1
         GROUP BY a.product_id
-        ORDER BY price DESC
+        ORDER BY b.sale_price DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -122,11 +134,23 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 1
         GROUP BY a.product_id
-        ORDER BY price
+        ORDER BY b.sale_price
         LIMIT ${startIdx}, ${row}
     </select>
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineWhite">
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE a.category_id = 2
+        GROUP BY a.product_id) a
+    </select>
 
     <select id="whiteWine">
         SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
@@ -168,7 +192,7 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 2
         GROUP BY a.product_id
-        ORDER BY price DESC
+        ORDER BY b.sale_price DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -183,12 +207,23 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 2
         GROUP BY a.product_id
-        ORDER BY price
+        ORDER BY b.sale_price
         LIMIT ${startIdx}, ${row}
     </select>
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
 
+    <select id="countWineSparkling">
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE a.category_id = 3
+        GROUP BY a.product_id) a
+    </select>
 
     <select id="sparklingWine">
         SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
@@ -230,7 +265,7 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 3
         GROUP BY a.product_id
-        ORDER BY price DESC
+        ORDER BY b.sale_price DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -245,11 +280,23 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 3
         GROUP BY a.product_id
-        ORDER BY price
+        ORDER BY b.sale_price
         LIMIT ${startIdx}, ${row}
     </select>
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineOther">
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE a.category_id = 4
+        GROUP BY a.product_id) a
+    </select>
 
     <select id="otherWine">
         SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
@@ -291,7 +338,7 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 4
         GROUP BY a.product_id
-        ORDER BY price DESC
+        ORDER BY b.sale_price DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -306,7 +353,7 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 4
         GROUP BY a.product_id
-        ORDER BY price
+        ORDER BY b.sale_price
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -343,6 +390,17 @@
         INNER JOIN t_feature b
         ON a.feature_id = b.feature_id
         WHERE product_id = #{productId}
+    </select>
+
+    <select id="countWineSel">
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        GROUP BY a.product_id) a
     </select>
 
     <select id="selWine">
@@ -382,7 +440,7 @@
         INNER JOIN t_aroma c
         ON a.product_id = c.product_id
         GROUP BY a.product_id
-        ORDER BY price DESC
+        ORDER BY b.sale_price DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -396,7 +454,7 @@
         INNER JOIN t_aroma c
         ON a.product_id = c.product_id
         GROUP BY a.product_id
-        ORDER BY price
+        ORDER BY b.sale_price
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -416,6 +474,20 @@
     </select>
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineSel2">
+        <![CDATA[
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE price < 20000
+        GROUP BY a.product_id) a
+        ]]>
+    </select>
 
     <select id="selWineByPrice2">
         <![CDATA[
@@ -462,7 +534,7 @@
             ON a.product_id = c.product_id
             WHERE price < 20000
                     GROUP BY a.product_id
-            ORDER BY price DESC
+            ORDER BY b.sale_price DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -479,12 +551,26 @@
             ON a.product_id = c.product_id
             WHERE price < 20000
                     GROUP BY a.product_id
-            ORDER BY price
+            ORDER BY b.sale_price
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineSel25">
+        <![CDATA[
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE price > 20000 AND price < 50000
+        GROUP BY a.product_id) a
+        ]]>
+    </select>
 
     <select id="selWineByPrice25">
         <![CDATA[
@@ -531,7 +617,7 @@
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
                     GROUP BY a.product_id
-            ORDER BY price DESC
+            ORDER BY b.sale_price DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -548,13 +634,27 @@
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
                     GROUP BY a.product_id
-            ORDER BY price
+            ORDER BY b.sale_price
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
 
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineSel510">
+        <![CDATA[
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE price > 50000 AND price < 100000
+        GROUP BY a.product_id) a
+        ]]>
+    </select>
 
     <select id="selWineByPrice510">
         <![CDATA[
@@ -601,7 +701,7 @@
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
                     GROUP BY a.product_id
-            ORDER BY price DESC
+            ORDER BY b.sale_price DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -618,13 +718,27 @@
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
                     GROUP BY a.product_id
-            ORDER BY price
+            ORDER BY b.sale_price
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
 
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineSel10">
+        <![CDATA[
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_sale b
+        ON a.product_id = b.product_id
+        INNER JOIN t_aroma c
+        ON a.product_id = c.product_id
+        WHERE price > 100000
+        GROUP BY a.product_id) a
+        ]]>
+    </select>
 
     <select id="selWineByPrice10">
         <![CDATA[
@@ -671,7 +785,7 @@
             ON a.product_id = c.product_id
             WHERE price > 100000
                     GROUP BY a.product_id
-            ORDER BY price DESC
+            ORDER BY b.sale_price DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -688,12 +802,26 @@
             ON a.product_id = c.product_id
             WHERE price > 100000
                     GROUP BY a.product_id
-            ORDER BY price
+            ORDER BY b.sale_price
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineCountry">
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_country b
+        ON a.country_id = b.country_id
+        INNER JOIN t_sale c
+        ON a.product_id = c.product_id
+        INNER JOIN t_aroma d
+        ON a.product_id = d.product_id
+        WHERE b.country_id = #{countryId}
+        GROUP BY a.product_id) a
+    </select>
 
     <select id="selWineByCountry">
         SELECT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
@@ -741,7 +869,7 @@
         ON a.product_id = d.product_id
         WHERE b.country_id = #{countryId}
         GROUP BY a.product_id
-        ORDER BY price desc
+        ORDER BY c.sale_price desc
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -758,12 +886,31 @@
         ON a.product_id = d.product_id
         WHERE b.country_id = #{countryId}
         GROUP BY a.product_id
-        ORDER BY price
+        ORDER BY c.sale_price
         LIMIT ${startIdx}, ${row}
     </select>
 
 
     <!-- ////////////////////////////////////////////////////////////////////////////////  -->
+
+    <select id="countWineFood">
+        SELECT count(product_id)
+        FROM ( SELECT a.product_id
+        FROM t_product a
+        INNER JOIN t_wine_pairing b
+        ON a.product_id = b.product_id
+        INNER JOIN t_small_category c
+        ON b.small_category_id = c.small_category_id
+        INNER JOIN t_big_category d
+        ON c.big_category_id = d.big_category_id
+        INNER JOIN t_sale e
+        ON a.product_id = e.product_id
+        INNER JOIN t_aroma f
+        ON a.product_id = f.product_id
+        WHERE d.big_category_id = #{bigCategoryId}
+        GROUP BY a.product_id) a
+    </select>
+
     <select id="selWineByFood">
         SELECT DISTINCT a.product_id productId, a.category_id categoryId, a.feature_id featureId, a.country_id countryId,
         f.aroma_category_id aromaId, d.big_category_id bigCategoryId, a.nm_kor nmKor, a.nm_eng nmEng, a.price, a.quantity, a.pic,
@@ -822,7 +969,7 @@
         ON a.product_id = f.product_id
         WHERE d.big_category_id = #{bigCategoryId}
         GROUP BY a.product_id
-        ORDER BY price DESC
+        ORDER BY e.sale_price DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -843,7 +990,7 @@
         ON a.product_id = f.product_id
         WHERE d.big_category_id = #{bigCategoryId}
         GROUP BY a.product_id
-        ORDER BY price
+        ORDER BY e.sale_price
         LIMIT ${startIdx}, ${row}
     </select>
 </mapper>

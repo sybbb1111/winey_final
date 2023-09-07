@@ -8,10 +8,22 @@ import java.util.List;
 @Mapper
 public interface MainMapper2 {
 
-
-
     int updPrice(WineUpdDto2 dto);
     int updSalePrice(WineUpdSalePriceDto2 dto);
+
+    int countWineRed(WineSelDto2 dto);
+    int countWineWhite(WineSelDto2 dto);
+    int countWineSparkling(WineSelDto2 dto);
+    int countWineOther(WineSelDto2 dto);
+    int countWineSel(WineSelDto2 dto);
+    int countWineSel2(WineSelDto2 dto);
+    int countWineSel25(WineSelDto2 dto);
+    int countWineSel510(WineSelDto2 dto);
+    int countWineSel10(WineSelDto2 dto);
+
+    int countWineCountry(WineSelByCountryDto2 dto);
+    int countWineFood(WineSelByFoodDto2 dto);
+
 
     List<WineTotalVo2> redWine(WineSelDto2 dto);
     List<WineTotalVo2> redWineByNew(WineSelDto2 dto);

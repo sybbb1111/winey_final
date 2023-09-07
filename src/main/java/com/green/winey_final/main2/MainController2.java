@@ -22,7 +22,7 @@ public class MainController2 {
 
     @GetMapping("/redWine")
     @Operation(summary = "레드와인", description = "레드와인만 모아놨지롱")
-    public List<WineTotalVo2> getRedWines(@RequestParam(defaultValue = "1") int page
+    public CountRes getRedWines(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -32,7 +32,7 @@ public class MainController2 {
 
     @GetMapping("/redWine/new")
     @Operation(summary = "레드와인 - 최신등록순")
-    public List<WineTotalVo2> getRedWinesNew(@RequestParam(defaultValue = "1") int page
+    public CountRes getRedWinesNew(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -42,7 +42,7 @@ public class MainController2 {
 
     @GetMapping("/redWine/expencive")
     @Operation(summary = "레드와인 - 높은가격순")
-    public List<WineTotalVo2> getRedWinesExpencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getRedWinesExpencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -52,7 +52,7 @@ public class MainController2 {
 
     @GetMapping("/redWine/cheap")
     @Operation(summary = "레드와인 - 낮은가격순")
-    public List<WineTotalVo2> getRedWinesCheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getRedWinesCheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -64,7 +64,7 @@ public class MainController2 {
 
     @GetMapping("/whiteWine")
     @Operation(summary = "화이트와인", description = "화이트와인만 모아놨지롱")
-    public List<WineTotalVo2> getWhiteWines(@RequestParam(defaultValue = "1") int page
+    public CountRes getWhiteWines(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -74,7 +74,7 @@ public class MainController2 {
 
     @GetMapping("/whiteWine/new")
     @Operation(summary = "화이트와인 - 최신등록순")
-    public List<WineTotalVo2> getWhiteWinesNew(@RequestParam(defaultValue = "1") int page
+    public CountRes getWhiteWinesNew(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -84,7 +84,7 @@ public class MainController2 {
 
     @GetMapping("/whiteWine/expencive")
     @Operation(summary = "화이트와인 - 높은가격순")
-    public List<WineTotalVo2> getWhiteWinesExpencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getWhiteWinesExpencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -94,7 +94,7 @@ public class MainController2 {
 
     @GetMapping("/whiteWine/cheap")
     @Operation(summary = "화이트와인 - 낮은가격순")
-    public List<WineTotalVo2> getWhiteWinesCheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getWhiteWinesCheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -106,7 +106,7 @@ public class MainController2 {
 
     @GetMapping("/sparklingWine")
     @Operation(summary = "스파클링와인", description = "스파클링와인만 모아놨지롱")
-    public List<WineTotalVo2> getsparklingWines(@RequestParam(defaultValue = "1") int page
+    public CountRes getsparklingWines(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -116,7 +116,7 @@ public class MainController2 {
 
     @GetMapping("/sparklingWine/new")
     @Operation(summary = "스파클링와인 - 최신등록순")
-    public List<WineTotalVo2> getsparklingWinesNew(@RequestParam(defaultValue = "1") int page
+    public CountRes getsparklingWinesNew(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -126,7 +126,7 @@ public class MainController2 {
 
     @GetMapping("/sparklingWine/expencive")
     @Operation(summary = "스파클링와인 - 높은가격순")
-    public List<WineTotalVo2> getsparklingWinesExpencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getsparklingWinesExpencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -136,7 +136,7 @@ public class MainController2 {
 
     @GetMapping("/sparklingWine/cheap")
     @Operation(summary = "스파클링와인 - 낮은가격순")
-    public List<WineTotalVo2> getsparklingWinesCheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getsparklingWinesCheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -148,7 +148,7 @@ public class MainController2 {
 
     @GetMapping("/otherWine")
     @Operation(summary = "기타와인", description = "기타와인만 모아놨지롱")
-    public List<WineTotalVo2> getOtherWines(@RequestParam(defaultValue = "1") int page
+    public CountRes getOtherWines(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -158,7 +158,7 @@ public class MainController2 {
 
     @GetMapping("/otherWine/new")
     @Operation(summary = "기타와인 - 최신등록순")
-    public List<WineTotalVo2> getOtherWinesNew(@RequestParam(defaultValue = "1") int page
+    public CountRes getOtherWinesNew(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -168,7 +168,7 @@ public class MainController2 {
 
     @GetMapping("/otherWine/expencive")
     @Operation(summary = "기타와인 - 높은가격순")
-    public List<WineTotalVo2> getOtherWinesExpencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getOtherWinesExpencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -178,7 +178,7 @@ public class MainController2 {
 
     @GetMapping("/otherWine/cheap")
     @Operation(summary = "기타와인 - 낮은가격순")
-    public List<WineTotalVo2> getOtherWinesCheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getOtherWinesCheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -227,7 +227,7 @@ public class MainController2 {
             "    \"beginner\": 입문자,<br>" +
             "    \"alcohol\": 알코올 도수<br>" +
             "  }")
-    public List<WineTotalVo2> getWines(@RequestParam(defaultValue = "1") int page
+    public CountRes getWines(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -237,7 +237,7 @@ public class MainController2 {
 
     @GetMapping("/wines/new")
     @Operation(summary = "전체 와인리스트 - 최신등록순")
-    public List<WineTotalVo2> getWinesNew(@RequestParam(defaultValue = "1") int page
+    public CountRes getWinesNew(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -247,7 +247,7 @@ public class MainController2 {
 
     @GetMapping("/wines/expencive")
     @Operation(summary = "전체 와인리스트 - 높은가격순")
-    public List<WineTotalVo2> getWinesExpencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getWinesExpencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -257,7 +257,7 @@ public class MainController2 {
 
     @GetMapping("/wines/cheap")
     @Operation(summary = "전체 와인리스트 - 낮은가격순")
-    public List<WineTotalVo2> getWinesCheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getWinesCheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -292,7 +292,7 @@ public class MainController2 {
             "    \"beginner\": 입문자,<br>" +
             "    \"alcohol\": 알코올 도수<br>" +
             "  }")
-    public List<WineTotalVo2> getWineByPrice2(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice2(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -302,7 +302,7 @@ public class MainController2 {
 
     @GetMapping("/price2/new")
     @Operation(summary = "2만원 미만 와인리스트 - 최신등록순")
-    public List<WineTotalVo2> getWineByPrice2New(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice2New(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -312,7 +312,7 @@ public class MainController2 {
 
     @GetMapping("/price2/expencive")
     @Operation(summary = "2만원 미만 와인리스트 - 높은가격순")
-    public List<WineTotalVo2> getWineByPrice2Expencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice2Expencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -322,7 +322,7 @@ public class MainController2 {
 
     @GetMapping("/price2/cheap")
     @Operation(summary = "2만원 미만 와인리스트 - 낮은가격순")
-    public List<WineTotalVo2> getWineByPrice2Cheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice2Cheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -348,7 +348,7 @@ public class MainController2 {
             "    \"beginner\": 입문자,<br>" +
             "    \"alcohol\": 알코올 도수<br>" +
             "  }")
-    public List<WineTotalVo2> getWineByPrice25(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice25(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -358,7 +358,7 @@ public class MainController2 {
 
     @GetMapping("/price25/new")
     @Operation(summary = "2-5만원 와인리스트 - 최신등록순")
-    public List<WineTotalVo2> getWineByPrice25New(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice25New(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -368,7 +368,7 @@ public class MainController2 {
 
     @GetMapping("/price25/expensive")
     @Operation(summary = "2-5만원 와인리스트 - 높은가격순")
-    public List<WineTotalVo2> getWineByPrice25Expencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice25Expencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -378,7 +378,7 @@ public class MainController2 {
 
     @GetMapping("/price25/cheap")
     @Operation(summary = "2-5만원 와인리스트 - 낮은가격순")
-    public List<WineTotalVo2> getWineByPrice25Cheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice25Cheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -403,7 +403,7 @@ public class MainController2 {
             "    \"beginner\": 입문자,<br>" +
             "    \"alcohol\": 알코올 도수<br>" +
             "  }")
-    public List<WineTotalVo2> getWineByPrice510(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice510(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -413,7 +413,7 @@ public class MainController2 {
 
     @GetMapping("/price510/new")
     @Operation(summary = "5-10만원 와인리스트 - 최신등록순")
-    public List<WineTotalVo2> getWineByPrice510New(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice510New(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -423,7 +423,7 @@ public class MainController2 {
 
     @GetMapping("/price510/expensive")
     @Operation(summary = "5-10만원 와인리스트 - 높은가격순")
-    public List<WineTotalVo2> getWineByPrice510Expencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice510Expencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -433,7 +433,7 @@ public class MainController2 {
 
     @GetMapping("/price510/cheap")
     @Operation(summary = "5-10만원 와인리스트 - 낮은가격순")
-    public List<WineTotalVo2> getWineByPrice510Cheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice510Cheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -458,7 +458,7 @@ public class MainController2 {
             "    \"beginner\": 입문자,<br>" +
             "    \"alcohol\": 알코올 도수<br>" +
             "  }")
-    public List<WineTotalVo2> getWineByPrice10(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice10(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -468,7 +468,7 @@ public class MainController2 {
 
     @GetMapping("/price10/new")
     @Operation(summary = "10만원 이상 와인리스트 - 최신등록순")
-    public List<WineTotalVo2> getWineByPrice10New(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice10New(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -478,7 +478,7 @@ public class MainController2 {
 
     @GetMapping("/price10/expensive")
     @Operation(summary = "10만원 이상 와인리스트 - 높은가격순")
-    public List<WineTotalVo2> getWineByPrice10Expencive(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice10Expencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -488,7 +488,7 @@ public class MainController2 {
 
     @GetMapping("/price10/cheap")
     @Operation(summary = "10만원 이상 와인리스트 - 낮은가격순")
-    public List<WineTotalVo2> getWineByPrice10Cheap(@RequestParam(defaultValue = "1") int page
+    public CountRes getWineByPrice10Cheap(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelDto2 dto = new WineSelDto2();
         dto.setPage(page);
@@ -519,7 +519,7 @@ public class MainController2 {
             "    \"beginner\": 입문자,<br>" +
             "    \"alcohol\": 알코올 도수<br>" +
             "  }")
-    public List<WineTotalVo2> getWineByCountry(@RequestParam Long countryId
+    public CountRes getWineByCountry(@RequestParam Long countryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByCountryDto2 dto = new WineSelByCountryDto2();
@@ -531,7 +531,7 @@ public class MainController2 {
 
     @GetMapping("/country/new/")
     @Operation(summary = "국가별 와인리스트 - 최신등록순")
-    public List<WineTotalVo2> getWineByCountryNew(@RequestParam Long countryId
+    public CountRes getWineByCountryNew(@RequestParam Long countryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByCountryDto2 dto = new WineSelByCountryDto2();
@@ -544,7 +544,7 @@ public class MainController2 {
 
     @GetMapping("/country/expensive")
     @Operation(summary = "국가별 와인리스트 - 높은금액순")
-    public List<WineTotalVo2> getWineByCountryExpensive(@RequestParam Long countryId
+    public CountRes getWineByCountryExpensive(@RequestParam Long countryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByCountryDto2 dto = new WineSelByCountryDto2();
@@ -557,7 +557,7 @@ public class MainController2 {
 
     @GetMapping("/country/cheap")
     @Operation(summary = "국가별 와인리스트 - 낮은금액순")
-    public List<WineTotalVo2> getWineByCountryCheap(@RequestParam Long countryId
+    public CountRes getWineByCountryCheap(@RequestParam Long countryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByCountryDto2 dto = new WineSelByCountryDto2();
@@ -589,7 +589,7 @@ public class MainController2 {
             "    \"beginner\": 입문자,<br>" +
             "    \"alcohol\": 알코올 도수<br>" +
             "  }")
-    public List<WineFoodVo2> getWineByFood(@RequestParam Long bigCategoryId
+    public CountFoodRes getWineByFood(@RequestParam Long bigCategoryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByFoodDto2 dto = new WineSelByFoodDto2();
@@ -601,7 +601,7 @@ public class MainController2 {
 
     @GetMapping("/food/new")
     @Operation(summary = "음식별 와인리스트 - 최신등록순")
-    public List<WineFoodVo2> getWineByFoodNew(@RequestParam Long bigCategoryId
+    public CountFoodRes getWineByFoodNew(@RequestParam Long bigCategoryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByFoodDto2 dto = new WineSelByFoodDto2();
@@ -614,7 +614,7 @@ public class MainController2 {
 
     @GetMapping("/food/expensive")
     @Operation(summary = "음식별 와인리스트 - 높은금액순")
-    public List<WineFoodVo2> getWineByFoodExpensive(@RequestParam Long bigCategoryId
+    public CountFoodRes getWineByFoodExpensive(@RequestParam Long bigCategoryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByFoodDto2 dto = new WineSelByFoodDto2();
@@ -627,7 +627,7 @@ public class MainController2 {
 
     @GetMapping("/food/cheap")
     @Operation(summary = "음식별 와인리스트 - 낮은가격순")
-    public List<WineFoodVo2> selWineByFoodCheap(@RequestParam Long bigCategoryId
+    public CountFoodRes selWineByFoodCheap(@RequestParam Long bigCategoryId
             , @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
         WineSelByFoodDto2 dto = new WineSelByFoodDto2();
