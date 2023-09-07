@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,14 +28,25 @@ public class RecommendService {
     private final UserSmallCategoryRepository userSmall;
     private final UserAromaRepository userAroma;
     private final RecommendMapper mapper;
-
+    private final UserInfoEntityRepository userinfo;
+    private final UserRepository user;
 
     public List<Long> selRecommend(RecommendRes2 res) {
         Long user = facade.getLoginUserPk();
         List<Long> result = mapper.selRecommend(res);
-        UserinfoDto2 dto = new UserinfoDto2();
-        dto.setUserId(user);
-        dto.setProductId(result);
+        List<UserInfoEntity> userInfoEntity = new ArrayList<>();
+
+        for (Long userinfoId : result) {
+            UserInfoEntity userinfo = new UserInfoEntity();
+            userinfo.setUserEntity(UserEntity.builder()
+                    .userId(user)
+                    .build());
+            userinfo.setProductEntity(ProductEntity.builder()
+                    .productId(userinfoId)
+                    .build());
+            userInfoEntity.add(userinfo);
+        }
+        userinfo.saveAll(userInfoEntity);
 
 
         List<UserCategoryEntity> categoryList = new ArrayList<>();
@@ -136,7 +148,7 @@ public class RecommendService {
         }
         userAroma.saveAll(aromaList);
 
-        mapper.insUserinfo(dto);
+
         return result;
     }
 
@@ -150,6 +162,11 @@ public class RecommendService {
             productPK.add(userInfoEntity.getProductEntity().getProductId());
         }
         return productPK;
+    }
+    public Long loginUserPk() {
+        Optional<UserEntity> optentity = user.findById(facade.getLoginUserPk());
+        UserEntity entity = optentity.get();
+        return entity.getUserId();
     }
 
     public RecommendVo selUserRecommend() {
