@@ -392,7 +392,7 @@ public class AdminService {
     }
 
     //가입회원 상세 주문 내역(회원pk별) +페이징 처리
-    public UserOrderDetailList2 getUserOrder(Long userId, SelListDto dto) {
+    public UserOrderDetailList2 getUserOrder2(Long userId, SelListDto dto) {
         UserOrderDetailDto detailDto = new UserOrderDetailDto();
         detailDto.setUserId(userId);
         detailDto.setRow(dto.getRow());
@@ -441,9 +441,11 @@ public class AdminService {
                 .build();
     }
 
-    public UserOrderDetailList getUserOrder2(Long userId, Pageable pageable) {
+    public UserOrderDetailList getUserOrder(Long userId, Pageable pageable) {
         PageCustom<UserOrderDetailVo> list = adminWorkRep.selUserOrderByUserId(userId, pageable);
         UserInfo user = adminWorkRep.selUserInfoByUserId(userId, pageable);
+
+
 
         return UserOrderDetailList.builder()
                 .userOrderList(list)

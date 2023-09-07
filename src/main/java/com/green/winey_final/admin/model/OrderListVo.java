@@ -17,10 +17,10 @@ public class OrderListVo {
     private int payment;
     private String pickUpStore;
     private int orderStatus;
-//    private int count;
+    private int count;
 
     @QueryProjection
-    public OrderListVo(Long orderId, String orderDate, String email, String nmKor, int quantity, int salePrice, int totalPrice, int payment, String pickUpStore, int orderStatus) {
+    public OrderListVo(Long orderId, String orderDate, String email, String nmKor, int quantity, int salePrice, int totalPrice, int payment, String pickUpStore, int orderStatus, int count) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.email = email;
@@ -31,5 +31,6 @@ public class OrderListVo {
         this.payment = payment;
         this.pickUpStore = pickUpStore;
         this.orderStatus = orderStatus;
+        this.count = count;
     }
 }

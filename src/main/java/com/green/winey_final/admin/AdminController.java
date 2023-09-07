@@ -148,8 +148,8 @@ public class AdminController {
             + "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
             + "type -> 기본값(0) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
-    @GetMapping("/{userId}/order")
-    public UserOrderDetailList2 getUserOrder(@PathVariable Long userId, @RequestParam(defaultValue = "1")int page,
+    @GetMapping("/{userId}/order2")
+    public UserOrderDetailList2 getUserOrder2(@PathVariable Long userId, @RequestParam(defaultValue = "1")int page,
                                             @RequestParam(defaultValue = "15")int row,
                                             @RequestParam(defaultValue = "0") String type,
                                             @RequestParam(defaultValue = "0") String sort) {
@@ -158,7 +158,7 @@ public class AdminController {
         dto.setRow(row);
         dto.setType(type);
         dto.setSort(sort);
-        return SERVICE.getUserOrder(userId, dto);
+        return SERVICE.getUserOrder2(userId, dto);
     }
 
     @Operation(summary = "JPA회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)P", description = "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
@@ -166,11 +166,10 @@ public class AdminController {
             + "size(row) -> 한 페이지 당 보여줄 갯수<br>"
             + "sort -> 입력 예시) orderDate,asc<br> - 주문번호(orderId) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
             + "- 오름차순(asc) / 내림차순(desc)")
-    @GetMapping("/{userId}/order2")
-    public UserOrderDetailList getUserOrder2(@PathVariable Long userId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+    @GetMapping("/{userId}/order")
+    public UserOrderDetailList getUserOrder(@PathVariable Long userId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
     Pageable pageable) {
-
-        return SERVICE.getUserOrder2(userId, pageable);
+        return SERVICE.getUserOrder(userId, pageable);
     }
 
     //상품 사진 삭제

@@ -93,7 +93,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 //                ConstantImpl.create("%y-%m-%d"));
 
         List<UserOrderDetailVo> list = queryFactory
-                .select(new QUserOrderDetailVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), productEntity.nmKor, orderEntity.totalOrderPrice.intValue(), storeEntity.nm, orderEntity.orderStatus.intValue()))
+                .select(new QUserOrderDetailVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), productEntity.nmKor, orderEntity.totalOrderPrice.intValue(), storeEntity.nm, orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))
                 .from(userEntity)
                 .innerJoin(orderEntity)
                 .on(userEntity.eq(orderEntity.userEntity))
@@ -110,6 +110,13 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        for(int i=0;i<list.size();i++) {
+            if(list.get(i).getCount()>1) {
+                list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
+            }
+        }
+
+
         JPAQuery<Long> countQuery = queryFactory
 //                .select(userEntity.userId.countDistinct())// count()와 countDistinct() 차이 알기
                 .select(userEntity.userId.count())// count()와 countDistinct() 차이 알기
@@ -124,6 +131,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .on(orderEntity.storeEntity.storeId.eq(storeEntity.storeId))
 //                .where(userEntity.userId.eq(userId)) //이 부분 주석 풀면 안됨... 이유 찾아야함
                 .groupBy(orderEntity.orderId);
+
 
         Page<UserOrderDetailVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
 
@@ -153,7 +161,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                         orderDetailEntity.quantity.sum().intValue(),
                         orderEntity.totalOrderPrice.intValue(),
                         orderEntity.payment.intValue(), storeEntity.nm,
-                        orderEntity.orderStatus.intValue()))
+                        orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))
                 .from(orderEntity)
                 .innerJoin(userEntity)
                 .on(orderEntity.userEntity.eq(userEntity))
@@ -168,6 +176,12 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        for(int i=0;i<list.size();i++) {
+            if(list.get(i).getCount()>1) {
+                list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
+            }
+        }
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(orderEntity.orderId.count())
