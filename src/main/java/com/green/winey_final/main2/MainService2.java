@@ -14,9 +14,6 @@ public class MainService2 {
 
     private final MainMapper2 MAPPER;
 
-
-
-
     public CountRes redWine(WineSelDto2 dto) {
         dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
 
@@ -34,7 +31,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes redWineByNew(WineSelDto2 dto) {
@@ -54,7 +50,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes redWineByExpencive(WineSelDto2 dto) {
@@ -74,7 +69,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes redWineByCheap(WineSelDto2 dto) {
@@ -94,7 +88,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     //====================================================================
@@ -134,7 +127,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes whiteWineByExpencive(WineSelDto2 dto) {
@@ -153,7 +145,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes whiteWineByCheap(WineSelDto2 dto) {
@@ -172,7 +163,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     //====================================================================
@@ -230,7 +220,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes sparklingWineByCheap(WineSelDto2 dto) {
@@ -249,7 +238,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     //====================================================================
@@ -308,7 +296,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes otherWineByCheap(WineSelDto2 dto) {
@@ -384,7 +371,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
 
@@ -404,7 +390,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByExpencive(WineSelDto2 dto) {
@@ -423,7 +408,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByCheap(WineSelDto2 dto) {
@@ -442,7 +426,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     //    public List<WineVo> selWineByPrice(WineSelByPriceDto dto) {
@@ -470,7 +453,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice2New(WineSelDto2 dto) {
@@ -489,7 +471,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice2Expencive(WineSelDto2 dto) {
@@ -508,7 +489,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice2Cheap(WineSelDto2 dto) {
@@ -564,7 +544,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice25Expencive(WineSelDto2 dto) {
@@ -583,7 +562,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice25Cheap(WineSelDto2 dto) {
@@ -602,7 +580,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
     //====================================================================
 
@@ -622,7 +599,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice510New(WineSelDto2 dto) {
@@ -641,7 +617,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice510Expencive(WineSelDto2 dto) {
@@ -660,7 +635,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice510Cheap(WineSelDto2 dto) {
@@ -679,7 +653,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     //====================================================================
@@ -700,7 +673,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice10New(WineSelDto2 dto) {
@@ -719,7 +691,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice10Expencive(WineSelDto2 dto) {
@@ -738,7 +709,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByPrice10Cheap(WineSelDto2 dto) {
@@ -757,7 +727,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     //===================================================================================
@@ -777,7 +746,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByCountryNew(WineSelByCountryDto2 dto) {
@@ -796,7 +764,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountRes selWineByCountryExpencive(WineSelByCountryDto2 dto) {
@@ -833,7 +800,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
 //===================================================================================
@@ -854,7 +820,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountFoodRes selWineByFoodNew(WineSelByFoodDto2 dto) {
@@ -873,7 +838,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountFoodRes selWineByFoodExpencive(WineSelByFoodDto2 dto) {
@@ -892,7 +856,6 @@ public class MainService2 {
                 .count(result)
                 .wineList(wine)
                 .build();
-
     }
 
     public CountFoodRes selWineByFoodCheap(WineSelByFoodDto2 dto) {
