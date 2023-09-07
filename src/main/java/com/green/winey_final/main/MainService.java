@@ -41,16 +41,10 @@ import static com.green.winey_final.common.entity.QUserEntity.userEntity;
 @RequiredArgsConstructor
 public class MainService {
     private final AuthenticationFacade FACADE;
-    private final ProductRepository productRep;
-    private final SmallCategoryRepository smallCategoryRep;
-    private final WinePairingRepository winePairingRep;
-    private final SaleRepository saleRep;
     private final JPAQueryFactory queryFactory;
 
 
-    /**
-     * 매일 6개 랜덤 와인 추천
-     */
+    /** 매일 6개 랜덤 와인 추천 */
 
 
     private List<WineVo> getRandomWine(WineCategoryDto dto) {
@@ -80,16 +74,13 @@ public class MainService {
                 .fetch();
     }
 
-    /**
-     * 할인 와인 리스트
-     */
+    /** 할인 와인 리스트 */
 
     public List<WineVo> saleWineList(Pageable pageable) {
 
         LocalDate now = LocalDate.now();
         int year = now.getYear();
         int startMonth = now.getMonthValue();
-//        int endMonth = now.getMonthValue();
 
         LocalDate startOfMonth = LocalDate.of(year, startMonth, 1); // 이번 달의 시작일
         LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1); // 이번 달의 마지막 날짜
@@ -113,9 +104,7 @@ public class MainService {
                                 productEntity.beginner,
                                 saleEntity.sale,
                                 saleEntity.salePrice,
-                                saleEntity.saleYn,
-                                saleEntity.startSale,
-                                saleEntity.endSale))
+                                saleEntity.saleYn))
                 .from(productEntity)
                 .innerJoin(saleEntity)
                 .on(productEntity.productId.eq(saleEntity.productEntity.productId))
@@ -125,10 +114,6 @@ public class MainService {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
-
-        log.info("query : {}", query.fetch());
-
-//        return null;
         return query.fetch();
     }
 
