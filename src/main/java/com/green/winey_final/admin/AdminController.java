@@ -1,6 +1,7 @@
 package com.green.winey_final.admin;
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.repository.support.PageCustom;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,7 +62,8 @@ public class AdminController {
     }
 
     //등록 상품 리스트 출력 (페이징 처리)
-    @Operation(summary = "등록된 상품 리스트 출력+ 등록 상품 검색(피그마: 등록상품리스트 페이지)P", description = "page값 = 1(default), row값 = 20(default)<br>"
+    @Tag(name = "관리자 페이지 별도 API")
+    @Operation(summary = "등록된 상품 리스트 출력+ 등록 상품 검색 myb(피그마: 등록상품리스트 페이지)P", description = "page값 = 1(default), row값 = 20(default)<br>"
             + "default값은 임시로 넣은 것이니 수정이 필요합니다.<br>"
             + "type -> 기본값(0) / 상품번호(productid)/세일가격(saleprice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
@@ -81,7 +84,7 @@ public class AdminController {
         dto.setStr(str);
         return SERVICE.getProduct2(dto);
     }
-    @Operation(summary = "JPA 등록된 상품 리스트 출력(피그마: 등록상품리스트 페이지)", description = "정렬 안한 기본 페이지는 productId,asc 가 기본값입니다.<br>"
+    @Operation(summary = "등록된 상품 리스트 출력(피그마: 등록상품리스트 페이지)p", description = "정렬 안한 기본 페이지는 productId,asc 가 기본값입니다.<br>"
             + "page -> 0이 1페이지입니다.<br> size(row) -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) productid,asc -> 상품번호 기준으로 오름차순 정렬한다는 의미<br> 정렬기준 ->상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
             + "정렬 ->  오름차순(asc) / 내림차순(desc)<br>"
@@ -107,7 +110,8 @@ public class AdminController {
     }
 
     //가입 회원 리스트 출력 + 회원 검색
-    @Operation(summary = "가입 회원 리스트 + 회원 검색 (피그마: 가입회원리스트 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정이 필요합니다.<br>"
+    @Tag(name = "관리자 페이지 별도 API")
+    @Operation(summary = "가입 회원 리스트 + 회원 검색 myb(피그마: 가입회원리스트 페이지)", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정이 필요합니다.<br>"
             + "type -> 기본값(0) / 픽업지역(pickUp) / 회원번호(userId)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)<br>"
             + "회원 검색시<br> type2 -> 이름(searchUserName) / 이메일(searchUserEmail)<br>"
@@ -129,7 +133,7 @@ public class AdminController {
         return SERVICE.getUserList2(dto);
     }
 
-    @Operation(summary = "JPA가입 회원 리스트 (피그마: 가입회원리스트 페이지)", description = "<br>"
+    @Operation(summary = "가입 회원 리스트 (피그마: 가입회원리스트 페이지)p", description = "<br>"
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) userId,asc <br> - 입력회원번호(userId) / 픽업지역(pickUp) <br> - 오름차순(asc) / 내림차순(desc)<br>"
             + "searchType(검색타입) -> unm(회원이름) / email(이메일) <br>"
@@ -142,9 +146,10 @@ public class AdminController {
 
         return SERVICE.getUserList(pageable, searchType, str);
     }
-
-    //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리
-    @Operation(summary = "회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
+/*
+    //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리 mybatis
+    @Tag(name = "관리자 페이지 별도 API")
+    @Operation(summary = "회원별 상세 주문 내역 myb (피그마: 회원상세내역 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
             + "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
             + "type -> 기본값(0) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
@@ -160,8 +165,9 @@ public class AdminController {
         dto.setSort(sort);
         return SERVICE.getUserOrder2(userId, dto);
     }
-
-    @Operation(summary = "JPA회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)P", description = "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
+*/
+    //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리 jpa
+    @Operation(summary = "회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)p", description = "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
             + "page -> 0이 1페이지입니다.<br>"
             + "size(row) -> 한 페이지 당 보여줄 갯수<br>"
             + "sort -> 입력 예시) orderDate,asc<br> - 주문번호(orderId) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
@@ -179,9 +185,10 @@ public class AdminController {
     public int deleteProductPic(int productId) {
         return SERVICE.deleteProductPic(productId);
     }
-
-    //주문 내역
-    @Operation(summary = "주문 내역 출력(피그마:주문내역관리 페이지)P", description = "<br>"
+/*
+    //주문 내역 mybatis
+    @Tag(name = "관리자 페이지 별도 API")
+    @Operation(summary = "주문 내역 출력 myb(피그마:주문내역관리 페이지)P", description = "<br>"
             +"page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
             +"type -> 기본값(0) / 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br>"
             +"sort ->  기본값(0) / 오름차순(asc) / 내림차순(desc)")
@@ -198,8 +205,9 @@ public class AdminController {
 
         return SERVICE.getOrder3(dto);
     }
-    //주문 내역
-    @Operation(summary = "JPA주문 내역 출력(피그마:주문내역관리 페이지)P", description = "<br>"
+*/
+    //주문 내역 jpa
+    @Operation(summary = "주문 내역 출력(피그마:주문내역관리 페이지)p", description = "<br>"
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) orderid,desc <br> - 주문번호(orderid) / 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br> - 오름차순(asc) / 내림차순(desc)<br>")
     @GetMapping("/order")
@@ -210,14 +218,15 @@ public class AdminController {
 
 
     //상세 주문 내역 리스트 by orderId
-    @Operation(summary = "상세 주문 내역 출력 by orderId(피그마:주문상세리스트)")
+    @Tag(name = "관리자 페이지 별도 API")
+    @Operation(summary = "상세 주문 내역 출력 by orderId myb(피그마:주문상세리스트)")
     @GetMapping("/order3/{orderId}")
     public OrderDetail3 getOrderDetail3(@PathVariable int orderId) {
         return SERVICE.getOrderDetail3(orderId);
     }
 
     //상세 주문 내역 리스트 by orderId
-    @Operation(summary = "JPA상세 주문 내역 출력 by orderId(피그마:주문상세리스트)")
+    @Operation(summary = "상세 주문 내역 출력 by orderId(피그마:주문상세리스트)p")
     @GetMapping("/order/{orderId}")
     public OrderDetail3 getOrderDetail(@PathVariable int orderId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
                                         Pageable pageable) {
@@ -225,7 +234,7 @@ public class AdminController {
     }
 
 
-    //환불된 상품과 환불 사유 출력
+    //환불된 상품과 환불 사유 출력 mybatis
     @Operation(summary = "환불 상품 내역과 환불 사유 출력", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"+
             "userId는 입력 안하면 전체 환불 내역과 사유 출력, 입력하면 userId의 환불내역과 사유 출력")
     @GetMapping("/order/refund")
@@ -239,16 +248,41 @@ public class AdminController {
         return SERVICE.getOrderRefund(dto, userId);
     }
 
-    //매장 정보 등록
+    //환불된 상품과 환불 사유 출력 jpa
+    @Operation(summary = "환불 상품 내역과 환불 사유 출력p", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
+            + "page -> 0이 1페이지입니다.<br>"
+            + "size(row) -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort -> 입력 예시) refundid,asc<br> - 환불번호(refundid) / 주문번호(orderId) / 환불여부(refundyn) / 환불날짜(refunddate) <br>"
+            + "- 오름차순(asc) / 내림차순(desc)")
+    @GetMapping("/order/refund2")
+    public PageCustom<OrderRefundVo> getOrderRefund2(@ParameterObject @PageableDefault(sort="refundid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                                   Pageable pageable) {
+        return SERVICE.getOrderRefund2(pageable);
+    }
+/*
+    //매장 정보 등록 mybatis
     @Operation(summary = "매장 정보 등록", description = "nm(매장이름)을 기존 등록된 매장이름과 중복된 이름 입력시 등록 안됨<br>"
             +"전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0<br>"
             +"주소 형식 -> ex) 서울 양천구 오목로 299")
-    @PostMapping("/store")
+    @PostMapping("/store2")
     public Long postStore(@RequestBody StoreInsParam param) {
         return SERVICE.insStore(param);
     }
+*/
+    //매장 정보 등록 jpa
+    @Operation(summary = "매장 정보 등록p", description = "nm(매장이름)을 기존 등록된 매장이름과 중복된 이름 입력시 등록 안됨<br>"
+            +"전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0<br>"
+            +"주소 형식 -> ex) 서울 양천구 오목로 299")
+    @PostMapping("/store")
+    public Long postStore2(@RequestBody StoreInsParam param) {
+
+        return SERVICE.insStore2(param);
+    }
+
+
     //매장 리스트 출력
-    @Operation(summary = "매장 리스트 출력P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.")
+    @Tag(name = "관리자 페이지 별도 API")
+    @Operation(summary = "매장 리스트 출력 myb", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.")
     @GetMapping("/store2")
     public StoreList getStore2(@RequestParam(defaultValue = "1")int page,
                               @RequestParam(defaultValue = "15")int row) {
@@ -259,7 +293,7 @@ public class AdminController {
         return SERVICE.getStore2(dto);
     }
     //매장 리스트 출력
-    @Operation(summary = "JPA매장 리스트 출력P", description = ""
+    @Operation(summary = "매장 리스트 출력P", description = ""
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) storeid,asc <br> - 매장번호(storeid) / 매장이름(storenm) / 주소(address) / 전화번호(tel) <br> - 오름차순(asc) / 내림차순(desc)<br>"
             + "searchType(검색타입) -> storename(매장명) / storeaddress(매장주소) / storetel(매장전화번호) <br>"
@@ -271,17 +305,34 @@ public class AdminController {
                                          @RequestParam(required = false)String str) {
         return SERVICE.getStore(pageable, searchType, str);
     }
-
-    //매장 정보 수정
+/*
+    //매장 정보 수정 mybatis
     @Operation(summary = "매장 정보 수정", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
     @PutMapping("/store/{storeId}")
     public Long putStore(@RequestBody StoreInsParam param, Long storeId) {
         return SERVICE.updStore(param, storeId);
     }
-    //매장 정보 삭제
+
+*/
+    //매장 정보 수정 jpa
+    @Operation(summary = "매장 정보 수정p", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
+    @PutMapping("/store/{storeId}")
+    public Long putStore2(@RequestBody StoreInsParam param, Long storeId) {
+        return SERVICE.updStore2(param, storeId);
+    }
+
+
+    //매장 정보 삭제 mybatis
     @Operation(summary = "매장 정보 삭제", description = "삭제 성공시 코드 : 1, 실패시 코드 : 0")
     @DeleteMapping("/store/{storeId}")
     public Long deleteStore(Long storeId) {
+        return SERVICE.deleteStore(storeId);
+    }
+
+    //매장 정보 삭제 jpa
+    @Operation(summary = "매장 정보 삭제p", description = "삭제 성공시 코드 : 1, 실패시 코드 : 0")
+    @DeleteMapping("/store2/{storeId}")
+    public Long deleteStore2(Long storeId) {
         return SERVICE.deleteStore(storeId);
     }
 
@@ -300,46 +351,28 @@ public class AdminController {
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return SERVICE.putProductSaleYn(dto);
     }
-
-    @Operation(summary = "회원 탈퇴상태(delYn) 업데이트", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
+/*
+    //회원 삭제 mybatis
+    @Operation(summary = "회원 탈퇴상태(delYn) 업데이트 myb", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
     @PutMapping("/withdrawal")
     public int putUserDelYn(UserDelYnUpdDto dto){
         return SERVICE.putUserDelYn(dto);
+    }
+*/
+    //회원 삭제 jpa
+    @Operation(summary = "회원 탈퇴상태(delYn) 업데이트p", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
+    @PutMapping("/withdrawal")
+    public ResponseEntity<Integer> putUserDelYn2(UserDelYnUpdDto dto){
+        SERVICE.putUserDelYn2(dto);
+        return ResponseEntity.ok(1);
     }
 
     //상품 삭제
     @Operation(summary = "등록 상품 삭제")
     @DeleteMapping("/product/{productId}")
     public int delProduct(@PathVariable int productId) {
-
         return SERVICE.delProduct(productId);
     }
-/*
-    //유저 검색
-    @Operation(summary = "가입회원리스트 검색", description = " <br>"
-            +"type(검색타입) -> 이름(userName) / 이메일(userEmail) <br>"
-            +"str -> 검색어입력  <br>")
-    @GetMapping("/user/serch")
-    public List<UserVo> serchUserList(@RequestParam String type, @RequestParam String str) {
-        AdminSerchDto dto = new AdminSerchDto();
-        dto.setType(type);
-        dto.setStr(str);
-        return SERVICE.serchUserList(dto);
-    }
-*/
-
-
-    //상품 검색
-//    @Operation(summary = "등록 상품 검색", description = " <br>"
-//            +"type(검색타입) -> 한글이름(productNmKor) <br>"
-//            +"str -> 검색어입력  <br>")
-//    @GetMapping("/product/serch")
-//    public List<ProductVo> serchProduct(@RequestParam String type, @RequestParam String str) {
-//        AdminSerchDto dto = new AdminSerchDto();
-//        dto.setType(type);
-//        dto.setStr(str);
-//        return SERVICE.searchProduct(dto);
-//    }
 
     //상품 디테일 관리자용
     @Operation(summary = "등록 상품 디테일(상품 수정용)")
@@ -349,7 +382,8 @@ public class AdminController {
     }
 
     //상품 디테일 관리자용
-    @Operation(summary = "JPA등록 상품 디테일(상품 수정용)")
+    @Tag(name = "관리자 페이지 별도 API")
+    @Operation(summary = "등록 상품 디테일(상품 수정용)p")
     @GetMapping("/product/detail2")
     public AdminProductDetailVo3 getProductDetail(@RequestParam int productId) {
         return SERVICE.getProductDetail(productId);

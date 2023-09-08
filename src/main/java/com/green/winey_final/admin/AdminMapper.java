@@ -52,7 +52,7 @@ public interface AdminMapper {
     int updSaleYnOff(ProductUpdDto dto); //세일 스케줄러용. saleYn을 0으로 update
 
     int updSaleYn(ProductSaleYnDto dto); //할인 상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도)
-    int updDelYn(UserDelYnUpdDto dto); //회원 탈퇴상태(del_yn) 업데이트(관리자페이지에서)
+//    int updDelYn(UserDelYnUpdDto dto); //회원 탈퇴상태(del_yn) 업데이트(관리자페이지에서)
 
     //페이징 처리
     int productCount(SelListDto dto); //product 개수 카운트

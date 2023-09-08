@@ -27,6 +27,7 @@ import static com.green.winey_final.common.entity.QCountryEntity.countryEntity;
 import static com.green.winey_final.common.entity.QFeatureEntity.featureEntity;
 import static com.green.winey_final.common.entity.QOrderDetailEntity.orderDetailEntity;
 import static com.green.winey_final.common.entity.QOrderEntity.orderEntity;
+import static com.green.winey_final.common.entity.QOrderRefundEntity.orderRefundEntity;
 import static com.green.winey_final.common.entity.QProductEntity.productEntity;
 import static com.green.winey_final.common.entity.QRegionNmEntity.regionNmEntity;
 import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
@@ -218,6 +219,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .on(orderEntity.eq(orderDetailEntity.orderEntity))
                 .join(productEntity)
                 .on(orderDetailEntity.productEntity.eq(productEntity));
+//                .groupBy(orderEntity.orderId); //그룹바이 적용안됨
 //                .groupBy(orderEntity.orderId); //groupBy하면 totalElements 제대로 안나옴
 
         Page<OrderListVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
@@ -326,6 +328,25 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         return smallCategoryId;
     }
 
+    @Override
+    public PageCustom<OrderRefundVo> selOrderRefund(Pageable pageable) {
+        List<OrderRefundVo> list = queryFactory
+                .select(new QOrderRefundVo(orderRefundEntity.refundId, orderRefundEntity.orderEntity.orderId, orderRefundEntity.refundReason, orderRefundEntity.refundYn.intValue(), orderRefundEntity.refundDate.stringValue()))
+                .from(orderRefundEntity)
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(orderRefundEntity.refundId.count())
+                .from(orderRefundEntity);
+
+        Page<OrderRefundVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<OrderRefundVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
 
 
     //정렬
@@ -371,6 +392,13 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                     case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.nm)); break; //주문내역과 공동
                     case "address": orders.add(new OrderSpecifier(direction, storeEntity.address)); break;
                     case "storetel": orders.add(new OrderSpecifier(direction, storeEntity.tel)); break;
+
+
+                    //환불 내역 정렬 //orderid정렬
+                    case "refundid": orders.add(new OrderSpecifier(direction, orderRefundEntity.refundId)); break;
+                    case "refundyn": orders.add(new OrderSpecifier(direction, orderRefundEntity.refundYn)); break;
+                    case "refunddate": orders.add(new OrderSpecifier(direction, orderRefundEntity.refundDate)); break;
+
 
 
                 }

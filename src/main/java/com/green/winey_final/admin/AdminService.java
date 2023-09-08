@@ -2,10 +2,12 @@ package com.green.winey_final.admin;
 
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.common.entity.StoreEntity;
+import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
 import com.green.winey_final.repository.support.PageCustom;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,34 +30,22 @@ public class AdminService {
     private final AdminMapper MAPPER;
     private final String FILE_DIR;
 
-    private final ProductRepository productRep;
-    private final FeatureRepository featureRep;
-    private final SaleRepository saleRep;
-    private final AromaRepository aromaRep;
-    private final CountryRepository countryRep;
-    private final CategoryRepository categoryRep;
-    private final AromaCategoryRepository aromaCategoryRep;
-    private final WinePairingRepository winePairingRep;
-    private final SmallCategoryRepository smallCategoryRep;
-    private final JPAQueryFactory queryFactory;
+    private final UserRepository userRep;
+    private final StoreRepository storeRep;
+    private final RegionNmRepository regionNmRep;
+
+    private final EntityManager em;
 
     private final AdminWorkRepositoryImpl adminWorkRep;
 
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, ProductRepository productRep, FeatureRepository featureRep, SaleRepository saleRep, AromaRepository aromaRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, JPAQueryFactory queryFactory, AdminWorkRepositoryImpl adminWorkRep) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
-        this.productRep = productRep;
-        this.featureRep = featureRep;
-        this.saleRep = saleRep;
-        this.aromaRep = aromaRep;
-        this.countryRep = countryRep;
-        this.categoryRep = categoryRep;
-        this.aromaCategoryRep = aromaCategoryRep;
-        this.winePairingRep = winePairingRep;
-        this.smallCategoryRep = smallCategoryRep;
-        this.queryFactory = queryFactory;
-
+        this.userRep = userRep;
+        this.storeRep = storeRep;
+        this.regionNmRep = regionNmRep;
+        this.em = em;
         this.adminWorkRep = adminWorkRep;
     }
 
@@ -217,14 +207,6 @@ public class AdminService {
         dto.setAcidity(param.getAcidity()); //t_feature
         dto.setBody(param.getBody()); //t_feature
 
-//        aromaDto.setProductId(param.getProductId()); //t_aroma
-//        aromaDto.setFlower(param.getAroma().getFlower()); //t_aroma
-//        aromaDto.setPlant(param.getAroma().getPlant()); //t_aroma
-//        aromaDto.setFruit(param.getAroma().getFruit()); //t_aroma
-//        aromaDto.setSpicy(param.getAroma().getSpicy()); //t_aroma
-//        aromaDto.setEarth(param.getAroma().getEarth()); //t_aroma
-//        aromaDto.setOak(param.getAroma().getOak()); //t_aroma
-//        aromaDto.setNuts(param.getAroma().getNuts()); //t_aroma
 
         //t_aroma 테이블 update
         //삭제
@@ -265,6 +247,7 @@ public class AdminService {
         //사진 파일 업로드 로직 1
         //임시경로에 사진 저장
         if(pic != null) { //만약에 pic가 있다면
+            deleteProductPic(dto.getProductId()); //사진 수정시 기존 사진 삭제 로직
             File tempDic = new File(FILE_DIR, "/temp");
             if(!tempDic.exists()) { // /temp 경로에 temp폴더가 존재하지 않는다면 temp폴더를 만든다.
                 tempDic.mkdirs();
@@ -447,7 +430,7 @@ public class AdminService {
                 .build();
     }
 
-    //주문 내역
+    //주문 내역 mybaits
     public OrderList getOrder3(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -468,7 +451,7 @@ public class AdminService {
                 .list(list)
                 .build();
     }
-    //주문 내역
+    //주문 내역 jpa
     public PageCustom<OrderListVo> getOrder(Pageable pageable) {
         return adminWorkRep.selOrderAll(pageable);
     }
@@ -496,7 +479,7 @@ public class AdminService {
                 .build();
     }
 
-    //환불된 상품과 환불 사유 출력
+    //환불된 상품과 환불 사유 출력 mybatis
     public List<OrderRefundVo> getOrderRefund(SelListDto dto, Long userId) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -506,8 +489,13 @@ public class AdminService {
         }
         return MAPPER.selOrderRefundById(dto, userId);
     }
+    //환불된 상품과 환불 사유 출력 jpa
+    public PageCustom<OrderRefundVo> getOrderRefund2(Pageable pageable) {
+        return adminWorkRep.selOrderRefund(pageable);
+    }
 
-    // 매장 정보 등록
+/*
+    // 매장 정보 등록 mybatis
     public Long insStore(StoreInsParam param) {
         StoreInsDto dto = new StoreInsDto();
         dto.setRegionNmId(param.getRegionNmId());
@@ -524,6 +512,20 @@ public class AdminService {
         }
         return 0L; //전화번호 유효성 검사 통과 실패
     }
+*/
+    // 매장 정보 등록 jpa
+    public Long insStore2(StoreInsParam param) {
+        StoreEntity storeEntity = new StoreEntity();
+
+        storeEntity.setRegionNmEntity(regionNmRep.findById(param.getRegionNmId()).get());
+        storeEntity.setNm(param.getNm());
+        storeEntity.setAddress(param.getAddress());
+        storeEntity.setTel(param.getTel());
+
+        storeRep.save(storeEntity);
+        return storeEntity.getStoreId();
+    }
+
     public StoreList getStore2(SelListDto dto) {
         int startIdx = (dto.getPage()-1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -541,7 +543,8 @@ public class AdminService {
     public PageCustom<StoreVo> getStore(Pageable pageable, String searchType, String str) {
         return adminWorkRep.selStoreAll(pageable, searchType, str);
     }
-
+/*
+    //매장 정보 수정 mybatis
     public Long updStore(StoreInsParam param, Long storeId) {
         StoreInsDto dto = new StoreInsDto();
         dto.setStoreId(storeId);
@@ -559,9 +562,34 @@ public class AdminService {
         }
         return 0L; //전화번호 유효성 검사 통과 실패
     }
-    //매장 삭제
+
+*/
+    //매장 정보 수정 jpa
+    public Long updStore2(StoreInsParam param, Long storeId) {
+        //tel(전화번호) 유효성 검사하기
+        String pattern = "(\\d{2,3})-(\\d{3,4})-(\\d{4})"; // (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자)
+        if(Pattern.matches(pattern, param.getTel())) {
+            return 0L; //전화번호 유효성 검사 통과 실패
+        }
+
+        StoreEntity storeEntity = storeRep.findById(storeId).get();
+        storeEntity.setNm(param.getNm());
+        storeEntity.setTel(param.getTel());
+        storeEntity.setAddress(param.getAddress());
+        storeRep.save(storeEntity);
+
+        return 1L;
+    }
+    //매장 삭제 mybatis
     public Long deleteStore(Long storeId) {
         return MAPPER.delStore(storeId);
+    }
+    //매장 삭제 jpa
+    public Long deleteStore2(Long storeId) {
+        StoreEntity storeEntity = storeRep.findById(storeId).get();
+        storeRep.deleteById(storeEntity.getStoreId());
+
+        return 1L;
     }
 
     //주문상태 업데이트 (관리자 페이지용)
@@ -584,10 +612,17 @@ public class AdminService {
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return MAPPER.updSaleYn(dto); // saleYn update 성공시 1, 실패시 0 리턴
     }
-
+/*
     //회원 삭제
     public int putUserDelYn(UserDelYnUpdDto dto){
         return MAPPER.updDelYn(dto);
+    }
+*/
+    //회원 삭제
+    public void putUserDelYn2(UserDelYnUpdDto dto){
+        UserEntity userEntity = userRep.findById(dto.getUserId()).get();
+        userEntity.setDelYn(1L);
+        userRep.save(userEntity);
     }
 
     //등록 상품 삭제
@@ -607,7 +642,7 @@ public class AdminService {
         MAPPER.delWinePairing(dto);
 
         //product 삭제
-        MAPPER.delProduct(productId);
+//        MAPPER.delProduct(productId);
 
         return 1;
     }

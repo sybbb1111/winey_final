@@ -60,17 +60,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private UserEntity createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
-
-        return rep.save(UserEntity.builder()
+        UserEntity entity = UserEntity.builder()
                 .providerType(providerType)
                 .uid(userInfo.getId())
                 .unm(userInfo.getName())
                 .roleType(RoleType.USER)
                 .email(userInfo.getEmail())
-                                .regionNmEntity(RegionNmEntity.builder().regionNmId(1L).build()
-                                )
+                .regionNmEntity(RegionNmEntity.builder().regionNmId(1L).build())
                 //.pic(userInfo.getImageUrl())
-                .build());
+                .build();
+        rep.save(entity);
+        return entity;
     }
 
     private UserEntity updateUser(UserEntity user, OAuth2UserInfo userInfo) {

@@ -3,6 +3,13 @@ package com.green.winey_final.order;
 
 import com.green.winey_final.common.config.security.AuthenticationFacade;
 import com.green.winey_final.common.entity.*;
+import com.green.winey_final.common.entity.QOrderDetailEntity;
+import com.green.winey_final.common.entity.QOrderEntity;
+import com.green.winey_final.common.entity.QProductEntity;
+import com.green.winey_final.common.entity.QReviewEntity;
+import com.green.winey_final.common.entity.QSaleEntity;
+import com.green.winey_final.common.entity.QStoreEntity;
+import com.green.winey_final.common.entity.QUserEntity;
 import com.green.winey_final.order.model.DetailVo;
 import com.green.winey_final.order.model.OrderDetailVo1;
 import com.green.winey_final.order.model.OrderDetailVo2;

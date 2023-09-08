@@ -26,4 +26,7 @@ public interface AdminQdslRepository {
     AdminProductDetailVo selPutProductInfo1(int productId);
     List<Long> selPutProductInfo2(int productId);
     List<Long> selPutProductInfo3(int productId);
+
+    //환불 내역
+    PageCustom<OrderRefundVo> selOrderRefund(Pageable pageable);
 }
