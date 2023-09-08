@@ -96,7 +96,6 @@ public class AuthService {
             redisService.deleteValues(redisRefreshTokenKey); // 삭제
         }
 
-
         return AuthResLoginVo.builder()
                 .authResVo(processAuth(r, req, res))
                 .roleType(r.getRoleType())
