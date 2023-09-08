@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface AromaRepository extends JpaRepository<AromaEntity, Long> {
+    int deleteByProductEntity(ProductEntity productEntity);
 
 
 }

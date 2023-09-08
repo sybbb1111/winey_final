@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface WinePairingRepository extends JpaRepository<WinePairingEntity,Long> {
-
+    int deleteByProductEntity(ProductEntity productEntity);
 //    List<WinePairingEntity> findWinePairingEntityByProductEntity_ProductIdDistinct(Long productId);
 }

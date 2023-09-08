@@ -44,11 +44,11 @@ public class AdminController {
     public int postProduct(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductInsParam param) {
         return SERVICE.postProduct(pic, param);
     }
-    @Operation(summary = "상품 등록")
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public int postProduct2(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductInsParam param) {
-        return SERVICE.postProduct(pic, param);
-    }
+//    @Operation(summary = "상품 등록p")
+//    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public int postProduct2(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductInsParam param) {
+//        return SERVICE.postProduct(pic, param);
+//    }
 
     @Operation(summary = "상품 수정", description = "성공시 코드 : 상품PK, 실패시 코드 : 0<br>"
             +"nmKor/nmEng -> String타입<br>"
@@ -65,6 +65,12 @@ public class AdminController {
     public int putProduct(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductUpdParam param) {
         return SERVICE.putProduct(pic, param);
     }
+    //jpa
+//    @Operation(summary = "상품 수정p")
+//    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public int putProduct2(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductUpdParam param) {
+//        return SERVICE.putProduct2(pic, param);
+//    }
 
     //등록 상품 리스트 출력 (페이징 처리)
     @Tag(name = "관리자 페이지 별도 API")

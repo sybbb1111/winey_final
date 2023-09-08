@@ -98,7 +98,6 @@ public class AdminService {
         LocalDate startSale = parseStartDate.withDayOfMonth(1); //할인시작월의 1일
         LocalDate endSale = parseEndDate.withDayOfMonth(parseEndDate.lengthOfMonth()); //할인종료월의 마지막 일
 
-//        dto.setSmallCategoryId(param.getSmallCategoryId());// t_wine_pairing 테이블에 인서트 아래에서
 
         // 피쳐 인서트 하기
         MAPPER.insFeature(dto); //t_feature 인서트 후 pk값 productInsDto에 들어감
@@ -437,6 +436,123 @@ public class AdminService {
         int result2 = MAPPER.updProduct(dto);
         if(result2 == 1) {
             return dto.getProductId();
+        }
+        return 0; // result2가 0이면 수정에 실패했다는 의미로 0 리턴
+    }
+
+    public int putProduct2(MultipartFile pic, ProductUpdParam param) {
+        //수정할 상품의pk 가져오기
+//        ProductEntity productEntity = productRep.findById(param.getProductId()).get();
+        //t_product
+        ProductEntity productEntity = ProductEntity.builder()
+                .productId(productRep.findById((long) param.getProductId()).get().getProductId())
+                .nmKor(param.getNmKor())
+                .nmEng(param.getNmEng())
+                .price(param.getPrice())
+                .countryEntity(countryRep.getReferenceById((long) param.getCountry()))
+                .categoryEntity(categoryRep.getReferenceById((long) param.getCategory()))
+                .build();
+        //t_sale
+        SaleEntity saleEntity = SaleEntity.builder()
+                .sale(param.getSale())
+                .salePrice(param.getSalePrice())
+                .productEntity(productEntity)
+                .build();
+        // 세일시작/종료날짜 로직
+        LocalDate parseStartDate = LocalDate.parse(param.getStartSale(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String startSale을 LocalDate로 변환
+        LocalDate parseEndDate = LocalDate.parse(param.getEndSale(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String endSale을 LocalDate로 변환
+        LocalDate startSale = parseStartDate.withDayOfMonth(1); //할인시작월의 1일
+        LocalDate endSale = parseEndDate.withDayOfMonth(parseEndDate.lengthOfMonth()); //할인종료월의 마지막 일
+        //t_feature
+        FeatureEntity featureEntity = FeatureEntity.builder()
+                .sweety((long) param.getSweety())
+                .acidity((long) param.getAcidity())
+                .body((long) param.getBody())
+                .build();
+        //t_aroma update
+        //삭제
+        aromaRep.deleteByProductEntity(productEntity);
+        //인서트
+        for(int i=0;i<param.getAroma().size();i++) {
+            aromaRep.save(AromaEntity.builder()
+                    .productEntity(productEntity)
+                    .aromaCategoryEntity(aromaCategoryRep.getReferenceById(param.getAroma().get(i).longValue()))
+                    .build());
+        }
+        //t_sale update
+        //saleDate가 이번 달과 똑같은 달이면 실행되는 로직
+        if(parseStartDate.getMonthValue() == LocalDate.now().getMonthValue()) {
+            saleEntity.setStartSale(LocalDate.now().plusDays(1).toString());
+            saleEntity.setEndSale(endSale.toString());
+            saleRep.save(saleEntity);
+        } else { //saleDate가 이번 달이 아니면 실행되는 로직
+            saleEntity.setStartSale(startSale.toString());
+            saleEntity.setEndSale(endSale.toString());
+            saleRep.save(saleEntity);
+        }
+        //t_feature 테이블 update 하고 productEntity에 featureId를 set
+        productEntity.setFeatureEntity(featureRep.save(featureEntity));
+
+        //t_small_category table update (t_wine_pairing)
+        //삭제
+        winePairingRep.deleteByProductEntity(productEntity);
+
+        //인서트
+        for(int i=0;i<param.getSmallCategoryId().size();i++) {
+            WinePairingEntity winePairingEntity = WinePairingEntity.builder()
+                    .productEntity(productEntity)
+                    .smallCategoryEntity(smallCategoryRep.getReferenceById(param.getSmallCategoryId().get(i).longValue()))
+                    .build();
+            winePairingRep.save(winePairingEntity);
+        }
+        //사진 파일 업로드 로직 1
+        //임시경로에 사진 저장
+        if(pic != null) { //만약에 pic가 있다면
+            File tempDic = new File(FILE_DIR, "/temp");
+            if(!tempDic.exists()) { // /temp 경로에 temp폴더가 존재하지 않는다면 temp폴더를 만든다.
+                tempDic.mkdirs();
+            }
+
+            String savedFileName = MyFileUtils.makeRandomFileNm(pic.getOriginalFilename());
+
+            File tempFile = new File(tempDic.getPath(), savedFileName);
+
+            try{
+                pic.transferTo(tempFile);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            //dto는 productupddto
+            String dbFilePath = "wine/" + param.getProductId() + "/" + savedFileName; //db에 wine/pk값/파일명 순으로 저장하기 위한 로직
+            productEntity.setPic(dbFilePath);
+            //t_product테이블 update
+            //사진 파일 업로드 로직 2
+            ProductEntity result = productRep.save(productEntity);
+
+            try {
+                if(result == null) {
+                    throw new Exception("상품을 등록할 수 없습니다.");
+                }
+            } catch(Exception e) {
+                tempFile.delete();
+                return 0;
+            }
+
+            if (result != null) {
+                String targetPath = FILE_DIR + "/wine/" + productEntity.getProductId();
+                File targetDic = new File(targetPath);
+                if(!targetDic.exists()) {
+                    targetDic.mkdirs();
+                }
+                File targetFile = new File(targetPath, savedFileName);
+                tempFile.renameTo(targetFile);
+            }
+            return productEntity.getProductId().intValue(); //성공시 상품PK값 리턴
+        }
+        //수정시 사진파일을 수정하지 않을 경우 (pic = null)
+        ProductEntity result2 = productRep.save(productEntity);
+        if(result2 != null) {
+            return productEntity.getProductId().intValue();
         }
         return 0; // result2가 0이면 수정에 실패했다는 의미로 0 리턴
     }
