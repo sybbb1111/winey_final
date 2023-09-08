@@ -9,6 +9,7 @@ public class WineDetailVo {
     private Long productId;
     private String nmKor;
     private String nmEng;
+    private Long temp;
     private Integer price;
     private String pic;
     private Integer promotion;

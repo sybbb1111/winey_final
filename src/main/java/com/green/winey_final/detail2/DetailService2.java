@@ -30,7 +30,6 @@ public class DetailService2 {
         }
 
         List<String> selPairing = MAPPER.selPairing(productId);
-
         List<String> selCount = new ArrayList();
 
         for (int i = 1; i <= 3; i++) {

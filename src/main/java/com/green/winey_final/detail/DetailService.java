@@ -36,9 +36,9 @@ public class DetailService {
 
     public WineVo4 selWineDetail(Long productId) {
         WineDetailVo vo = jpaQueryFactory.select(Projections.constructor(WineDetailVo.class,
-                        product.productId, product.nmKor, product.nmEng, product.price, product.pic,
+                        product.productId, product.nmKor, product.nmEng,category.categoryId.as("temp"), product.price, product.pic,
                         product.promotion, product.beginner, product.alcohol, product.quantity, category.nm.as("categoryNm"),
-                         country.nm.as("countryNm"),feature.sweety,feature.acidity,feature.body))
+                        country.nm.as("countryNm"),feature.sweety,feature.acidity,feature.body))
                 .from(product)
                 .leftJoin(category).on(product.categoryEntity.categoryId.eq(category.categoryId))
                 .leftJoin(country).on(product.countryEntity.countryId.eq(country.countryId))
@@ -53,6 +53,14 @@ public class DetailService {
                 .where(product.productId.eq(productId))
                 .orderBy(smallCategory.smallCategoryId.desc())
                 .fetch();
+
+        if (vo.getTemp()==1L) {
+            vo.setTemp(10L);
+        } else if (vo.getTemp()==2L) {
+            vo.setTemp(15L);
+        } else {
+            vo.setTemp(18L);
+        }
 
         List<String> selCount = new ArrayList();
 
