@@ -2,9 +2,7 @@ package com.green.winey_final.admin;
 
 
 import com.green.winey_final.admin.model.*;
-import com.green.winey_final.common.entity.SaleEntity;
-import com.green.winey_final.common.entity.StoreEntity;
-import com.green.winey_final.common.entity.UserEntity;
+import com.green.winey_final.common.entity.*;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
 import com.green.winey_final.repository.support.PageCustom;
@@ -36,19 +34,36 @@ public class AdminService {
     private final RegionNmRepository regionNmRep;
     private final SaleRepository saleRep;
 
+    private final AromaRepository aromaRep;
+    private final FeatureRepository featureRep;
+    private final CountryRepository countryRep;
+    private final CategoryRepository categoryRep;
+    private final AromaCategoryRepository aromaCategoryRep;
+    private final WinePairingRepository winePairingRep;
+    private final SmallCategoryRepository smallCategoryRep;
+    private final ProductRepository productRep;
+
     private final EntityManager em;
 
 
     private final AdminWorkRepositoryImpl adminWorkRep;
 
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, SaleRepository saleRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, SaleRepository saleRep, AromaRepository aromaRep, FeatureRepository featureRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, ProductRepository productRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
         this.userRep = userRep;
         this.storeRep = storeRep;
         this.regionNmRep = regionNmRep;
         this.saleRep = saleRep;
+        this.aromaRep = aromaRep;
+        this.featureRep = featureRep;
+        this.countryRep = countryRep;
+        this.categoryRep = categoryRep;
+        this.aromaCategoryRep = aromaCategoryRep;
+        this.winePairingRep = winePairingRep;
+        this.smallCategoryRep = smallCategoryRep;
+        this.productRep = productRep;
         this.em = em;
         this.adminWorkRep = adminWorkRep;
     }
@@ -184,6 +199,132 @@ public class AdminService {
             MAPPER.insWinePairing(dto);
         }
         return dto.getProductId();
+    }
+    //jpa
+    public int postProduct2(MultipartFile pic, ProductInsParam param) {
+        //t_feature 인서트
+        FeatureEntity featureEntity = FeatureEntity.builder()
+                .acidity((long) param.getAcidity())
+                .sweety((long) param.getSweety())
+                .body((long) param.getBody())
+                .build();
+        FeatureEntity featureResult = featureRep.save(featureEntity);
+
+        //t_product
+        ProductEntity productEntity = ProductEntity.builder()
+                .nmKor(param.getNmKor())
+                .nmEng(param.getNmEng())
+                .price(param.getPrice())
+                .promotion(param.getPromotion())
+                .beginner(param.getBeginner())
+                .alcohol(param.getAlcohol())
+                .quantity(param.getQuantity())
+                .featureEntity(featureResult)
+                .countryEntity(countryRep.getReferenceById((long) param.getCountry()))
+                .categoryEntity(categoryRep.getReferenceById((long) param.getCategory()))
+                .build();
+
+        //t_sale
+        SaleEntity saleEntity = SaleEntity.builder()
+                .sale(param.getSale())
+                .salePrice(param.getSalePrice())
+                .startSale(param.getStartSale())
+                .endSale(param.getEndSale())
+                .productEntity(productEntity) // *******
+                .build();
+
+        //t_aroma
+        AromaEntity aromaEntity = new AromaEntity();
+
+        //페어링음식 t_wine_pairing에 인서트
+        WinePairingEntity winePairingEntity = new WinePairingEntity();
+
+        //사진 파일 업로드 로직 1 (사진업로드 하고 상품 등록할 때 실행되는 부분)
+        //임시경로에 사진 저장
+        if(pic != null) { //만약에 pic가 있다면
+            File tempDic = new File(FILE_DIR, "/temp");
+            if (!tempDic.exists()) { // /temp 경로에 temp폴더가 존재하지 않는다면 temp폴더를 만든다.
+                tempDic.mkdirs();
+            }
+
+            String savedFileName = MyFileUtils.makeRandomFileNm(pic.getOriginalFilename());
+
+            File tempFile = new File(tempDic.getPath(), savedFileName);
+
+            try {
+                pic.transferTo(tempFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            productEntity.setPic(savedFileName);
+
+            //사진파일 업로드 로직2
+            //로직2 안에 t_product 인서트
+            //로직2 안에 t_sale 인서트
+            //로직2 안에 t_aroma인서트
+            //로직2 안에 t_winepairing인서트
+
+            //t_product에 인서트
+            ProductEntity productResult = productRep.save(productEntity);
+            String dbFilePath = "wine/" +  productResult.getProductId() + "/" + savedFileName; //db에 wine/pk값/파일명 순으로 저장하기 위한 로직
+            productResult.setPic(dbFilePath);
+            try {
+                if (productResult == null) {
+                    throw new Exception("상품을 등록할 수 없습니다.");
+                }
+            } catch (Exception e) {
+                tempFile.delete();
+                return 0;
+            }
+            if (productResult != null) {
+                String targetPath = FILE_DIR + "wine/" + productResult.getProductId() +"/";
+                File targetDic = new File(targetPath);
+                if (!targetDic.exists()) {
+                    targetDic.mkdirs();
+                }
+                File targetFile = new File(targetPath, savedFileName);
+                tempFile.renameTo(targetFile);
+                //t_sale 인서트
+                saleRep.save(saleEntity);
+
+                //t_aroma 인서트
+                aromaEntity.setProductEntity(productResult);
+                for (int i = 0; i < param.getAroma().size(); i++) {
+                    AromaCategoryEntity aromaCategoryResult = aromaCategoryRep.getReferenceById(param.getAroma().get(i).longValue());
+                    aromaEntity.setAromaCategoryEntity(aromaCategoryResult);
+                    aromaRep.save(aromaEntity);
+                }
+                //페어링음식 t_wine_pairing에 인서트
+                winePairingEntity.setProductEntity(productResult);
+
+                for (int i = 0; i < param.getSmallCategoryId().size(); i++) {
+                    SmallCategoryEntity smallCategoryResult = smallCategoryRep.getReferenceById(param.getSmallCategoryId().get(i).longValue());
+                    winePairingEntity.setSmallCategoryEntity(smallCategoryResult);
+                    winePairingRep.save(winePairingEntity);
+                }
+                return productResult.getProductId().intValue();
+            }
+        }
+        //사진업로드 안하고 상품 등록할 때 실행되는 부분
+        ProductEntity productResult = productRep.save(productEntity);
+        // 할인율, 할인가격 t_sale에 인서트 (product_id 이용해서) , 할인시작일과 종료일은(3차 때 구현)
+        saleRep.save(saleEntity);
+        //t_aroma 인서트
+        aromaEntity.setProductEntity(productResult);
+        for (int i = 0; i < param.getAroma().size(); i++) {
+            AromaCategoryEntity aromaCategoryResult = aromaCategoryRep.getReferenceById(param.getAroma().get(i).longValue());
+            aromaEntity.setAromaCategoryEntity(aromaCategoryResult);
+            aromaRep.save(aromaEntity);
+        }
+        //페어링음식 t_wine_pairing에 인서트
+        winePairingEntity.setProductEntity(productResult);
+        for (int i = 0; i < param.getSmallCategoryId().size(); i++) {
+            SmallCategoryEntity smallCategoryResult = smallCategoryRep.getReferenceById(param.getSmallCategoryId().get(i).longValue());
+            winePairingEntity.setSmallCategoryEntity(smallCategoryResult);
+            winePairingRep.save(winePairingEntity);
+        }
+        return productResult.getProductId().intValue();
     }
 
     public int putProduct(MultipartFile pic, ProductUpdParam param) {
