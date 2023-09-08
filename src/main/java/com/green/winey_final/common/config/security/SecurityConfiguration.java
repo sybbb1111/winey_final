@@ -71,7 +71,7 @@ public class SecurityConfiguration {
 
                                         ,"/api/search/**", "/api/search**"
 
-                                        ,"/admin", "/admin**", "/admin/**"
+                                        //,"/admin", "/admin**", "/admin/**"
 
                                 ).permitAll()
                                 .requestMatchers("**exception**") .permitAll()
