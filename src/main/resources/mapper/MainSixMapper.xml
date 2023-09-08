@@ -129,7 +129,7 @@
         ON a.user_id = b.user_id
         INNER JOIN t_order_detail c
         ON b.order_id = c.order_id
-        WHERE user_id = {userId}
+        WHERE a.user_id = #{userId}
     </select>
 
 </mapper>

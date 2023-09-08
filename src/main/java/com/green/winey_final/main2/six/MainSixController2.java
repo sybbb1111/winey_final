@@ -97,34 +97,29 @@ public class MainSixController2 {
         selRecommendDto2.setUserId(userId);
 
         List<Long> recommandWines = recommendMapper.selUserinfo(selRecommendDto2);
+        List<Long> orderList = MAPPER.orderList(userId);
 
         List<Long> getProductId = new ArrayList<>();
         List<Long> getProductOrderId = new ArrayList<>();
 
         List<WineRecommendVo2> selectedWines = new ArrayList<>();
-        List<Long> orderList = MAPPER.orderList(userId);
 
         // userId 당 해당하는 productId 담기
-        /*for (Long wineId : recommandWines) {
+        for (Long wineId : recommandWines) {
             getProductId.add(wineId);
         }
 
         for (Long orderId : orderList) {
             getProductOrderId.add(orderId);
-        }*/
+        }
 
+        for (int i = 0; i < getProductId.size(); i++) {
+            Long productId = getProductId.get(i);
 
-        getProductId.stream()
-                .filter(x -> !getProductOrderId.contains(x))
-                .collect(Collectors.toList());
-
-
-        try {
-            for (int i = 0; i < getProductId.size() - 1; i++) {
-                getProductId.remove(getProductId.get(i) == getProductOrderId.get(i));
+            if (recommandWines.contains(productId) && orderList.contains(productId)) {
+                getProductId.remove(i);
+                i--; // 요소를 제거하면 인덱스를 감소시켜 중복 제거를 위해 다음 요소를 확인합니다.
             }
-        } catch (Exception e) {
-            return null;
         }
         //랜덤 6개 출력하기
         List<WineRecommendVo2> allWines = MAPPER.selWineByday(userId);
