@@ -76,7 +76,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .from(userEntity)
                 .orderBy(getAllOrderSpecifiers(pageable))
                 .where(eqUserName(searchType, str),
-                        eqUserEmail(searchType, str))
+                        eqUserEmail(searchType, str), userEntity.delYn.eq(0L))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
