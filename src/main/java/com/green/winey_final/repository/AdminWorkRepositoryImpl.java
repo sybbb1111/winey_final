@@ -116,6 +116,13 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
+//        LocalDate now = LocalDate.now();
+//        int year = now.getYear();
+//        int startMonth = now.getMonthValue();
+//
+//        LocalDate startOfMonth = LocalDate.of(year, startMonth, 1); // 이번 달의 시작일
+//        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1);
+
         for(int i=0;i<list.size();i++) {
             if(list.get(i).getCount()>1) {
                 list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
