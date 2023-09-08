@@ -479,7 +479,7 @@ public class AdminService {
                 .build();
     }
 
-    //환불된 상품과 환불 사유 출력
+    //환불된 상품과 환불 사유 출력 mybatis
     public List<OrderRefundVo> getOrderRefund(SelListDto dto, Long userId) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -489,6 +489,11 @@ public class AdminService {
         }
         return MAPPER.selOrderRefundById(dto, userId);
     }
+    //환불된 상품과 환불 사유 출력 jpa
+    public PageCustom<OrderRefundVo> getOrderRefund2(Pageable pageable) {
+        return adminWorkRep.selOrderRefund(pageable);
+    }
+
 /*
     // 매장 정보 등록 mybatis
     public Long insStore(StoreInsParam param) {

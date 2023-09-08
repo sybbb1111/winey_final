@@ -1,5 +1,6 @@
 package com.green.winey_final.admin.model;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,4 +12,13 @@ public class OrderRefundVo {
     private String refundReason;
     private int refundYn;
     private String refundDate;
+
+    @QueryProjection
+    public OrderRefundVo(Long refundId, Long orderId, String refundReason, int refundYn, String refundDate) {
+        this.refundId = refundId;
+        this.orderId = orderId;
+        this.refundReason = refundReason;
+        this.refundYn = refundYn;
+        this.refundDate = refundDate;
+    }
 }

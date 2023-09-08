@@ -234,7 +234,7 @@ public class AdminController {
     }
 
 
-    //환불된 상품과 환불 사유 출력
+    //환불된 상품과 환불 사유 출력 mybatis
     @Operation(summary = "환불 상품 내역과 환불 사유 출력", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"+
             "userId는 입력 안하면 전체 환불 내역과 사유 출력, 입력하면 userId의 환불내역과 사유 출력")
     @GetMapping("/order/refund")
@@ -246,6 +246,18 @@ public class AdminController {
         dto.setRow(row);
 
         return SERVICE.getOrderRefund(dto, userId);
+    }
+
+    //환불된 상품과 환불 사유 출력 jpa
+    @Operation(summary = "환불 상품 내역과 환불 사유 출력p", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
+            + "page -> 0이 1페이지입니다.<br>"
+            + "size(row) -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort -> 입력 예시) refundid,asc<br> - 환불번호(refundid) / 주문번호(orderId) / 환불여부(refundyn) / 환불날짜(refunddate) <br>"
+            + "- 오름차순(asc) / 내림차순(desc)")
+    @GetMapping("/order/refund2")
+    public PageCustom<OrderRefundVo> getOrderRefund2(@ParameterObject @PageableDefault(sort="refundid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                                   Pageable pageable) {
+        return SERVICE.getOrderRefund2(pageable);
     }
 /*
     //매장 정보 등록 mybatis
