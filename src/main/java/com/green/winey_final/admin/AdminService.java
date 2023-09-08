@@ -2,6 +2,7 @@ package com.green.winey_final.admin;
 
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.common.entity.StoreEntity;
 import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,16 +31,20 @@ public class AdminService {
     private final String FILE_DIR;
 
     private final UserRepository userRep;
+    private final StoreRepository storeRep;
+    private final RegionNmRepository regionNmRep;
 
     private final EntityManager em;
 
     private final AdminWorkRepositoryImpl adminWorkRep;
 
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
         this.userRep = userRep;
+        this.storeRep = storeRep;
+        this.regionNmRep = regionNmRep;
         this.em = em;
         this.adminWorkRep = adminWorkRep;
     }
@@ -492,8 +496,8 @@ public class AdminService {
         }
         return MAPPER.selOrderRefundById(dto, userId);
     }
-
-    // 매장 정보 등록
+/*
+    // 매장 정보 등록 mybatis
     public Long insStore(StoreInsParam param) {
         StoreInsDto dto = new StoreInsDto();
         dto.setRegionNmId(param.getRegionNmId());
@@ -510,6 +514,20 @@ public class AdminService {
         }
         return 0L; //전화번호 유효성 검사 통과 실패
     }
+*/
+    // 매장 정보 등록 jpa
+    public Long insStore2(StoreInsParam param) {
+        StoreEntity storeEntity = new StoreEntity();
+
+        storeEntity.setRegionNmEntity(regionNmRep.findById(param.getRegionNmId()).get());
+        storeEntity.setNm(param.getNm());
+        storeEntity.setAddress(param.getAddress());
+        storeEntity.setTel(param.getTel());
+
+        storeRep.save(storeEntity);
+        return storeEntity.getStoreId();
+    }
+
     public StoreList getStore2(SelListDto dto) {
         int startIdx = (dto.getPage()-1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -527,7 +545,8 @@ public class AdminService {
     public PageCustom<StoreVo> getStore(Pageable pageable, String searchType, String str) {
         return adminWorkRep.selStoreAll(pageable, searchType, str);
     }
-
+/*
+    //매장 정보 수정 mybatis
     public Long updStore(StoreInsParam param, Long storeId) {
         StoreInsDto dto = new StoreInsDto();
         dto.setStoreId(storeId);
@@ -545,9 +564,34 @@ public class AdminService {
         }
         return 0L; //전화번호 유효성 검사 통과 실패
     }
-    //매장 삭제
+
+*/
+    //매장 정보 수정 jpa
+    public Long updStore2(StoreInsParam param, Long storeId) {
+        //tel(전화번호) 유효성 검사하기
+        String pattern = "(\\d{2,3})-(\\d{3,4})-(\\d{4})"; // (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자)
+        if(Pattern.matches(pattern, param.getTel())) {
+            return 0L; //전화번호 유효성 검사 통과 실패
+        }
+
+        StoreEntity storeEntity = storeRep.findById(storeId).get();
+        storeEntity.setNm(param.getNm());
+        storeEntity.setTel(param.getTel());
+        storeEntity.setAddress(param.getAddress());
+        storeRep.save(storeEntity);
+
+        return 1L;
+    }
+    //매장 삭제 mybatis
     public Long deleteStore(Long storeId) {
         return MAPPER.delStore(storeId);
+    }
+    //매장 삭제 jpa
+    public Long deleteStore2(Long storeId) {
+        StoreEntity storeEntity = storeRep.findById(storeId).get();
+        storeRep.deleteById(storeEntity.getStoreId());
+
+        return 1L;
     }
 
     //주문상태 업데이트 (관리자 페이지용)

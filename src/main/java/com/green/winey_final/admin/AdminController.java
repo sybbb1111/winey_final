@@ -245,15 +245,27 @@ public class AdminController {
 
         return SERVICE.getOrderRefund(dto, userId);
     }
-
-    //매장 정보 등록
+/*
+    //매장 정보 등록 mybatis
     @Operation(summary = "매장 정보 등록", description = "nm(매장이름)을 기존 등록된 매장이름과 중복된 이름 입력시 등록 안됨<br>"
             +"전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0<br>"
             +"주소 형식 -> ex) 서울 양천구 오목로 299")
-    @PostMapping("/store")
+    @PostMapping("/store2")
     public Long postStore(@RequestBody StoreInsParam param) {
         return SERVICE.insStore(param);
     }
+*/
+    //매장 정보 등록 jpa
+    @Operation(summary = "매장 정보 등록p", description = "nm(매장이름)을 기존 등록된 매장이름과 중복된 이름 입력시 등록 안됨<br>"
+            +"전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0<br>"
+            +"주소 형식 -> ex) 서울 양천구 오목로 299")
+    @PostMapping("/store")
+    public Long postStore2(@RequestBody StoreInsParam param) {
+
+        return SERVICE.insStore2(param);
+    }
+
+
     //매장 리스트 출력
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "매장 리스트 출력 myb", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.")
@@ -279,17 +291,34 @@ public class AdminController {
                                          @RequestParam(required = false)String str) {
         return SERVICE.getStore(pageable, searchType, str);
     }
-
-    //매장 정보 수정
+/*
+    //매장 정보 수정 mybatis
     @Operation(summary = "매장 정보 수정", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
     @PutMapping("/store/{storeId}")
     public Long putStore(@RequestBody StoreInsParam param, Long storeId) {
         return SERVICE.updStore(param, storeId);
     }
-    //매장 정보 삭제
+
+*/
+    //매장 정보 수정 jpa
+    @Operation(summary = "매장 정보 수정p", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
+    @PutMapping("/store/{storeId}")
+    public Long putStore2(@RequestBody StoreInsParam param, Long storeId) {
+        return SERVICE.updStore2(param, storeId);
+    }
+
+
+    //매장 정보 삭제 mybatis
     @Operation(summary = "매장 정보 삭제", description = "삭제 성공시 코드 : 1, 실패시 코드 : 0")
     @DeleteMapping("/store/{storeId}")
     public Long deleteStore(Long storeId) {
+        return SERVICE.deleteStore(storeId);
+    }
+
+    //매장 정보 삭제 jpa
+    @Operation(summary = "매장 정보 삭제p", description = "삭제 성공시 코드 : 1, 실패시 코드 : 0")
+    @DeleteMapping("/store2/{storeId}")
+    public Long deleteStore2(Long storeId) {
         return SERVICE.deleteStore(storeId);
     }
 
