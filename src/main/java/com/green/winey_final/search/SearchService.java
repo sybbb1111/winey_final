@@ -83,12 +83,12 @@ public class SearchService {
                 builder.and(productEntity.price.between(20000, 50000));
             } else if (dto.getPrice() == 3) {
                 builder.and(productEntity.price.between(50000, 100000));
-            } else {
+            } else if (dto.getPrice() == 4){
                 builder.and(productEntity.price.goe(100000));
             }
 
         if (dto.getText() != null && !dto.getText().isEmpty()) {
-            builder.and(productEntity.nmKor.contains(dto.getText()).and(productEntity.nmEng.contains(dto.getText())));
+            builder.and(productEntity.nmKor.contains(dto.getText()).or(productEntity.nmEng.contains(dto.getText())));
         }
         JPAQuery<WineVo> query = queryFactory.select(
                         Projections.constructor(
