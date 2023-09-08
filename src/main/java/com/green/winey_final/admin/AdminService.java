@@ -2,14 +2,16 @@ package com.green.winey_final.admin;
 
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
 import com.green.winey_final.repository.support.PageCustom;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,34 +30,18 @@ public class AdminService {
     private final AdminMapper MAPPER;
     private final String FILE_DIR;
 
-    private final ProductRepository productRep;
-    private final FeatureRepository featureRep;
-    private final SaleRepository saleRep;
-    private final AromaRepository aromaRep;
-    private final CountryRepository countryRep;
-    private final CategoryRepository categoryRep;
-    private final AromaCategoryRepository aromaCategoryRep;
-    private final WinePairingRepository winePairingRep;
-    private final SmallCategoryRepository smallCategoryRep;
-    private final JPAQueryFactory queryFactory;
+    private final UserRepository userRep;
+
+    private final EntityManager em;
 
     private final AdminWorkRepositoryImpl adminWorkRep;
 
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, ProductRepository productRep, FeatureRepository featureRep, SaleRepository saleRep, AromaRepository aromaRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, JPAQueryFactory queryFactory, AdminWorkRepositoryImpl adminWorkRep) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
-        this.productRep = productRep;
-        this.featureRep = featureRep;
-        this.saleRep = saleRep;
-        this.aromaRep = aromaRep;
-        this.countryRep = countryRep;
-        this.categoryRep = categoryRep;
-        this.aromaCategoryRep = aromaCategoryRep;
-        this.winePairingRep = winePairingRep;
-        this.smallCategoryRep = smallCategoryRep;
-        this.queryFactory = queryFactory;
-
+        this.userRep = userRep;
+        this.em = em;
         this.adminWorkRep = adminWorkRep;
     }
 
@@ -584,10 +570,17 @@ public class AdminService {
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return MAPPER.updSaleYn(dto); // saleYn update 성공시 1, 실패시 0 리턴
     }
-
+/*
     //회원 삭제
     public int putUserDelYn(UserDelYnUpdDto dto){
         return MAPPER.updDelYn(dto);
+    }
+*/
+    //회원 삭제
+    public void putUserDelYn2(UserDelYnUpdDto dto){
+        UserEntity userEntity = userRep.findById(dto.getUserId()).get();
+        userEntity.setDelYn(1L);
+        userRep.save(userEntity);
     }
 
     //등록 상품 삭제

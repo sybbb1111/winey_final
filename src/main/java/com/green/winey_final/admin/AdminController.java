@@ -1,6 +1,7 @@
 package com.green.winey_final.admin;
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.repository.support.PageCustom;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -306,11 +308,20 @@ public class AdminController {
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return SERVICE.putProductSaleYn(dto);
     }
-
-    @Operation(summary = "회원 탈퇴상태(delYn) 업데이트", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
+/*
+    //회원 삭제 mybatis
+    @Operation(summary = "회원 탈퇴상태(delYn) 업데이트 myb", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
     @PutMapping("/withdrawal")
     public int putUserDelYn(UserDelYnUpdDto dto){
         return SERVICE.putUserDelYn(dto);
+    }
+*/
+    //회원 삭제 jpa
+    @Operation(summary = "회원 탈퇴상태(delYn) 업데이트p", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
+    @PutMapping("/withdrawal")
+    public ResponseEntity<Integer> putUserDelYn2(UserDelYnUpdDto dto){
+        SERVICE.putUserDelYn2(dto);
+        return ResponseEntity.ok(1);
     }
 
     //상품 삭제
