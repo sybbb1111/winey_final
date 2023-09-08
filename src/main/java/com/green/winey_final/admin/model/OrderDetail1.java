@@ -2,8 +2,10 @@ package com.green.winey_final.admin.model;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class OrderDetail1 {
     private Long orderId;
     private String orderDate;

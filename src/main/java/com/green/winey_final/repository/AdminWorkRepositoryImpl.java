@@ -3,11 +3,10 @@ package com.green.winey_final.repository;
 import com.green.winey_final.admin.model.*;
 import com.green.winey_final.repository.support.PageCustom;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -95,11 +96,13 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 
     @Override
     public PageCustom<UserOrderDetailVo> selUserOrderByUserId(Long userId, Pageable pageable) {
-        //데이트포맷 로직
-        //        StringTemplate formattedDate = Expressions.dateTemplate(
-//                "DATE_FORMAT({0}, {1})",
-//                UserOrderDetailVo,
-//                ConstantImpl.create("%y-%m-%d"));
+
+////        UserOrderDetailVo vo = new UserOrderDetailVo();
+//        StringTemplate formattedDate = Expressions.dateTemplate(String.class, , ConstantImpl.create("%Y-%m-%d"));
+//        //        StringTemplate formattedDate = Expressions.dateTemplate(
+////                "DATE_FORMAT({0}, {1})",
+////                UserOrderDetailVo,
+////                ConstantImpl.create("%y-%m-%d"));
 
         List<UserOrderDetailVo> list = queryFactory
                 .select(new QUserOrderDetailVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), productEntity.nmKor, orderEntity.totalOrderPrice.intValue(), storeEntity.nm, orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))
@@ -119,13 +122,12 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-//        LocalDate now = LocalDate.now();
-//        int year = now.getYear();
-//        int startMonth = now.getMonthValue();
-//
-//        LocalDate startOfMonth = LocalDate.of(year, startMonth, 1); // 이번 달의 시작일
-//        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1);
+        //데이트포맷 로직
+        for(int i=0;i<list.size();i++) {
+            list.get(i).setOrderDate(list.get(i).getOrderDate().substring(2,10));
+        }
 
+        //외 1 로직
         for(int i=0;i<list.size();i++) {
             if(list.get(i).getCount()>1) {
                 list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
@@ -193,6 +195,11 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        //데이트포맷 로직
+        for(int i=0;i<list.size();i++) {
+            list.get(i).setOrderDate(list.get(i).getOrderDate().substring(2,10));
+        }
+
         for(int i=0;i<list.size();i++) {
             if(list.get(i).getCount()>1) {
                 list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
@@ -254,30 +261,19 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .where(orderEntity.orderId.eq((long) orderId))
                 .fetch();
 
+        //데이트포맷 로직
+        for(int i=0;i<list.size();i++) {
+            list.get(i).setOrderDate(list.get(i).getOrderDate().substring(2,10));
+        }
+
         return list;
-/* 추후 페이징 필요하면 사용
-        JPAQuery<Long> countQuery = queryFactory
-                .select(orderEntity.orderId.count())
-                .from(orderEntity)
-                .innerJoin(orderDetailEntity)
-                .on(orderEntity.eq(orderDetailEntity.orderEntity))
-                .innerJoin(userEntity)
-                .on(orderEntity.userEntity.userId.eq(userEntity.userId))
-                .innerJoin(productEntity)
-                .on(orderDetailEntity.productEntity.eq(productEntity))
-                .where(orderEntity.orderId.eq((long) orderId));
-
-        Page<OrderDetail1> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
-
-        return new PageCustom<OrderDetail1>(map.getContent(), map.getPageable(), map.getTotalElements());
- */
     }
 
     //상세 주문 내역2
     @Override
     public OrderDetail2 selOrderDetailByOrderId2(int orderId, Pageable pageable) {
         OrderDetail2 list = queryFactory
-                .select(new QOrderDetail2(orderDetailEntity.quantity.sum(), orderDetailEntity.salePrice.sum(), orderEntity.totalOrderPrice, orderEntity.payment.stringValue(), storeEntity.nm, orderEntity.pickupTime.stringValue(), orderEntity.orderStatus))
+                .select(new QOrderDetail2(orderDetailEntity.quantity.sum(), orderDetailEntity.salePrice.sum(), orderEntity.payment, storeEntity.nm, orderEntity.pickupTime.stringValue(), orderEntity.pickupTime.stringValue(), orderEntity.orderStatus))
                 .from(orderEntity)
                 .innerJoin(orderDetailEntity)
                 .on(orderEntity.eq(orderDetailEntity.orderEntity))
@@ -285,6 +281,10 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .on(orderEntity.storeEntity.eq(storeEntity))
                 .where(orderEntity.orderId.eq((long) orderId))
                 .fetchOne();
+
+        //데이트포맷 로직
+        list.setPickUpDate(list.getPickUpDate().substring(2,10));
+        list.setPickUpTime(list.getPickUpTime().substring(11,16));
 
         return list;
     }
