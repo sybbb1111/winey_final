@@ -203,7 +203,7 @@ public class AdminController {
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) orderid,desc <br> - 주문번호(orderid) / 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br> - 오름차순(asc) / 내림차순(desc)<br>")
     @GetMapping("/order")
-    public PageCustom<OrderListVo> getOrder(@ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+    public PageCustom<OrderListVo> getOrder(@ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.DESC, page = 0, size = 20)
                                    Pageable pageable) {
         return SERVICE.getOrder(pageable);
     }
