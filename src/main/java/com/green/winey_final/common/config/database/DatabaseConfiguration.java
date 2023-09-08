@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 
 @Configuration
+@EnableTransactionManagement
 public class DatabaseConfiguration {
 
     @Bean
@@ -25,23 +26,5 @@ public class DatabaseConfiguration {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean baseEntityManager() {
-        LocalContainerEntityManagerFactoryBean em
-                = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource());
-        em.setPackagesToScan("com.green.campingsmore");
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
-        HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", "update");
-        em.setJpaPropertyMap(properties);
-        return em;
-    }
-    @Bean
-    public PlatformTransactionManager baseTransactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(baseEntityManager().getObject());
-        return transactionManager;
-    }
+
 }
