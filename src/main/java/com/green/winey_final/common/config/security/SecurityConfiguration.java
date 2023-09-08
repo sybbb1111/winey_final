@@ -77,22 +77,22 @@ public class SecurityConfiguration {
                                 .requestMatchers("**exception**") .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/sign-api/refresh-token").permitAll()
 
-//                                .requestMatchers("/api/recommend/**").hasAnyRole("USER","ADMIN") //맞춤와인추천
-//
-//                                .requestMatchers("/api/mypage/upduser/**").hasAnyRole("USER","ADMIN") //비밀번호 변경
-//                                .requestMatchers("/api/mypage/delUser/**").hasAnyRole("USER","ADMIN") //탈퇴
-//                                .requestMatchers("/api/mypage/userinfo/**").hasAnyRole("USER","ADMIN") //회원정보
-//
-//
-//                                .requestMatchers("/api/wine/**").hasAnyRole("USER","ADMIN") //장바구니 - 회원만 이용 가능
+                                .requestMatchers("/api/recommend/**").hasAnyRole("USER","ADMIN") //맞춤와인추천
 
-                                //.requestMatchers("/api/admin/**").hasRole("ADMIN") //관리자
-                                //.requestMatchers("/admin/**").hasRole("ADMIN")     //관리자
+                                .requestMatchers("/api/mypage/upduser/**").hasAnyRole("USER","ADMIN") //비밀번호 변경
+                                .requestMatchers("/api/mypage/delUser/**").hasAnyRole("USER","ADMIN") //탈퇴
+                                .requestMatchers("/api/mypage/userinfo/**").hasAnyRole("USER","ADMIN") //회원정보
 
-                                //.requestMatchers("/api/download/**").hasRole("ADMIN")
-                                //.requestMatchers("/api/orderList/**").hasAnyRole("USER","ADMIN") //주문내역
-                                //.requestMatchers("/api/detail/**").hasAnyRole("USER","ADMIN")  //주문상세내역
-                                //.requestMatchers("/api/payment/**").hasAnyRole("USER","ADMIN") //결제
+
+                                .requestMatchers("/api/wine/**").hasAnyRole("USER","ADMIN") //장바구니 - 회원만 이용 가능
+
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN") //관리자
+                                .requestMatchers("/admin/**").hasRole("ADMIN")     //관리자
+
+                                .requestMatchers("/api/download/**").hasRole("ADMIN")
+                                .requestMatchers("/api/orderList/**").hasAnyRole("USER","ADMIN") //주문내역
+                                .requestMatchers("/api/detail/**").hasAnyRole("USER","ADMIN")  //주문상세내역
+                                .requestMatchers("/api/payment/**").hasAnyRole("USER","ADMIN") //결제
 
                                 .anyRequest().permitAll()
 
