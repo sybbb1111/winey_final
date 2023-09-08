@@ -74,16 +74,19 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 
         List<UserVo> list = queryFactory.select(new QUserVo(userEntity.userId, userEntity.email, userEntity.unm, regionNmEntity.regionNmId.intValue(), userEntity.createdAt.stringValue()))
                 .from(userEntity)
-                .orderBy(getAllOrderSpecifiers(pageable))
                 .where(eqUserName(searchType, str),
-                        eqUserEmail(searchType, str), userEntity.delYn.eq(0L))
+        eqUserEmail(searchType, str), userEntity.delYn.eq(0L))
+                .orderBy(getAllOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
-                .select(userEntity.count())// count()와 countDistinct() 차이 알기
-                .from(userEntity);
+//                .select(userEntity.count())// count()와 countDistinct() 차이 알기
+                .select(userEntity.countDistinct())// count()와 countDistinct() 차이 알기
+                .from(userEntity)
+                .where(eqUserName(searchType, str),
+                        eqUserEmail(searchType, str), userEntity.delYn.eq(0L));
 
         Page<UserVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
 
@@ -115,6 +118,13 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+//        LocalDate now = LocalDate.now();
+//        int year = now.getYear();
+//        int startMonth = now.getMonthValue();
+//
+//        LocalDate startOfMonth = LocalDate.of(year, startMonth, 1); // 이번 달의 시작일
+//        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1);
 
         for(int i=0;i<list.size();i++) {
             if(list.get(i).getCount()>1) {
@@ -163,8 +173,8 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
     public PageCustom<OrderListVo> selOrderAll(Pageable pageable) {
         List<OrderListVo> list = queryFactory
                 .select(new QOrderListVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), userEntity.email, productEntity.nmKor,
-                        orderDetailEntity.salePrice.sum().intValue(),
                         orderDetailEntity.quantity.sum().intValue(),
+                        orderDetailEntity.salePrice.sum().intValue(),
                         orderEntity.totalOrderPrice.intValue(),
                         orderEntity.payment.intValue(), storeEntity.nm,
                         orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))

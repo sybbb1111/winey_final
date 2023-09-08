@@ -448,7 +448,7 @@ public class AdminService {
     }
 
     //주문 내역
-    public OrderList getOrder(SelListDto dto) {
+    public OrderList getOrder3(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
 
@@ -469,7 +469,7 @@ public class AdminService {
                 .build();
     }
     //주문 내역
-    public PageCustom<OrderListVo> getOrder2(Pageable pageable) {
+    public PageCustom<OrderListVo> getOrder(Pageable pageable) {
         return adminWorkRep.selOrderAll(pageable);
     }
 
