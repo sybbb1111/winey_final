@@ -48,7 +48,7 @@ spring:
     password: green502
   jpa:
     hibernate:
-      ddl-auto: create-drop #update #create
+      ddl-auto: update #update #create
     show-sql: true
     properties:
       hibernate:
@@ -57,8 +57,6 @@ spring:
           batch_size: 50
         order_updates: true
         order_inserts: true
-        generate_statistics: true #통계를 보기 위함
-
   data:
     redis:
       host: localhost
@@ -111,7 +109,6 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-
 
 # cors
 cors:

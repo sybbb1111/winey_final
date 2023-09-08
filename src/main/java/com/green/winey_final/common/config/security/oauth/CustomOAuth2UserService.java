@@ -66,11 +66,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .unm(userInfo.getName())
                 .roleType(RoleType.USER)
                 .email(userInfo.getEmail())
-                .regionNmEntity(RegionNmEntity.builder().regionNmId(1L).build()
-                )
+                .regionNmEntity(RegionNmEntity.builder().regionNmId(1L).build())
                 //.pic(userInfo.getImageUrl())
                 .build();
-        rep.saveAndFlush(entity);
+        rep.save(entity);
         return entity;
     }
 

@@ -70,17 +70,11 @@ public class UserEntity extends BaseEntity {
     @JoinColumn(name = "region_nm_id")
     private RegionNmEntity regionNmEntity;
 
-
-
     @Column(length = 11)
     private Long tosYn;
-
-
 
     @Column(length = 11)
     @ColumnDefault("0")
     private Long delYn;
-
-
 
 }
