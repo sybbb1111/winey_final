@@ -225,7 +225,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 //                .groupBy(orderEntity.orderId); //groupBy하면 totalElements 제대로 안나옴
 
         Page<OrderListVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
-
+        //맨 첫 페이지 content 개수가 size 미달이거나, 마지막 page인 경우 count query 실행 X하여 최적화
         return new PageCustom<OrderListVo>(map.getContent(), map.getPageable(), map.getTotalElements());
     }
 
