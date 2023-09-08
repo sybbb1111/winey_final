@@ -8,8 +8,10 @@ import com.green.winey_final.order.model.OrderDetailVo1;
 import com.green.winey_final.order.model.OrderDetailVo2;
 import com.green.winey_final.order.model.SelOrderVo;
 import com.green.winey_final.repository.OrderRepository;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -48,7 +50,7 @@ public class OrderService {
 
         List<SelOrderVo> result = jpaQueryFactory
                 .select(Projections.constructor(SelOrderVo.class,
-                        order.orderDate, order.orderId, order.userEntity.userId,
+                        Expressions.stringTemplate("DATE_FORMAT({0},{1})",order.orderDate, ConstantImpl.create("%Y-%m-%d")), order.orderId, order.userEntity.userId,
                         product.nmKor, order.payment, order.totalOrderPrice,
                         store.nm, order.pickupTime, order.orderStatus, order.count()))
                 .from(order)
@@ -79,6 +81,10 @@ public class OrderService {
                 entity.setNmKor(entity.getNmKor());
             }
         }
+
+
+
+
         return result;
     }
 
@@ -144,17 +150,11 @@ public class OrderService {
 
 
         vo2.setStoreNm("이마트 " + vo2.getStoreNm());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = vo2.getOrderDate().format(formatter);
+
 
         return DetailVo.builder()
                 .vo1(vo1)
-                .orderDate(formattedDate)
-                .payment(vo2.getPayment())
-                .pickupTime(vo2.getPickupTime())
-                .orderStatus(vo2.getOrderStatus())
-                .totalOrderPrice(vo2.getTotalOrderPrice())
-                .storeNm(vo2.getStoreNm())
+                .vo2(vo2)
                 .build();
     }
 

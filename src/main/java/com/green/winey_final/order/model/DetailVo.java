@@ -12,10 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class DetailVo {
     private List<OrderDetailVo1> vo1;
-    private String orderDate;
-    private Integer payment;
-    private LocalDateTime pickupTime;
-    private Integer orderStatus;
-    private Integer totalOrderPrice;
-    private String storeNm;
+    private OrderDetailVo2 vo2;
 }
