@@ -16,7 +16,7 @@ public interface RecommendMapper2 {
     Long insUserAroma(UserAroma aroma);
     int insUserinfo(UserinfoDto2 dto);
     int loginUserPk(UserDto2 dto);
-    List<Integer> selUserinfo(SelRecommendDto2 dto);
+    List<Long> selUserinfo(SelRecommendDto2 dto);
     List<Long> selUserCategoryId(UserDto2 dto);
     List<Long> selUserCountryId(UserDto2 dto);
     List<Long> selUserSmallCategoryId(UserDto2 dto);

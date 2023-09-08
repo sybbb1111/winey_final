@@ -42,7 +42,7 @@ public class RecommendController2 {
 
     @GetMapping("/getUserInfo")
     @Operation(summary = "유저와인정보")
-    public List<Integer> getUserInfo() {
+    public List<Long> getUserInfo() {
         return service.selUserinfo();
     }
 

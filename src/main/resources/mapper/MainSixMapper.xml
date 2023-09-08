@@ -122,5 +122,14 @@
         GROUP BY a.product_id
     </select>
 
+    <select id="orderList">
+        SELECT c.product_id
+        FROM t_user a
+        INNER JOIN t_order b
+        ON a.user_id = b.user_id
+        INNER JOIN t_order_detail c
+        ON b.order_id = c.order_id
+        WHERE user_id = {userId};
+    </select>
 
 </mapper>

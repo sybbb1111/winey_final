@@ -17,4 +17,6 @@ public interface MainSixMapper2 {
 
     List<WineRecommendVo2> selWineByday(Long val);
 
+    List<Long> orderList(Long id);
+
 }

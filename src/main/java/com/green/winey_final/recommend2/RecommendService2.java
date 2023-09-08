@@ -101,7 +101,7 @@ public class RecommendService2 {
     }
 
 
-    public List<Integer> selUserinfo() {
+    public List<Long> selUserinfo() {
         SelRecommendDto2 dto = new SelRecommendDto2();
         dto.setUserId(facade.getLoginUserPk());
         return mapper.selUserinfo(dto);

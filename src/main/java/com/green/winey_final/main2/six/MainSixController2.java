@@ -86,7 +86,7 @@ public class MainSixController2 {
     public List<WineRecommendVo2> getRandomWines() {
 
         //로그인한 userId 불러오기
-        Long userId = facade.getLoginUserPk().longValue();
+        Long userId = facade.getLoginUserPk();
 
         LoginUserDto2 dto = new LoginUserDto2();
         dto.setUserId(userId);
@@ -94,17 +94,23 @@ public class MainSixController2 {
         //불러온 userId값 넣어주기
         SelRecommendDto2 selRecommendDto2 = new SelRecommendDto2();
         selRecommendDto2.setUserId(userId);
-        List<Integer> recommandWines = recommendMapper.selUserinfo(selRecommendDto2);
+        List<Long> recommandWines = recommendMapper.selUserinfo(selRecommendDto2);
         List<Long> getProductId = new ArrayList<>();
 
         List<WineRecommendVo2> selectedWines = new ArrayList<>();
-        List<Integer> totalWines = recommandWines;
 
+        List<Long> orderList = MAPPER.orderList(userId);
         //userId 당 해당하는 productId 담기
-        for (Integer wineId : recommandWines) {
-            getProductId.add(wineId.longValue());
-        }
+//        for (Integer wineId : recommandWines) {
+//            if (wineId != orderList.get())
+//            getProductId.add(wineId.longValue());
+//        }
 
+        for (int i = 0; i < recommandWines.size(); i++) {
+                if (recommandWines.get(i) != orderList.get(i)){
+                     getProductId.add(recommandWines.get(i));
+            }
+        }
         //랜덤 6개 출력하기
         List<WineRecommendVo2> allWines = MAPPER.selWineByday(userId);
         int winesToDisplay = 6;
