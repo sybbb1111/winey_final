@@ -118,7 +118,7 @@ public class MainSixController2 {
 
             if (recommandWines.contains(productId) && orderList.contains(productId)) {
                 getProductId.remove(i);
-                i--; // 요소를 제거하면 인덱스를 감소시켜 중복 제거를 위해 다음 요소를 확인합니다.
+                i--;
             }
         }
         //랜덤 6개 출력하기

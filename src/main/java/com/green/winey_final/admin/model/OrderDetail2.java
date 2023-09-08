@@ -2,8 +2,10 @@ package com.green.winey_final.admin.model;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class OrderDetail2 {
     private int quantity;
     private int totalPrice; //총결제금액
