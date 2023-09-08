@@ -217,8 +217,8 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .join(orderDetailEntity)
                 .on(orderEntity.eq(orderDetailEntity.orderEntity))
                 .join(productEntity)
-                .on(orderDetailEntity.productEntity.eq(productEntity))
-                .groupBy(orderEntity.orderId); //그룹바이 적용안됨
+                .on(orderDetailEntity.productEntity.eq(productEntity));
+//                .groupBy(orderEntity.orderId); //그룹바이 적용안됨
 //                .groupBy(orderEntity.orderId); //groupBy하면 totalElements 제대로 안나옴
 
         Page<OrderListVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);

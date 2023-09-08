@@ -146,8 +146,8 @@ public class AdminController {
 
         return SERVICE.getUserList(pageable, searchType, str);
     }
-
-    //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리
+/*
+    //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리 mybatis
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "회원별 상세 주문 내역 myb (피그마: 회원상세내역 페이지)P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
             + "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
@@ -165,7 +165,8 @@ public class AdminController {
         dto.setSort(sort);
         return SERVICE.getUserOrder2(userId, dto);
     }
-
+*/
+    //가입 회원별 상세 주문 내역(회원pk별) +페이징 처리 jpa
     @Operation(summary = "회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)p", description = "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
             + "page -> 0이 1페이지입니다.<br>"
             + "size(row) -> 한 페이지 당 보여줄 갯수<br>"
@@ -184,8 +185,8 @@ public class AdminController {
     public int deleteProductPic(int productId) {
         return SERVICE.deleteProductPic(productId);
     }
-
-    //주문 내역
+/*
+    //주문 내역 mybatis
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "주문 내역 출력 myb(피그마:주문내역관리 페이지)P", description = "<br>"
             +"page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
@@ -204,7 +205,8 @@ public class AdminController {
 
         return SERVICE.getOrder3(dto);
     }
-    //주문 내역
+*/
+    //주문 내역 jpa
     @Operation(summary = "주문 내역 출력(피그마:주문내역관리 페이지)p", description = "<br>"
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) orderid,desc <br> - 주문번호(orderid) / 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br> - 오름차순(asc) / 내림차순(desc)<br>")

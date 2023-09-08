@@ -207,14 +207,6 @@ public class AdminService {
         dto.setAcidity(param.getAcidity()); //t_feature
         dto.setBody(param.getBody()); //t_feature
 
-//        aromaDto.setProductId(param.getProductId()); //t_aroma
-//        aromaDto.setFlower(param.getAroma().getFlower()); //t_aroma
-//        aromaDto.setPlant(param.getAroma().getPlant()); //t_aroma
-//        aromaDto.setFruit(param.getAroma().getFruit()); //t_aroma
-//        aromaDto.setSpicy(param.getAroma().getSpicy()); //t_aroma
-//        aromaDto.setEarth(param.getAroma().getEarth()); //t_aroma
-//        aromaDto.setOak(param.getAroma().getOak()); //t_aroma
-//        aromaDto.setNuts(param.getAroma().getNuts()); //t_aroma
 
         //t_aroma 테이블 update
         //삭제
@@ -255,6 +247,7 @@ public class AdminService {
         //사진 파일 업로드 로직 1
         //임시경로에 사진 저장
         if(pic != null) { //만약에 pic가 있다면
+            deleteProductPic(dto.getProductId()); //사진 수정시 기존 사진 삭제 로직
             File tempDic = new File(FILE_DIR, "/temp");
             if(!tempDic.exists()) { // /temp 경로에 temp폴더가 존재하지 않는다면 temp폴더를 만든다.
                 tempDic.mkdirs();
@@ -437,7 +430,7 @@ public class AdminService {
                 .build();
     }
 
-    //주문 내역
+    //주문 내역 mybaits
     public OrderList getOrder3(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -458,7 +451,7 @@ public class AdminService {
                 .list(list)
                 .build();
     }
-    //주문 내역
+    //주문 내역 jpa
     public PageCustom<OrderListVo> getOrder(Pageable pageable) {
         return adminWorkRep.selOrderAll(pageable);
     }
@@ -644,7 +637,7 @@ public class AdminService {
         MAPPER.delWinePairing(dto);
 
         //product 삭제
-        MAPPER.delProduct(productId);
+//        MAPPER.delProduct(productId);
 
         return 1;
     }
