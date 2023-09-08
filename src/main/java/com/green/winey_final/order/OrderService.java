@@ -18,8 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+
+
 
 
 @Slf4j
@@ -139,11 +142,19 @@ public class OrderService {
                 .where(order.orderId.eq(orderId).and(order.userEntity.userId.eq(userPk)))
                 .fetchOne();
 
+
         vo2.setStoreNm("이마트 " + vo2.getStoreNm());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = vo2.getOrderDate().format(formatter);
 
         return DetailVo.builder()
                 .vo1(vo1)
-                .vo2(vo2)
+                .orderDate(formattedDate)
+                .payment(vo2.getPayment())
+                .pickupTime(vo2.getPickupTime())
+                .orderStatus(vo2.getOrderStatus())
+                .totalOrderPrice(vo2.getTotalOrderPrice())
+                .storeNm(vo2.getStoreNm())
                 .build();
     }
 
