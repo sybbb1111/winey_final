@@ -233,7 +233,7 @@ public class AdminController {
         return SERVICE.getOrderDetail(orderId, pageable);
     }
 
-
+/*
     //환불된 상품과 환불 사유 출력 mybatis
     @Operation(summary = "환불 상품 내역과 환불 사유 출력", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"+
             "userId는 입력 안하면 전체 환불 내역과 사유 출력, 입력하면 userId의 환불내역과 사유 출력")
@@ -247,7 +247,7 @@ public class AdminController {
 
         return SERVICE.getOrderRefund(dto, userId);
     }
-
+*/
     //환불된 상품과 환불 사유 출력 jpa
     @Operation(summary = "환불 상품 내역과 환불 사유 출력p", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
             + "page -> 0이 1페이지입니다.<br>"
@@ -345,13 +345,21 @@ public class AdminController {
         return SERVICE.updOrderStatus(dto);
     }
 
-    //할인 상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도)
+    //할인 상태(saleYn) 업데이트 mybatis (관리자가 수동으로 On/Off하는 용도)
     @Operation(summary = "상품 할인상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도)", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
     @PutMapping("/sale")
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return SERVICE.putProductSaleYn(dto);
     }
-/*
+
+    //할인 상태(saleYn) 업데이트 jpa (관리자가 수동으로 On/Off하는 용도)
+    @Operation(summary = "상품 할인상태(saleYn) 업데이트p (관리자가 수동으로 On/Off하는 용도)", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
+    @PutMapping("/sale2")
+    public int putProductSaleYn2(ProductSaleYnDto dto) {
+        return SERVICE.putProductSaleYn(dto);
+    }
+
+    /*
     //회원 삭제 mybatis
     @Operation(summary = "회원 탈퇴상태(delYn) 업데이트 myb", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
     @PutMapping("/withdrawal")

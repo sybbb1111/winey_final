@@ -14,7 +14,7 @@ public class PageCustom<T> implements Serializable {
     private List<T> content;
 
     private PageableCustom pageableCustom;
-
+//쿼리
     public PageCustom(List<T> content, Pageable pageable, long total) {
         this.content = content;
         this.pageableCustom = new PageableCustom(new PageImpl(content, pageable, total));

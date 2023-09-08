@@ -2,6 +2,7 @@ package com.green.winey_final.admin;
 
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.common.entity.SaleEntity;
 import com.green.winey_final.common.entity.StoreEntity;
 import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.common.utils.MyFileUtils;
@@ -33,18 +34,21 @@ public class AdminService {
     private final UserRepository userRep;
     private final StoreRepository storeRep;
     private final RegionNmRepository regionNmRep;
+    private final SaleRepository saleRep;
 
     private final EntityManager em;
+
 
     private final AdminWorkRepositoryImpl adminWorkRep;
 
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, SaleRepository saleRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
         this.userRep = userRep;
         this.storeRep = storeRep;
         this.regionNmRep = regionNmRep;
+        this.saleRep = saleRep;
         this.em = em;
         this.adminWorkRep = adminWorkRep;
     }
@@ -608,10 +612,20 @@ public class AdminService {
         return 0L; //매장 정보 수정 실패했다는 의미
     }
 
-    //할인 상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도)
+    //할인 상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도) mybatis
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return MAPPER.updSaleYn(dto); // saleYn update 성공시 1, 실패시 0 리턴
     }
+
+    //할인 상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도) jpa
+    public int putProductSaleYn2(ProductSaleYnDto dto) {
+        SaleEntity saleEntity = saleRep.findById((long) dto.getProductId()).get();
+        saleEntity.setSaleYn(1);
+        saleRep.save(saleEntity);
+
+        return 1; // saleYn update 성공시 1, 실패시 0 리턴
+    }
+
 /*
     //회원 삭제
     public int putUserDelYn(UserDelYnUpdDto dto){

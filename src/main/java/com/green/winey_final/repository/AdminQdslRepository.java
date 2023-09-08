@@ -2,6 +2,7 @@ package com.green.winey_final.repository;
 
 import com.green.winey_final.admin.model.*;
 import com.green.winey_final.repository.support.PageCustom;
+import com.querydsl.core.QueryResults;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

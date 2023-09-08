@@ -195,6 +195,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+//                .fetchResults();
 
         //데이트포맷 로직
         for(int i=0;i<list.size();i++) {
