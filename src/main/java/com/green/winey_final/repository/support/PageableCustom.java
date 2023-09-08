@@ -2,9 +2,11 @@ package com.green.winey_final.repository.support;
 
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.*;
 
 @Getter
+@Setter
 public class PageableCustom {
 
     //    private boolean first;

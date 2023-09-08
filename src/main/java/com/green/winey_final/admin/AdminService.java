@@ -6,6 +6,7 @@ import com.green.winey_final.common.entity.*;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
 import com.green.winey_final.repository.support.PageCustom;
+import com.querydsl.core.QueryResults;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -714,7 +715,12 @@ public class AdminService {
     }
     //주문 내역 jpa
     public PageCustom<OrderListVo> getOrder(Pageable pageable) {
-        return adminWorkRep.selOrderAll(pageable);
+        PageCustom<OrderListVo> list = adminWorkRep.selOrderAll(pageable);
+        QueryResults<OrderListVo> list2 = adminWorkRep.selOrderAll2(pageable);
+        list.getPageableCustom().setTotalElements(list2.getTotal());
+
+        return list;
+//        return adminWorkRep.selOrderAll(pageable); //prev
     }
 
     //상세 주문 내역 리스트 by orderId

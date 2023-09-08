@@ -14,8 +14,9 @@ public interface AdminQdslRepository {
     //가입 회원별 상세 주문 내역
     PageCustom<UserOrderDetailVo> selUserOrderByUserId(Long userId, Pageable pageable);
     UserInfo selUserInfoByUserId(Long userId, Pageable pageable);
-
+    //주문 내역
     PageCustom<OrderListVo> selOrderAll(Pageable pageable);
+    QueryResults<OrderListVo> selOrderAll2(Pageable pageable);
     //매장 리스트
     PageCustom<StoreVo> selStoreAll(Pageable pageable, String searchType, String str);
 

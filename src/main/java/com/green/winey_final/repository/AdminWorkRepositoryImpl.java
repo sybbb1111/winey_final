@@ -3,6 +3,7 @@ package com.green.winey_final.repository;
 import com.green.winey_final.admin.model.*;
 import com.green.winey_final.repository.support.PageCustom;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -226,6 +227,33 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         Page<OrderListVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
 
         return new PageCustom<OrderListVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
+    @Override
+    public QueryResults<OrderListVo> selOrderAll2(Pageable pageable) {
+        QueryResults<OrderListVo> list = queryFactory
+                .select(new QOrderListVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), userEntity.email, productEntity.nmKor,
+                        orderDetailEntity.quantity.sum().intValue(),
+                        orderDetailEntity.salePrice.sum().intValue(),
+                        orderEntity.totalOrderPrice.intValue(),
+                        orderEntity.payment.intValue(), storeEntity.nm,
+                        orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))
+                .from(orderEntity)
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.eq(userEntity))
+                .join(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .join(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .join(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity))
+                .groupBy(orderEntity.orderId)
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        return list;
     }
 
     @Override
