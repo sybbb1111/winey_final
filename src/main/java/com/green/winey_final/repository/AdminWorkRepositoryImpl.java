@@ -20,13 +20,19 @@ import org.springframework.stereotype.Repository;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.green.winey_final.common.entity.QAromaEntity.aromaEntity;
+import static com.green.winey_final.common.entity.QCategoryEntity.categoryEntity;
+import static com.green.winey_final.common.entity.QCountryEntity.countryEntity;
+import static com.green.winey_final.common.entity.QFeatureEntity.featureEntity;
 import static com.green.winey_final.common.entity.QOrderDetailEntity.orderDetailEntity;
 import static com.green.winey_final.common.entity.QOrderEntity.orderEntity;
 import static com.green.winey_final.common.entity.QProductEntity.productEntity;
 import static com.green.winey_final.common.entity.QRegionNmEntity.regionNmEntity;
 import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
+import static com.green.winey_final.common.entity.QSmallCategoryEntity.smallCategoryEntity;
 import static com.green.winey_final.common.entity.QStoreEntity.storeEntity;
 import static com.green.winey_final.common.entity.QUserEntity.userEntity;
+import static com.green.winey_final.common.entity.QWinePairingEntity.winePairingEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -93,7 +99,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 //                ConstantImpl.create("%y-%m-%d"));
 
         List<UserOrderDetailVo> list = queryFactory
-                .select(new QUserOrderDetailVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), productEntity.nmKor, orderEntity.totalOrderPrice.intValue(), storeEntity.nm, orderEntity.orderStatus.intValue()))
+                .select(new QUserOrderDetailVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), productEntity.nmKor, orderEntity.totalOrderPrice.intValue(), storeEntity.nm, orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))
                 .from(userEntity)
                 .innerJoin(orderEntity)
                 .on(userEntity.eq(orderEntity.userEntity))
@@ -110,6 +116,13 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        for(int i=0;i<list.size();i++) {
+            if(list.get(i).getCount()>1) {
+                list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
+            }
+        }
+
+
         JPAQuery<Long> countQuery = queryFactory
 //                .select(userEntity.userId.countDistinct())// count()와 countDistinct() 차이 알기
                 .select(userEntity.userId.count())// count()와 countDistinct() 차이 알기
@@ -124,6 +137,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .on(orderEntity.storeEntity.storeId.eq(storeEntity.storeId))
 //                .where(userEntity.userId.eq(userId)) //이 부분 주석 풀면 안됨... 이유 찾아야함
                 .groupBy(orderEntity.orderId);
+
 
         Page<UserOrderDetailVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
 
@@ -144,6 +158,164 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 
         return user;
     }
+
+    @Override
+    public PageCustom<OrderListVo> selOrderAll(Pageable pageable) {
+        List<OrderListVo> list = queryFactory
+                .select(new QOrderListVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), userEntity.email, productEntity.nmKor,
+                        orderDetailEntity.salePrice.sum().intValue(),
+                        orderDetailEntity.quantity.sum().intValue(),
+                        orderEntity.totalOrderPrice.intValue(),
+                        orderEntity.payment.intValue(), storeEntity.nm,
+                        orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))
+                .from(orderEntity)
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.eq(userEntity))
+                .join(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .join(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .join(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity))
+                .groupBy(orderEntity.orderId)
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        for(int i=0;i<list.size();i++) {
+            if(list.get(i).getCount()>1) {
+                list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
+            }
+        }
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(orderEntity.orderId.count())
+//                .select(orderEntity.orderId.countDistinct())
+                .from(orderEntity)
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.eq(userEntity))
+                .join(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .join(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .join(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity));
+//                .groupBy(orderEntity.orderId); //groupBy하면 totalElements 제대로 안나옴
+
+        Page<OrderListVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<OrderListVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
+    @Override
+    public PageCustom<StoreVo> selStoreAll(Pageable pageable, String searchType, String str) {
+        List<StoreVo> list = queryFactory.select(new QStoreVo(storeEntity.storeId, regionNmEntity.regionNmId, storeEntity.nm, storeEntity.tel, storeEntity.address))
+                .from(storeEntity)
+                .where(eqStoreNm(searchType, str),
+                        eqStoreAddr(searchType, str),
+                        eqStoreTel(searchType, str))
+                .orderBy(getAllOrderSpecifiers(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(storeEntity.count())
+                .from(storeEntity);
+
+        Page<StoreVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<StoreVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
+    //상세 주문 내역1
+    @Override
+    public List<OrderDetail1> selOrderDetailByOrderId(int orderId, Pageable pageable) {
+        List<OrderDetail1> list = queryFactory
+                .select(new QOrderDetail1(orderEntity.orderId, orderEntity.orderDate.stringValue(), userEntity.email, productEntity.nmKor, orderDetailEntity.salePrice, orderDetailEntity.quantity))
+                .from(orderEntity)
+                .innerJoin(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.userId.eq(userEntity.userId))
+                .innerJoin(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity))
+                .where(orderEntity.orderId.eq((long) orderId))
+                .fetch();
+
+        return list;
+/* 추후 페이징 필요하면 사용
+        JPAQuery<Long> countQuery = queryFactory
+                .select(orderEntity.orderId.count())
+                .from(orderEntity)
+                .innerJoin(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .innerJoin(userEntity)
+                .on(orderEntity.userEntity.userId.eq(userEntity.userId))
+                .innerJoin(productEntity)
+                .on(orderDetailEntity.productEntity.eq(productEntity))
+                .where(orderEntity.orderId.eq((long) orderId));
+
+        Page<OrderDetail1> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<OrderDetail1>(map.getContent(), map.getPageable(), map.getTotalElements());
+ */
+    }
+
+    //상세 주문 내역2
+    @Override
+    public OrderDetail2 selOrderDetailByOrderId2(int orderId, Pageable pageable) {
+        OrderDetail2 list = queryFactory
+                .select(new QOrderDetail2(orderDetailEntity.quantity.sum(), orderDetailEntity.salePrice.sum(), orderEntity.totalOrderPrice, orderEntity.payment.stringValue(), storeEntity.nm, orderEntity.pickupTime.stringValue(), orderEntity.orderStatus))
+                .from(orderEntity)
+                .innerJoin(orderDetailEntity)
+                .on(orderEntity.eq(orderDetailEntity.orderEntity))
+                .innerJoin(storeEntity)
+                .on(orderEntity.storeEntity.eq(storeEntity))
+                .where(orderEntity.orderId.eq((long) orderId))
+                .fetchOne();
+
+        return list;
+    }
+
+    //상품수정용 상품디테일1
+    @Override
+    public AdminProductDetailVo selPutProductInfo1(int productId) {
+        AdminProductDetailVo product = queryFactory
+                .select(new QAdminProductDetailVo(productEntity.productId.intValue(), productEntity.nmKor, productEntity.nmEng, productEntity.price, productEntity.promotion, productEntity.beginner, productEntity.alcohol, productEntity.quantity, productEntity.pic,
+                        countryEntity.countryId.intValue(), featureEntity.sweety.intValue(), featureEntity.acidity.intValue(), featureEntity.body.intValue(), categoryEntity.categoryId.intValue(), saleEntity.sale, saleEntity.salePrice, saleEntity.startSale, saleEntity.endSale, saleEntity.saleYn))
+                .from(productEntity)
+                .innerJoin(saleEntity)
+                .on(productEntity.eq(saleEntity.productEntity))
+                .innerJoin(featureEntity)
+                .on(productEntity.featureEntity.eq(featureEntity))
+                .where(productEntity.productId.eq((long) productId))
+                .fetchOne();
+
+        return product;
+    }
+    //상품수정용 상품디테일2 아로마
+    @Override
+    public List<Long> selPutProductInfo2(int productId) {
+        List<Long> aroma = queryFactory
+                .select(aromaEntity.aromaCategoryEntity.aromaCategoryId)
+                .from(aromaEntity)
+                .where(aromaEntity.productEntity.productId.eq((long) productId))
+                .fetch();
+        return aroma;
+    }
+    //상품수정용 상품디테일3 smallCategoryId 음식
+    @Override
+    public List<Long> selPutProductInfo3(int productId) {
+        List<Long> smallCategoryId = queryFactory
+                .select(smallCategoryEntity.smallCategoryId)
+                .from(winePairingEntity)
+                .where(winePairingEntity.productEntity.productId.eq((long) productId))
+                .fetch();
+        return smallCategoryId;
+    }
+
 
 
     //정렬
@@ -173,8 +345,22 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                     //회원별 상세 주문 내역 정렬
                     case "orderid": orders.add(new OrderSpecifier(direction, orderEntity.orderId)); break;
                     case "orderdate": orders.add(new OrderSpecifier(direction, orderEntity.orderDate)); break;
-                    case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.regionNmEntity)); break;
+//                    case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.regionNmEntity)); break;
                     case "orderstatus": orders.add(new OrderSpecifier(direction, orderEntity.orderStatus)); break;
+
+                    //주문 내역 정렬
+//                    case "orderid": orders.add(new OrderSpecifier(direction, orderEntity.orderId)); break;
+//                    case "orderdate": orders.add(new OrderSpecifier(direction, orderEntity.orderDate)); break;
+//                    case "storenm": orders.add(new OrderSpecifier(direction, regionNmEntity.regionNm)); break;
+//                    case "orderstatus": orders.add(new OrderSpecifier(direction, orderEntity.orderStatus)); break;
+                    case "orderdatemonth": orders.add(new OrderSpecifier(direction, orderEntity.orderDate)); break;
+
+
+                    //매장 정렬
+                    case "storeid": orders.add(new OrderSpecifier(direction, storeEntity.storeId)); break; //주문내역과 공동
+                    case "storenm": orders.add(new OrderSpecifier(direction, storeEntity.nm)); break; //주문내역과 공동
+                    case "address": orders.add(new OrderSpecifier(direction, storeEntity.address)); break;
+                    case "storetel": orders.add(new OrderSpecifier(direction, storeEntity.tel)); break;
 
 
                 }
@@ -207,6 +393,35 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         }
         return null;
 
+    }
+
+    //
+
+    public BooleanExpression eqStoreNm(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("storename")) {
+            return storeEntity.nm.containsIgnoreCase(str);
+        }
+        return null;
+    }
+
+    public BooleanExpression eqStoreAddr(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("storeaddress")) {
+            return storeEntity.address.containsIgnoreCase(str);
+        }
+        return null;
+    }
+
+    public BooleanExpression eqStoreTel(String searchType, String str) {
+        if (searchType == null) {
+            return null;
+        } else if (searchType.equalsIgnoreCase("storetel")) {
+            return storeEntity.tel.containsIgnoreCase(str);
+        }
+        return null;
     }
 
 

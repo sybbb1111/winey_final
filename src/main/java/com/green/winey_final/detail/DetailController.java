@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "와인상세페이지 3차JPA")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/detail2")
+@RequestMapping("/api/detail")
 public class DetailController {
     private final DetailService service;
 
@@ -33,14 +33,11 @@ public class DetailController {
     }
 
 
-    @GetMapping("/korNm/{productId}")
+    @GetMapping("/kornm/{productId}")
     @Operation(summary = "와인 한글이름")
     public SelWineKorNm getWineKorNm(@PathVariable Long productId) {
         return service.selKorNm(productId);
     }
-
-
-
 
 
 }

@@ -35,8 +35,6 @@ public class DetailService {
     private final QSaleEntity sale = QSaleEntity.saleEntity;
 
     public WineVo4 selWineDetail(Long productId) {
-
-
         WineDetailVo vo = jpaQueryFactory.select(Projections.constructor(WineDetailVo.class,
                         product.productId, product.nmKor, product.nmEng, product.price, product.pic,
                         product.promotion, product.beginner, product.alcohol, product.quantity, category.nm.as("categoryNm"),
@@ -47,8 +45,6 @@ public class DetailService {
                 .leftJoin(feature).on(product.featureEntity.featureId.eq(feature.featureId))
                 .where(product.productId.eq(productId))
                 .fetchOne();
-
-
 
         List<String> selPairing = jpaQueryFactory.select(Projections.constructor(String.class,smallCategory.sKind.as("selReview")))
                 .from(product)
@@ -95,7 +91,6 @@ public class DetailService {
                 .from(product)
                 .leftJoin(sale).on(sale.productEntity.productId.eq(product.productId))
                 .where(product.productId.eq(productId).and(sale.saleYn.eq(1))).fetchOne();
-
 
         if (selSale != null) {
             selSale.setProductId(productId);

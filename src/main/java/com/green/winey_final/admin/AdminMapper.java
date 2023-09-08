@@ -34,9 +34,9 @@ public interface AdminMapper {
 
     List<UserOrderDetailVo> selUserOrder(UserOrderDetailDto dto);
 
-    List<OrderListVo> selOrder(SelListDto dto); //주문 내역
+    List<OrderListVo2> selOrder(SelListDto dto); //주문 내역
     List<OrderDetail1> selOrderDetail1(int orderId);
-    List<OrderDetail2> selOrderDetail2(int orderId);
+    OrderDetail2 selOrderDetail2(int orderId);
     List<OrderDetailVo> selOrderDetail(int orderId); //상세 주문 내역 리스트 by orderId
     List<OrderRefundVo> selOrderRefund(SelListDto dto); //전체 환불된 상품과 환불 사유 출력
     List<OrderRefundVo> selOrderRefundById(SelListDto dto, Long userId); //환불된 상품과 환불 사유 출력 by userId
@@ -79,7 +79,7 @@ public interface AdminMapper {
 //    List<ProductVo> searchProduct(AdminSerchDto dto);
 
     //
-    AdminProductDetailVo selPutProductInfo1(int userId);
+    AdminProductDetailVo2 selPutProductInfo1(int userId);
     List<Integer> selPutProductInfo2(int userId);
     List<Integer> selPutProductInfo3(int userId);
 

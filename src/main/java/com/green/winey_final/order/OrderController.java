@@ -12,11 +12,10 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/orderList2")
+@RequestMapping("/api/orderlist")
 @Tag(name = "주문내역페이지 3차JPA")
 public class OrderController {
     private final OrderService service;
-
 
     @GetMapping("/user")
     @Operation(summary = "유저별 주문내역 리스트", description = "")
@@ -24,16 +23,19 @@ public class OrderController {
         return service.selOrder();
     }
 
+
     @PutMapping("/cancel")
     private int cancelOrder(@RequestParam Long orderId){
         return service.cancelOrder(orderId);
     }
 
-    @PutMapping("/pickupFinish")
+
+    @PutMapping("/pickup-finish")
     @Operation(summary = "픽업 완료", description = "주문상태를 픽업완료로 업데이트")
     public int pickupFinishOrder(@RequestParam Long orderId){
         return service.pickupFinishOrder(orderId);
     }
+
 
     @GetMapping("/detail")
     @Operation(summary = "주문 상세 내역", description = "원래 주문내역이 있으면 주문상세내역도 있어야하는데, 더미데이터를 임의로 " +
@@ -41,4 +43,6 @@ public class OrderController {
     public DetailVo selOrderDetail(@RequestParam Long orderId) {
         return service.selOrderDetail(orderId);
     }
+
+
 }

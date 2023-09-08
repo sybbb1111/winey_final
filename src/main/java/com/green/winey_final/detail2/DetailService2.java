@@ -17,7 +17,6 @@ public class DetailService2 {
     private final SelReview2 selReview;
 
     public WineVo3 selWineDetail(Long productId) {
-
         WineDetailVo2 vo = MAPPER.selWineDetail(productId);
         switch (vo.getTemp()) {
             case 0:
@@ -30,10 +29,7 @@ public class DetailService2 {
                 vo.setTemp(18);
         }
 
-
-
         List<String> selPairing = MAPPER.selPairing(productId);
-
 
         List<String> selCount = new ArrayList();
 
@@ -45,9 +41,7 @@ public class DetailService2 {
             selCount.add(MAPPER.selCount(selCountVo2));
         }
 
-
         List<String> selAroma = MAPPER.selAroma(productId);
-
 
         int level = 0;
         int sum = vo.getSweety() + vo.getAcidity() + vo.getBody();
@@ -59,16 +53,6 @@ public class DetailService2 {
         } else if (sum >= 11 && sum < 16) {
             level = 3;
         }
-
-//        return -1;
-//        if(vo.getSweety() <= 2 && vo.getAcidity() <= 2 && vo.getBody() <= 2 ){
-//            level = 1;
-//        } else if(vo.getSweety() == 5 && vo.getAcidity() == 5 && vo.getBody() == 5 ){
-//            level = 3;
-//        } else {
-//            level = 2;
-//        }
-
 
         SelSale2 selSale = MAPPER.selSale(productId);
         if(selSale !=null){
@@ -85,8 +69,6 @@ public class DetailService2 {
 
         }
 
-
-
         return WineVo3.builder()
                 .wineDetailVo(vo)
                 .selPairing(selPairing)
@@ -102,10 +84,6 @@ public class DetailService2 {
     public SelWineKorNm2 selKorNm(Long productId) {
         return MAPPER.selKorNm(productId);
     }
-
-
-
-
 
 
 }

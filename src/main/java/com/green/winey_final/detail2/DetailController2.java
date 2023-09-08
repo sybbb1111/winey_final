@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "와인상세페이지2차")
 @RestController
-@RequestMapping("/api/detail")
+@RequestMapping("/api/detail2")
 @RequiredArgsConstructor
 public class DetailController2 {
     private final DetailService2 SERVICE;
@@ -32,6 +32,7 @@ public class DetailController2 {
         vo.setProductId(productId);
         return SERVICE.selWineDetail(productId);
     }
+
 
     @GetMapping("/korNm/{productId}")
     @Operation(summary = "와인 한글이름")

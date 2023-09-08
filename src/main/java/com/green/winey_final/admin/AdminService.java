@@ -5,14 +5,11 @@ import com.green.winey_final.admin.model.*;
 import com.green.winey_final.common.utils.MyFileUtils;
 import com.green.winey_final.repository.*;
 import com.green.winey_final.repository.support.PageCustom;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.green.winey_final.common.entity.QProductEntity.productEntity;
-import static com.green.winey_final.common.entity.QSaleEntity.saleEntity;
 
 @Slf4j
 @Service
@@ -392,7 +386,7 @@ public class AdminService {
     }
 
     //가입회원 상세 주문 내역(회원pk별) +페이징 처리
-    public UserOrderDetailList2 getUserOrder(Long userId, SelListDto dto) {
+    public UserOrderDetailList2 getUserOrder2(Long userId, SelListDto dto) {
         UserOrderDetailDto detailDto = new UserOrderDetailDto();
         detailDto.setUserId(userId);
         detailDto.setRow(dto.getRow());
@@ -441,9 +435,11 @@ public class AdminService {
                 .build();
     }
 
-    public UserOrderDetailList getUserOrder2(Long userId, Pageable pageable) {
+    public UserOrderDetailList getUserOrder(Long userId, Pageable pageable) {
         PageCustom<UserOrderDetailVo> list = adminWorkRep.selUserOrderByUserId(userId, pageable);
         UserInfo user = adminWorkRep.selUserInfoByUserId(userId, pageable);
+
+
 
         return UserOrderDetailList.builder()
                 .userOrderList(list)
@@ -459,7 +455,7 @@ public class AdminService {
         int maxOrder = MAPPER.orderCount();
 
         //상품명에 외 1 넣는 로직
-        List<OrderListVo> list = MAPPER.selOrder(dto);
+        List<OrderListVo2> list = MAPPER.selOrder(dto);
 
         for(int i=0;i<list.size();i++) {
             if(list.get(i).getCount()>1) {
@@ -472,18 +468,31 @@ public class AdminService {
                 .list(list)
                 .build();
     }
+    //주문 내역
+    public PageCustom<OrderListVo> getOrder2(Pageable pageable) {
+        return adminWorkRep.selOrderAll(pageable);
+    }
 
     //상세 주문 내역 리스트 by orderId
-    public OrderDetail3 getOrderDetail(int orderId) {
+    public OrderDetail3 getOrderDetail3(int orderId) {
         List<OrderDetail1> list1 = MAPPER.selOrderDetail1(orderId);
 
         List<OrderDetailVo> list = MAPPER.selOrderDetail(orderId);
 
-        List<OrderDetail2> list2 = MAPPER.selOrderDetail2(orderId);
+        OrderDetail2 list2 = MAPPER.selOrderDetail2(orderId);
 
         return OrderDetail3.builder()
                 .list1(list1)
                 .list2(list2)
+                .build();
+    }
+
+    //상세 주문 내역 리스트 by orderId
+    public OrderDetail3 getOrderDetail(int orderId, Pageable pageable) {
+
+        return OrderDetail3.builder()
+                .list1(adminWorkRep.selOrderDetailByOrderId(orderId, pageable))
+                .list2(adminWorkRep.selOrderDetailByOrderId2(orderId, pageable))
                 .build();
     }
 
@@ -515,7 +524,7 @@ public class AdminService {
         }
         return 0L; //전화번호 유효성 검사 통과 실패
     }
-    public StoreList getStore(SelListDto dto) {
+    public StoreList getStore2(SelListDto dto) {
         int startIdx = (dto.getPage()-1) * dto.getRow();
         dto.setStartIdx(startIdx);
 
@@ -528,6 +537,11 @@ public class AdminService {
                 .list(MAPPER.selStore(dto))
                 .build();
     }
+    //매장 리스트
+    public PageCustom<StoreVo> getStore(Pageable pageable, String searchType, String str) {
+        return adminWorkRep.selStoreAll(pageable, searchType, str);
+    }
+
     public Long updStore(StoreInsParam param, Long storeId) {
         StoreInsDto dto = new StoreInsDto();
         dto.setStoreId(storeId);
@@ -606,8 +620,8 @@ public class AdminService {
 //        return MAPPER.searchProduct(dto);
 //    }
 
-    public AdminProductDetailVo getProductDetail(int productId) {
-        AdminProductDetailVo dto = MAPPER.selPutProductInfo1(productId);
+    public AdminProductDetailVo2 getProductDetail1(int productId) {
+        AdminProductDetailVo2 dto = MAPPER.selPutProductInfo1(productId);
         List<Integer> aroma = MAPPER.selPutProductInfo2(productId);
         List<Integer> smallCategoryId = MAPPER.selPutProductInfo3(productId);
         dto.setAroma(aroma);
@@ -615,6 +629,14 @@ public class AdminService {
         return dto;
     }
 
+    public AdminProductDetailVo3 getProductDetail(int productId) {
+
+        return AdminProductDetailVo3.builder()
+                .product(adminWorkRep.selPutProductInfo1(productId))
+                .aroma(adminWorkRep.selPutProductInfo2(productId))
+                .smallCategoryId(adminWorkRep.selPutProductInfo3(productId))
+                .build();
+    }
 
 
 }

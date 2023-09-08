@@ -14,8 +14,4 @@ public interface DetailMapper2 {
     List<String> selAroma(Long productId);
     SelWineKorNm2 selKorNm(Long productId);
 
-
-
-
-
 }

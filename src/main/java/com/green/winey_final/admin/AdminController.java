@@ -148,8 +148,8 @@ public class AdminController {
             + "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
             + "type -> 기본값(0) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
             + "sort -> 기본값(0) / 오름차순(asc) / 내림차순(desc)")
-    @GetMapping("/{userId}/order")
-    public UserOrderDetailList2 getUserOrder(@PathVariable Long userId, @RequestParam(defaultValue = "1")int page,
+    @GetMapping("/{userId}/order2")
+    public UserOrderDetailList2 getUserOrder2(@PathVariable Long userId, @RequestParam(defaultValue = "1")int page,
                                             @RequestParam(defaultValue = "15")int row,
                                             @RequestParam(defaultValue = "0") String type,
                                             @RequestParam(defaultValue = "0") String sort) {
@@ -158,7 +158,7 @@ public class AdminController {
         dto.setRow(row);
         dto.setType(type);
         dto.setSort(sort);
-        return SERVICE.getUserOrder(userId, dto);
+        return SERVICE.getUserOrder2(userId, dto);
     }
 
     @Operation(summary = "JPA회원별 상세 주문 내역 (피그마: 회원상세내역 페이지)P", description = "구매합산금액(sumOrderPrice) / 구매횟수(orderCount) 추가<br>"
@@ -166,11 +166,10 @@ public class AdminController {
             + "size(row) -> 한 페이지 당 보여줄 갯수<br>"
             + "sort -> 입력 예시) orderDate,asc<br> - 주문번호(orderId) / 주문날짜(orderDate) / 픽업매장(storeNm) / 주문상태(orderStatus)<br>"
             + "- 오름차순(asc) / 내림차순(desc)")
-    @GetMapping("/{userId}/order2")
-    public UserOrderDetailList getUserOrder2(@PathVariable Long userId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+    @GetMapping("/{userId}/order")
+    public UserOrderDetailList getUserOrder(@PathVariable Long userId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
     Pageable pageable) {
-
-        return SERVICE.getUserOrder2(userId, pageable);
+        return SERVICE.getUserOrder(userId, pageable);
     }
 
     //상품 사진 삭제
@@ -199,12 +198,32 @@ public class AdminController {
 
         return SERVICE.getOrder(dto);
     }
+    //주문 내역
+    @Operation(summary = "JPA주문 내역 출력(피그마:주문내역관리 페이지)P", description = "<br>"
+            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) orderid,desc <br> - 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br> - 오름차순(asc) / 내림차순(desc)<br>")
+    @GetMapping("/order2")
+    public PageCustom<OrderListVo> getOrder2(@ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                   Pageable pageable) {
+        return SERVICE.getOrder2(pageable);
+    }
+
+
     //상세 주문 내역 리스트 by orderId
     @Operation(summary = "상세 주문 내역 출력 by orderId(피그마:주문상세리스트)")
-    @GetMapping("/order/{orderId}")
-    public OrderDetail3 getOrderDetail(@PathVariable int orderId) {
-        return SERVICE.getOrderDetail(orderId);
+    @GetMapping("/order3/{orderId}")
+    public OrderDetail3 getOrderDetail3(@PathVariable int orderId) {
+        return SERVICE.getOrderDetail3(orderId);
     }
+
+    //상세 주문 내역 리스트 by orderId
+    @Operation(summary = "JPA상세 주문 내역 출력 by orderId(피그마:주문상세리스트)")
+    @GetMapping("/order/{orderId}")
+    public OrderDetail3 getOrderDetail(@PathVariable int orderId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                        Pageable pageable) {
+        return SERVICE.getOrderDetail(orderId, pageable);
+    }
+
 
     //환불된 상품과 환불 사유 출력
     @Operation(summary = "환불 상품 내역과 환불 사유 출력", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"+
@@ -230,15 +249,29 @@ public class AdminController {
     }
     //매장 리스트 출력
     @Operation(summary = "매장 리스트 출력P", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.")
-    @GetMapping("/store")
-    public StoreList getStore(@RequestParam(defaultValue = "1")int page,
+    @GetMapping("/store2")
+    public StoreList getStore2(@RequestParam(defaultValue = "1")int page,
                               @RequestParam(defaultValue = "15")int row) {
         SelListDto dto = new SelListDto();
         dto.setPage(page);
         dto.setRow(row);
 
-        return SERVICE.getStore(dto);
+        return SERVICE.getStore2(dto);
     }
+    //매장 리스트 출력
+    @Operation(summary = "JPA매장 리스트 출력P", description = ""
+            + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) storeid,asc <br> - 매장번호(storeid) / 매장이름(storenm) / 주소(address) / 전화번호(tel) <br> - 오름차순(asc) / 내림차순(desc)<br>"
+            + "searchType(검색타입) -> storename(매장명) / storeaddress(매장주소) / storetel(매장전화번호) <br>"
+            + "str ->  검색어")
+    @GetMapping("/store")
+    public PageCustom<StoreVo> getStore(@ParameterObject @PageableDefault(sort="storeid", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                         Pageable pageable,
+                                         @RequestParam(required = false)String searchType,
+                                         @RequestParam(required = false)String str) {
+        return SERVICE.getStore(pageable, searchType, str);
+    }
+
     //매장 정보 수정
     @Operation(summary = "매장 정보 수정", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
     @PutMapping("/store/{storeId}")
@@ -311,7 +344,14 @@ public class AdminController {
     //상품 디테일 관리자용
     @Operation(summary = "등록 상품 디테일(상품 수정용)")
     @GetMapping("/product/detail")
-    public AdminProductDetailVo getProductDetail(@RequestParam int productId) {
+    public AdminProductDetailVo2 getProductDetail1(@RequestParam int productId) {
+        return SERVICE.getProductDetail1(productId);
+    }
+
+    //상품 디테일 관리자용
+    @Operation(summary = "JPA등록 상품 디테일(상품 수정용)")
+    @GetMapping("/product/detail2")
+    public AdminProductDetailVo3 getProductDetail(@RequestParam int productId) {
         return SERVICE.getProductDetail(productId);
     }
 }
