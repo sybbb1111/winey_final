@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Tag(name = "와인 리스트 6개")
 @RestController
@@ -96,33 +97,33 @@ public class MainSixController2 {
         selRecommendDto2.setUserId(userId);
 
         List<Long> recommandWines = recommendMapper.selUserinfo(selRecommendDto2);
-        List<Long> orderList = MAPPER.orderList(userId);
 
         List<Long> getProductId = new ArrayList<>();
         List<Long> getProductOrderId = new ArrayList<>();
 
         List<WineRecommendVo2> selectedWines = new ArrayList<>();
+        List<Long> orderList = MAPPER.orderList(userId);
 
         // userId 당 해당하는 productId 담기
-        for (Long wineId : recommandWines) {
+        /*for (Long wineId : recommandWines) {
             getProductId.add(wineId);
         }
 
         for (Long orderId : orderList) {
             getProductOrderId.add(orderId);
-        }
+        }*/
 
 
-
+        getProductId.stream()
+                .filter(x -> !getProductOrderId.contains(x))
+                .collect(Collectors.toList());
 
 
         try {
             for (int i = 0; i < getProductId.size() - 1; i++) {
-                if (getProductId.get(i) == getProductOrderId.get(i)) {
-                    getProductId.remove(i);
-                }
+                getProductId.remove(getProductId.get(i) == getProductOrderId.get(i));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
         //랜덤 6개 출력하기
