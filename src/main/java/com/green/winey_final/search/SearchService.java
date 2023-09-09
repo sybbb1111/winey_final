@@ -139,24 +139,20 @@ public class SearchService {
             builder.and(productEntity.countryEntity.countryId.eq(dto.getCountryId()));
         }
 
+        if (dto.getPrice() == 0) {
+            builder.and(saleEntity.salePrice.gt(0));
+        } else if (dto.getPrice() == 1) {
+            builder.and(saleEntity.salePrice.lt(20000));
+        } else if (dto.getPrice() == 2) {
+            builder.and(saleEntity.salePrice.between(20000, 50000));
+        } else if (dto.getPrice() == 3) {
+            builder.and(saleEntity.salePrice.between(50000, 100000));
+        } else {
+            builder.and(saleEntity.salePrice.goe(100000));
+        }
+
         if (dto.getText() != null && !dto.getText().isEmpty()) {
             builder.and(productEntity.nmKor.contains(dto.getText()).or(productEntity.nmEng.contains(dto.getText())));
-        }
-
-        if (dto.getPrice() == 0) {
-            builder.and(productEntity.price.gt(0));
-        } else if (dto.getPrice() == 1) {
-            builder.and(productEntity.price.lt(20000));
-        } else if (dto.getPrice() == 2) {
-            builder.and(productEntity.price.between(20000, 50000));
-        } else if (dto.getPrice() == 3) {
-            builder.and(productEntity.price.between(50000, 100000));
-        } else {
-            builder.and(productEntity.price.goe(100000));
-        }
-
-        if (dto.getText() != null && !dto.getText().isEmpty()) {
-            builder.and(productEntity.nmKor.contains(dto.getText()).and(productEntity.nmEng.contains(dto.getText())));
         }
 
         return queryFactory
