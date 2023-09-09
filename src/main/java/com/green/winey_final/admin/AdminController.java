@@ -355,17 +355,17 @@ public class AdminController {
     public Long putOrderStatus(@RequestBody OrderStatusDto dto) {
         return SERVICE.updOrderStatus(dto);
     }
-
+/*
     //할인 상태(saleYn) 업데이트 mybatis (관리자가 수동으로 On/Off하는 용도)
     @Operation(summary = "상품 할인상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도)", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
-    @PutMapping("/sale")
+    @PutMapping("/sale2")
     public int putProductSaleYn(ProductSaleYnDto dto) {
         return SERVICE.putProductSaleYn(dto);
     }
-
+*/
     //할인 상태(saleYn) 업데이트 jpa (관리자가 수동으로 On/Off하는 용도)
     @Operation(summary = "상품 할인상태(saleYn) 업데이트p (관리자가 수동으로 On/Off하는 용도)", description = "업데이트 <br>"+"* 성공시 코드: 1<br>"+ "* 실패시 코드: 0")
-    @PutMapping("/sale2")
+    @PutMapping("/sale")
     public int putProductSaleYn2(ProductSaleYnDto dto) {
         return SERVICE.putProductSaleYn(dto);
     }

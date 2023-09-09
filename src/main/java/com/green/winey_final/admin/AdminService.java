@@ -836,16 +836,15 @@ public class AdminService {
         //tel(전화번호) 유효성 검사하기
         String pattern = "(\\d{2,3})-(\\d{3,4})-(\\d{4})"; // (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자)
         if(Pattern.matches(pattern, param.getTel())) {
-            return 0L; //전화번호 유효성 검사 통과 실패
+            StoreEntity storeEntity = storeRep.findById(storeId).get();
+            storeEntity.setNm(param.getNm());
+            storeEntity.setTel(param.getTel());
+            storeEntity.setAddress(param.getAddress());
+            storeRep.save(storeEntity);
+            return 1L;
         }
+        return 0L; //전화번호 유효성 검사 통과 실패
 
-        StoreEntity storeEntity = storeRep.findById(storeId).get();
-        storeEntity.setNm(param.getNm());
-        storeEntity.setTel(param.getTel());
-        storeEntity.setAddress(param.getAddress());
-        storeRep.save(storeEntity);
-
-        return 1L;
     }
     //매장 삭제 mybatis
     public Long deleteStore(Long storeId) {
