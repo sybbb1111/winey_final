@@ -121,7 +121,7 @@
         GROUP BY a.product_id
         ORDER BY
         CASE
-        WHEN e.sale_yn = 1 THEN e.sale_price
+        WHEN b.sale_yn = 1 THEN b.sale_price
         ELSE a.price
         END DESC
         LIMIT ${startIdx}, ${row}
@@ -202,7 +202,7 @@
         GROUP BY a.product_id
         ORDER BY
         CASE
-        WHEN e.sale_yn = 1 THEN e.sale_price
+        WHEN b.sale_yn = 1 THEN b.sale_price
         ELSE a.price
         END DESC
         LIMIT ${startIdx}, ${row}
@@ -283,7 +283,7 @@
         GROUP BY a.product_id
         ORDER BY
         CASE
-        WHEN e.sale_yn = 1 THEN e.sale_price
+        WHEN b.sale_yn = 1 THEN b.sale_price
         ELSE a.price
         END DESC
         LIMIT ${startIdx}, ${row}
@@ -364,7 +364,7 @@
         GROUP BY a.product_id
         ORDER BY
         CASE
-        WHEN e.sale_yn = 1 THEN e.sale_price
+        WHEN b.sale_yn = 1 THEN b.sale_price
         ELSE a.price
         END DESC
         LIMIT ${startIdx}, ${row}
@@ -474,7 +474,7 @@
         GROUP BY a.product_id
         ORDER BY
         CASE
-        WHEN e.sale_yn = 1 THEN e.sale_price
+        WHEN b.sale_yn = 1 THEN b.sale_price
         ELSE a.price
         END DESC
         LIMIT ${startIdx}, ${row}
@@ -556,7 +556,7 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price < 20000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY a.product_id DESC
             LIMIT ${startIdx}, ${row}
         ]]>
@@ -573,10 +573,10 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price < 20000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY
             CASE
-            WHEN e.sale_yn = 1 THEN e.sale_price
+            WHEN b.sale_yn = 1 THEN b.sale_price
             ELSE a.price
             END DESC
             LIMIT ${startIdx}, ${row}
@@ -594,12 +594,12 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price < 20000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY
-        CASE
-        WHEN b.sale_yn = 1 THEN b.sale_price
-        ELSE a.price
-        END ASC
+                CASE
+                WHEN b.sale_yn = 1 THEN b.sale_price
+                ELSE a.price
+                END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -631,7 +631,7 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -647,7 +647,7 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY a.product_id DESC
             LIMIT ${startIdx}, ${row}
         ]]>
@@ -664,10 +664,10 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
-                    GROUP BY a.product_id
-           ORDER BY
+            GROUP BY a.product_id
+            ORDER BY
             CASE
-            WHEN e.sale_yn = 1 THEN e.sale_price
+            WHEN b.sale_yn = 1 THEN b.sale_price
             ELSE a.price
             END DESC
             LIMIT ${startIdx}, ${row}
@@ -685,12 +685,12 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY
-        CASE
-        WHEN b.sale_yn = 1 THEN b.sale_price
-        ELSE a.price
-        END ASC
+                CASE
+                WHEN b.sale_yn = 1 THEN b.sale_price
+                ELSE a.price
+                END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -723,7 +723,7 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -739,7 +739,7 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY a.product_id DESC
             LIMIT ${startIdx}, ${row}
         ]]>
@@ -756,10 +756,10 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY
             CASE
-            WHEN e.sale_yn = 1 THEN e.sale_price
+            WHEN b.sale_yn = 1 THEN b.sale_price
             ELSE a.price
             END DESC
             LIMIT ${startIdx}, ${row}
@@ -777,12 +777,12 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY
-        CASE
-        WHEN b.sale_yn = 1 THEN b.sale_price
-        ELSE a.price
-        END ASC
+                CASE
+                WHEN b.sale_yn = 1 THEN b.sale_price
+                ELSE a.price
+                END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -815,7 +815,7 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -831,7 +831,7 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY a.product_id DESC
             LIMIT ${startIdx}, ${row}
         ]]>
@@ -848,10 +848,10 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY
             CASE
-            WHEN e.sale_yn = 1 THEN e.sale_price
+            WHEN b.sale_yn = 1 THEN b.sale_price
             ELSE a.price
             END DESC
             LIMIT ${startIdx}, ${row}
@@ -869,12 +869,12 @@
             INNER JOIN t_aroma c
             ON a.product_id = c.product_id
             WHERE price > 100000
-                    GROUP BY a.product_id
+            GROUP BY a.product_id
             ORDER BY
-        CASE
-        WHEN b.sale_yn = 1 THEN b.sale_price
-        ELSE a.price
-        END ASC
+                CASE
+                WHEN b.sale_yn = 1 THEN b.sale_price
+                ELSE a.price
+                END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -942,10 +942,10 @@
         WHERE b.country_id = #{countryId}
         GROUP BY a.product_id
         ORDER BY
-        CASE
-        WHEN c.sale_yn = 1 THEN c.sale_price
-        ELSE a.price
-        END DESC
+            CASE
+            WHEN c.sale_yn = 1 THEN c.sale_price
+            ELSE a.price
+            END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -963,10 +963,10 @@
         WHERE b.country_id = #{countryId}
         GROUP BY a.product_id
         ORDER BY
-        CASE
-        WHEN c.sale_yn = 1 THEN c.sale_price
-        ELSE a.price
-        END ASC
+            CASE
+            WHEN c.sale_yn = 1 THEN c.sale_price
+            ELSE a.price
+            END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -1075,10 +1075,10 @@
         WHERE d.big_category_id = #{bigCategoryId}
         GROUP BY a.product_id
         ORDER BY
-        CASE
-        WHEN e.sale_yn = 1 THEN e.sale_price
-        ELSE a.price
-        END ASC
+            CASE
+            WHEN e.sale_yn = 1 THEN e.sale_price
+            ELSE a.price
+            END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 </mapper>
