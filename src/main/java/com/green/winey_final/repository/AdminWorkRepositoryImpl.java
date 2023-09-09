@@ -84,6 +84,11 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        //데이트포맷 로직
+        for(int i=0;i<list.size();i++) {
+            list.get(i).setCreatedAt(list.get(i).getCreatedAt().substring(2,10));
+        }
+
         JPAQuery<Long> countQuery = queryFactory
 //                .select(userEntity.count())// count()와 countDistinct() 차이 알기
                 .select(userEntity.countDistinct())// count()와 countDistinct() 차이 알기

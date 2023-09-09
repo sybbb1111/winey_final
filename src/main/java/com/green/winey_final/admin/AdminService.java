@@ -613,7 +613,7 @@ public class AdminService {
                 .build();
     }
 
-    //가입회원 리스트
+    //가입회원 리스트 mybatis
     public UserList getUserList2(SelListDto dto) {
         int startIdx = (dto.getPage()-1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -625,7 +625,7 @@ public class AdminService {
                 .list(MAPPER.selUserList(dto))
                 .build();
     }
-
+    //가입회원 리스트 jpa
     public PageCustom<UserVo> getUserList(Pageable pageable, String searchType, String str) {
         return adminWorkRep.selUserAll(pageable, searchType, str);
     }

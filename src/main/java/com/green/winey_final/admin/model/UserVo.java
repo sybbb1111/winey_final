@@ -3,9 +3,11 @@ package com.green.winey_final.admin.model;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Builder
+@Setter
 public class UserVo {
     Long userId;
     String email;
