@@ -1,7 +1,6 @@
 package com.green.winey_final.admin;
 
 import com.green.winey_final.admin.model.*;
-import com.green.winey_final.common.entity.UserEntity;
 import com.green.winey_final.repository.support.PageCustom;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Tag(name = "관리자 페이지")
 @RestController
@@ -214,14 +211,14 @@ public class AdminController {
             +"page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
             +"type -> 기본값(0) / 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br>"
             +"sort ->  기본값(0) / 오름차순(asc) / 내림차순(desc)")
-    @GetMapping("/order3")
+    @GetMapping("/order2")
     public OrderList getOrder3(@RequestParam(defaultValue = "1")int page,
-                              @RequestParam(defaultValue = "15")int row,
+                              @RequestParam(defaultValue = "15")int size,
                               @RequestParam(defaultValue = "0") String type,
                               @RequestParam(defaultValue = "0") String sort) {
         SelListDto dto = new SelListDto();
         dto.setPage(page);
-        dto.setRow(row);
+        dto.setRow(size);
         dto.setType(type);
         dto.setSort(sort);
 
@@ -238,16 +235,16 @@ public class AdminController {
         return SERVICE.getOrder(pageable);
     }
 
-
-    //상세 주문 내역 리스트 by orderId
+/*
+    //상세 주문 내역 리스트 by orderId mybatis
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "상세 주문 내역 출력 by orderId myb(피그마:주문상세리스트)")
     @GetMapping("/order3/{orderId}")
     public OrderDetail3 getOrderDetail3(@PathVariable int orderId) {
         return SERVICE.getOrderDetail3(orderId);
     }
-
-    //상세 주문 내역 리스트 by orderId
+*/
+    //상세 주문 내역 리스트 by orderId jpa
     @Operation(summary = "상세 주문 내역 출력 by orderId(피그마:주문상세리스트)p")
     @GetMapping("/order/{orderId}")
     public OrderDetail3 getOrderDetail(@PathVariable int orderId, @ParameterObject @PageableDefault(sort="orderid", direction = Sort.Direction.ASC, page = 0, size = 20)
@@ -314,6 +311,7 @@ public class AdminController {
 
         return SERVICE.getStore2(dto);
     }
+
     //매장 리스트 출력
     @Operation(summary = "매장 리스트 출력P", description = ""
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
