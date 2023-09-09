@@ -600,7 +600,7 @@ public class AdminService {
         return adminWorkRep.selProductAll(pageable, str);
     }
 
-    //할인 중인 상품 리스트 출력
+    //할인 중인 상품 리스트 출력 mybatis
     public ProductSaleList getProductSale(SelListDto dto) {
         int startIdx = (dto.getPage() - 1) * dto.getRow();
         dto.setStartIdx(startIdx);
@@ -611,6 +611,12 @@ public class AdminService {
                 .page(new PageDto(maxProductSale, dto.getPage(), dto.getRow()))
                 .list(MAPPER.selProductSale(dto))
                 .build();
+    }
+
+    //할인 중인 상품 리스트 출력 jpa
+    public PageCustom<ProductSaleVo> getProductSale2(Pageable pageable) {
+
+        return adminWorkRep.selProductSaleAll(pageable);
     }
 
     //가입회원 리스트 mybatis

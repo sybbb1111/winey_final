@@ -31,4 +31,7 @@ public interface AdminQdslRepository {
 
     //환불 내역
     PageCustom<OrderRefundVo> selOrderRefund(Pageable pageable);
+
+    //할인률 등록 상품 리스트
+    PageCustom<ProductSaleVo> selProductSaleAll(Pageable pageable);
 }

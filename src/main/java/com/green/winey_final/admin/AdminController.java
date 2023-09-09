@@ -108,8 +108,8 @@ public class AdminController {
         return SERVICE.getProduct(pageable, str);
     }
 
-    //할인률 등록 상품 리스트 출력
-    @Operation(summary = "할인률을 입력한 상품 리스트P", description = "saleYn = 1은 할인 적용, 0은 미적용<br>"
+    //할인률 등록 상품 리스트 출력 mybatis
+    @Operation(summary = "할인률을 입력한 상품 리스트 myb", description = "saleYn = 1은 할인 적용, 0은 미적용<br>"
             +"page (기본값 1), row (기본값 20) 디폴트값 임시로 해놓은거라 수정이 필요합니다.")
     @GetMapping("/product/salelist")
     public ProductSaleList getProductSale(@RequestParam(defaultValue = "1")int page,
@@ -118,6 +118,15 @@ public class AdminController {
         dto.setRow(row);
         dto.setPage(page);
         return SERVICE.getProductSale(dto);
+    }
+
+    //할인률 등록 상품 리스트 출력 jpa
+    @Operation(summary = "할인률을 입력한 상품 리스트p", description = "saleYn = 1은 할인 적용, 0은 미적용<br>"
+            +"page (기본값 1), row (기본값 20) 디폴트값 임시로 해놓은거라 수정이 필요합니다.")
+    @GetMapping("/product/salelist2")
+    public PageCustom<ProductSaleVo> getProductSale(@ParameterObject @PageableDefault(sort="productId", direction = Sort.Direction.ASC, page = 0, size = 20)
+                                              Pageable pageable) {
+        return SERVICE.getProductSale2(pageable);
     }
 
     //가입 회원 리스트 출력 + 회원 검색

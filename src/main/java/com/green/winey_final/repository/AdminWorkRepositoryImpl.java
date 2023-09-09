@@ -382,6 +382,29 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         return new PageCustom<OrderRefundVo>(map.getContent(), map.getPageable(), map.getTotalElements());
     }
 
+    @Override
+    public PageCustom<ProductSaleVo> selProductSaleAll(Pageable pageable) {
+        List<ProductSaleVo> list = queryFactory
+                .select(new QProductSaleVo(productEntity.productId, productEntity.nmKor, productEntity.price, saleEntity.sale, saleEntity.salePrice, productEntity.promotion, productEntity.beginner, productEntity.quantity, saleEntity.saleYn))
+                .from(productEntity)
+                .innerJoin(saleEntity)
+                .on(productEntity.eq(saleEntity.productEntity))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(productEntity.productId.count())
+                .from(productEntity)
+                .innerJoin(saleEntity)
+                .on(productEntity.eq(saleEntity.productEntity));
+
+
+        Page<ProductSaleVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+
+        return new PageCustom<ProductSaleVo>(map.getContent(), map.getPageable(), map.getTotalElements());
+    }
+
 
     //정렬
     private OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable) {
@@ -433,6 +456,9 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                     case "refundyn": orders.add(new OrderSpecifier(direction, orderRefundEntity.refundYn)); break;
                     case "refunddate": orders.add(new OrderSpecifier(direction, orderRefundEntity.refundDate)); break;
 
+                    //세일등록한 상품 정렬
+                    case "saleyn": orders.add(new OrderSpecifier(direction, productEntity.productId));
+                                    orders.add(new OrderSpecifier(direction, saleEntity.saleYn));break;
 
 
                 }
