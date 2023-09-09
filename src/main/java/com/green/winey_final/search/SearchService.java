@@ -74,15 +74,15 @@ public class SearchService {
         }
 
             if (dto.getPrice() == 0) {
-                builder.and(productEntity.price.gt(0));
+                builder.and(saleEntity.salePrice.gt(0));
             } else if (dto.getPrice() == 1) {
-                builder.and(productEntity.price.lt(20000));
+                builder.and(saleEntity.salePrice.lt(20000));
             } else if (dto.getPrice() == 2) {
-                builder.and(productEntity.price.between(20000, 50000));
+                builder.and(saleEntity.salePrice.between(20000, 50000));
             } else if (dto.getPrice() == 3) {
-                builder.and(productEntity.price.between(50000, 100000));
+                builder.and(saleEntity.salePrice.between(50000, 100000));
             } else if (dto.getPrice() == 4){
-                builder.and(productEntity.price.goe(100000));
+                builder.and(saleEntity.salePrice.goe(100000));
             }
 
         if (dto.getText() != null && !dto.getText().isEmpty()) {
@@ -113,9 +113,9 @@ public class SearchService {
         } else if (dto.getSort() == 1) {
             query.orderBy(productEntity.productId.desc());
         } else if (dto.getSort() == 2) {
-            query.orderBy(productEntity.price.desc());
+            query.orderBy(saleEntity.salePrice.desc());
         } else if (dto.getSort() == 3) {
-            query.orderBy(productEntity.price.asc());
+            query.orderBy(saleEntity.salePrice.asc());
         }
         int result = (dto.getPage() - 1) * dto.getRow();
 
