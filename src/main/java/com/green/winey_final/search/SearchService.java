@@ -1,20 +1,14 @@
 package com.green.winey_final.search;
 
-import com.green.winey_final.common.entity.QProductEntity;
 import com.green.winey_final.search.model.WineSearchDto;
 import com.green.winey_final.search.model.WineSelDetailRes;
 import com.green.winey_final.search.model.WineVo;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
