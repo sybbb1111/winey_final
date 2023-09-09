@@ -68,8 +68,8 @@ public class AdminController {
 //    public int putProduct2(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductUpdParam param) {
 //        return SERVICE.putProduct2(pic, param);
 //    }
-
-    //등록 상품 리스트 출력 (페이징 처리)
+/*
+    //등록 상품 리스트 출력 mybatis
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "등록된 상품 리스트 출력+ 등록 상품 검색 myb(피그마: 등록상품리스트 페이지)P", description = "page값 = 1(default), row값 = 20(default)<br>"
             + "default값은 임시로 넣은 것이니 수정이 필요합니다.<br>"
@@ -92,6 +92,8 @@ public class AdminController {
         dto.setStr(str);
         return SERVICE.getProduct2(dto);
     }
+*/
+    //등록 상품 리스트 출력 jpa
     @Operation(summary = "등록된 상품 리스트 출력(피그마: 등록상품리스트 페이지)p", description = "정렬 안한 기본 페이지는 productId,asc 가 기본값입니다.<br>"
             + "page -> 0이 1페이지입니다.<br> size(row) -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) productid,asc -> 상품번호 기준으로 오름차순 정렬한다는 의미<br> 정렬기준 ->상품번호(productId)/세일가격(salePrice)/할인률(sale)/정상가(price)/추천상품(recommend)/재고수량=품절여부(quantity)<br>"
@@ -101,7 +103,6 @@ public class AdminController {
     public PageCustom<ProductVo> getProduct(@ParameterObject @PageableDefault(sort="productId", direction = Sort.Direction.ASC, page = 0, size = 20)
                                              Pageable pageable,
                                              @RequestParam(required = false) String str) {
-
         return SERVICE.getProduct(pageable, str);
     }
 /*
@@ -209,13 +210,13 @@ public class AdminController {
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "주문 내역 출력 myb(피그마:주문내역관리 페이지)P", description = "<br>"
             +"page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.<br>"
-            +"type -> 기본값(0) / 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br>"
-            +"sort ->  기본값(0) / 오름차순(asc) / 내림차순(desc)")
+            +"type -> 기본값(orderdate) / 픽업장소(storeNm) / 픽업배송상태(orderStatus) <br>"
+            +"sort ->  기본값(desc) / 오름차순(asc) / 내림차순(desc)")
     @GetMapping("/order2")
     public OrderList getOrder3(@RequestParam(defaultValue = "1")int page,
                               @RequestParam(defaultValue = "15")int size,
-                              @RequestParam(defaultValue = "0") String type,
-                              @RequestParam(defaultValue = "0") String sort) {
+                              @RequestParam(defaultValue = "orderdate") String type,
+                              @RequestParam(defaultValue = "desc") String sort) {
         SelListDto dto = new SelListDto();
         dto.setPage(page);
         dto.setRow(size);
@@ -298,8 +299,8 @@ public class AdminController {
         return SERVICE.insStore2(param);
     }
 
-
-    //매장 리스트 출력
+/*
+    //매장 리스트 출력 mybatis
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "매장 리스트 출력 myb", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정 필요하면 말해주세요.")
     @GetMapping("/store2")
@@ -311,8 +312,8 @@ public class AdminController {
 
         return SERVICE.getStore2(dto);
     }
-
-    //매장 리스트 출력
+*/
+    //매장 리스트 출력 jpa
     @Operation(summary = "매장 리스트 출력P", description = ""
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) storeid,asc <br> - 매장번호(storeid) / 매장이름(storenm) / 주소(address) / 전화번호(tel) <br> - 오름차순(asc) / 내림차순(desc)<br>"

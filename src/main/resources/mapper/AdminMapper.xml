@@ -485,7 +485,7 @@
     <select id="selOrder">
 
         <choose>
-            <when test="type == '0'.toString() and sort == '0'.toString()">
+            <when test="type == 'orderdate'.toString() and sort == 'desc'.toString()">
                 SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
                 , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
                 FROM t_order A
@@ -499,6 +499,55 @@
                 ON D.product_id = E.product_id
                 GROUP BY A.order_id
                 ORDER BY A.order_date DESC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'orderdate'.toString() and sort == 'asc'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY A.order_date ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+
+            <when test="type == 'orderid'.toString() and sort == 'asc'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY A.order_id ASC
+                LIMIT #{startIdx}, #{row}
+            </when>
+            <when test="type == 'orderid'.toString() and sort == 'desc'.toString()">
+                SELECT A.order_id orderId, DATE_FORMAT(A.order_date, '%y-%m-%d') orderDate , B.email, E.nm_kor nmKor, SUM(D.sale_price) salePrice, SUM(D.quantity) quantity, A.total_order_price totalPrice
+                , A.payment, C.nm pickUpStore, A.order_status orderStatus, COUNT(*) count
+                FROM t_order A
+                INNER JOIN t_user B
+                ON A.user_id = B.user_id
+                INNER JOIN t_store C
+                ON A.store_id = C.store_id
+                INNER JOIN t_order_detail D
+                ON A.order_id = D.order_id
+                INNER JOIN t_product E
+                ON D.product_id = E.product_id
+                GROUP BY A.order_id
+                ORDER BY A.order_id DESC
                 LIMIT #{startIdx}, #{row}
             </when>
 
