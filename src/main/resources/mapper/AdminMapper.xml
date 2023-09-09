@@ -482,7 +482,7 @@
         </choose>
     </select>
 
-    <select id="selOrder" resultType="OrderListVo">
+    <select id="selOrder">
 
         <choose>
             <when test="type == '0'.toString() and sort == '0'.toString()">
