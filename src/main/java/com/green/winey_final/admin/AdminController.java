@@ -196,7 +196,7 @@ public class AdminController {
     public int deleteProductPic(int productId) {
         return SERVICE.deleteProductPic(productId);
     }
-/*
+
     //주문 내역 mybatis
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "주문 내역 출력 myb(피그마:주문내역관리 페이지)P", description = "<br>"
@@ -216,7 +216,7 @@ public class AdminController {
 
         return SERVICE.getOrder3(dto);
     }
-*/
+
     //주문 내역 jpa
     @Operation(summary = "주문 내역 출력(피그마:주문내역관리 페이지)p", description = "<br>"
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
