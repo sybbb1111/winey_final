@@ -41,6 +41,7 @@ public class SearchController {
 
         WineSearchDto dto = new WineSearchDto();
         dto.setText(text);
+        dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
         dto.setPage(page);
         dto.setRow(row);
         dto.setCategoryId(cate);

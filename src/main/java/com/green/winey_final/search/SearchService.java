@@ -35,8 +35,6 @@ public class SearchService {
 
         List<WineVo> wineList = getWineList(dto);
 
-        dto.setStartIdx((dto.getPage() - 1));
-
         Long count = countWineList(dto);
         int maxPage = (int) Math.ceil((double) count / dto.getRow());
         int isMore = maxPage > dto.getPage() ? 1 : 0;
@@ -119,8 +117,9 @@ public class SearchService {
         } else if (dto.getSort() == 3) {
             query.orderBy(productEntity.price.asc());
         }
+        int result = (dto.getPage() - 1) * dto.getRow();
 
-        return query.offset(dto.getStartIdx())
+        return query.offset(result)
                 .limit(dto.getRow())
                 .fetch();
     }

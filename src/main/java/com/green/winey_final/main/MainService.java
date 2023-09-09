@@ -182,7 +182,7 @@ public class MainService {
 
         List<WineVo> wineList = getWineLists(dto);
 
-        dto.setStartIdx((dto.getPage() - 1));
+        dto.setStartIdx((dto.getPage() - 1) * dto.getRow());
 
         Long count = countWineList(dto);
         int maxPage = (int) Math.ceil((double) count / dto.getRow());
@@ -260,8 +260,9 @@ public class MainService {
         } else if (dto.getSort() == 3) {
             query.orderBy(productEntity.price.asc());
         }
+        int result = (dto.getPage() - 1) * dto.getRow();
 
-        return query.offset(dto.getStartIdx())
+        return query.offset(result)
                 .limit(dto.getRow())
                 .fetch();
     }
