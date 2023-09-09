@@ -45,41 +45,7 @@ public class MainService {
     private final JPAQueryFactory queryFactory;
 
 
-    /**
-     * 매일 6개 랜덤 와인 추천
-     */
-
-
-    private List<WineVo> getRandomWine(WineCategoryDto dto) {
-
-        JPAQuery<WineVo> query = queryFactory.select(
-                        Projections.constructor(
-                                WineVo.class,
-                                productEntity.productId,
-                                productEntity.nmKor,
-                                productEntity.nmEng,
-                                productEntity.price,
-                                productEntity.pic,
-                                productEntity.promotion,
-                                productEntity.beginner,
-                                saleEntity.sale,
-                                saleEntity.salePrice,
-                                saleEntity.saleYn))
-                .from(productEntity)
-                .innerJoin(saleEntity)
-                .on(productEntity.productId.eq(saleEntity.productEntity.productId))
-                .where(userEntity.userId.eq(FACADE.getLoginUser().getUserId()))
-                .groupBy(productEntity.productId);
-
-
-        return query.offset(dto.getStartIdx())
-                .limit(dto.getRow())
-                .fetch();
-    }
-
-    /**
-     * 할인 와인 리스트
-     */
+    /** 할인 와인 리스트 */
 
     public WineRes wineList(Pageable pageable) {
 

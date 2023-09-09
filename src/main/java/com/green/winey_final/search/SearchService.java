@@ -139,6 +139,10 @@ public class SearchService {
             builder.and(productEntity.countryEntity.countryId.eq(dto.getCountryId()));
         }
 
+        if (dto.getText() != null && !dto.getText().isEmpty()) {
+            builder.and(productEntity.nmKor.contains(dto.getText()).or(productEntity.nmEng.contains(dto.getText())));
+        }
+
         if (dto.getPrice() == 0) {
             builder.and(productEntity.price.gt(0));
         } else if (dto.getPrice() == 1) {

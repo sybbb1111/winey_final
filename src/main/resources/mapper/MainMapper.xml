@@ -119,7 +119,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 1
         GROUP BY a.product_id
-        ORDER BY b.sale_price DESC
+        ORDER BY
+        CASE
+        WHEN e.sale_yn = 1 THEN e.sale_price
+        ELSE a.price
+        END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -134,7 +138,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 1
         GROUP BY a.product_id
-        ORDER BY b.sale_price
+        ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -192,7 +200,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 2
         GROUP BY a.product_id
-        ORDER BY b.sale_price DESC
+        ORDER BY
+        CASE
+        WHEN e.sale_yn = 1 THEN e.sale_price
+        ELSE a.price
+        END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -207,7 +219,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 2
         GROUP BY a.product_id
-        ORDER BY b.sale_price
+        ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -265,7 +281,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 3
         GROUP BY a.product_id
-        ORDER BY b.sale_price DESC
+        ORDER BY
+        CASE
+        WHEN e.sale_yn = 1 THEN e.sale_price
+        ELSE a.price
+        END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -280,7 +300,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 3
         GROUP BY a.product_id
-        ORDER BY b.sale_price
+        ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -338,7 +362,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 4
         GROUP BY a.product_id
-        ORDER BY b.sale_price DESC
+        ORDER BY
+        CASE
+        WHEN e.sale_yn = 1 THEN e.sale_price
+        ELSE a.price
+        END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -353,7 +381,11 @@
         ON a.product_id = c.product_id
         WHERE a.category_id = 4
         GROUP BY a.product_id
-        ORDER BY b.sale_price
+        ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -440,7 +472,11 @@
         INNER JOIN t_aroma c
         ON a.product_id = c.product_id
         GROUP BY a.product_id
-        ORDER BY b.sale_price DESC
+        ORDER BY
+        CASE
+        WHEN e.sale_yn = 1 THEN e.sale_price
+        ELSE a.price
+        END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -454,7 +490,11 @@
         INNER JOIN t_aroma c
         ON a.product_id = c.product_id
         GROUP BY a.product_id
-        ORDER BY b.sale_price
+        ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -534,7 +574,11 @@
             ON a.product_id = c.product_id
             WHERE price < 20000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price DESC
+            ORDER BY
+            CASE
+            WHEN e.sale_yn = 1 THEN e.sale_price
+            ELSE a.price
+            END DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -551,7 +595,11 @@
             ON a.product_id = c.product_id
             WHERE price < 20000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price
+            ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -617,7 +665,11 @@
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price DESC
+           ORDER BY
+            CASE
+            WHEN e.sale_yn = 1 THEN e.sale_price
+            ELSE a.price
+            END DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -634,7 +686,11 @@
             ON a.product_id = c.product_id
             WHERE price > 20000 AND price < 50000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price
+            ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -701,7 +757,11 @@
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price DESC
+            ORDER BY
+            CASE
+            WHEN e.sale_yn = 1 THEN e.sale_price
+            ELSE a.price
+            END DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -718,7 +778,11 @@
             ON a.product_id = c.product_id
             WHERE price > 50000 AND price < 100000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price
+            ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -785,7 +849,11 @@
             ON a.product_id = c.product_id
             WHERE price > 100000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price DESC
+            ORDER BY
+            CASE
+            WHEN e.sale_yn = 1 THEN e.sale_price
+            ELSE a.price
+            END DESC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -802,7 +870,11 @@
             ON a.product_id = c.product_id
             WHERE price > 100000
                     GROUP BY a.product_id
-            ORDER BY b.sale_price
+            ORDER BY
+        CASE
+        WHEN b.sale_yn = 1 THEN b.sale_price
+        ELSE a.price
+        END ASC
             LIMIT ${startIdx}, ${row}
         ]]>
     </select>
@@ -869,7 +941,11 @@
         ON a.product_id = d.product_id
         WHERE b.country_id = #{countryId}
         GROUP BY a.product_id
-        ORDER BY c.sale_price desc
+        ORDER BY
+        CASE
+        WHEN c.sale_yn = 1 THEN c.sale_price
+        ELSE a.price
+        END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -886,7 +962,11 @@
         ON a.product_id = d.product_id
         WHERE b.country_id = #{countryId}
         GROUP BY a.product_id
-        ORDER BY c.sale_price
+        ORDER BY
+        CASE
+        WHEN c.sale_yn = 1 THEN c.sale_price
+        ELSE a.price
+        END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -969,7 +1049,11 @@
         ON a.product_id = f.product_id
         WHERE d.big_category_id = #{bigCategoryId}
         GROUP BY a.product_id
-        ORDER BY e.sale_price DESC
+        ORDER BY
+            CASE
+            WHEN e.sale_yn = 1 THEN e.sale_price
+            ELSE a.price
+            END DESC
         LIMIT ${startIdx}, ${row}
     </select>
 
@@ -990,7 +1074,11 @@
         ON a.product_id = f.product_id
         WHERE d.big_category_id = #{bigCategoryId}
         GROUP BY a.product_id
-        ORDER BY e.sale_price
+        ORDER BY
+        CASE
+        WHEN e.sale_yn = 1 THEN e.sale_price
+        ELSE a.price
+        END ASC
         LIMIT ${startIdx}, ${row}
     </select>
 </mapper>

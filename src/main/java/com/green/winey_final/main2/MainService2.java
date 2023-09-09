@@ -813,7 +813,7 @@ public class MainService2 {
         for (WineFoodVo2 vo : wine) {
              if(vo.getSaleYn() == 0){
                 vo.setSale(0);
-                vo.setSalePrice(vo.getPrice());
+//                vo.setSalePrice(vo.getPrice());
             }
         }
         return CountFoodRes.builder()
