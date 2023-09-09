@@ -107,11 +107,11 @@ public class AdminController {
 
         return SERVICE.getProduct(pageable, str);
     }
-
+/*
     //할인률 등록 상품 리스트 출력 mybatis
     @Operation(summary = "할인률을 입력한 상품 리스트 myb", description = "saleYn = 1은 할인 적용, 0은 미적용<br>"
             +"page (기본값 1), row (기본값 20) 디폴트값 임시로 해놓은거라 수정이 필요합니다.")
-    @GetMapping("/product/salelist")
+    @GetMapping("/product/salelist2")
     public ProductSaleList getProductSale(@RequestParam(defaultValue = "1")int page,
                                           @RequestParam(defaultValue = "20")int row) {
         SelListDto dto = new SelListDto();
@@ -119,11 +119,13 @@ public class AdminController {
         dto.setPage(page);
         return SERVICE.getProductSale(dto);
     }
-
+*/
     //할인률 등록 상품 리스트 출력 jpa
     @Operation(summary = "할인률을 입력한 상품 리스트p", description = "saleYn = 1은 할인 적용, 0은 미적용<br>"
-            +"page (기본값 1), row (기본값 20) 디폴트값 임시로 해놓은거라 수정이 필요합니다.")
-    @GetMapping("/product/salelist2")
+            + "page -> 0이 1페이지입니다.<br> size(row) -> 한 페이지 당 보여줄 갯수<br>"
+            + "sort ->  입력 예시) productid,asc -> 상품번호 기준으로 오름차순 정렬한다는 의미<br> 정렬기준 -> 상품번호(productId) / 할인여부(saleyn)/ 할인률(salerate)<br>"
+            + "정렬 ->  오름차순(asc) / 내림차순(desc)<br>")
+    @GetMapping("/product/salelist")
     public PageCustom<ProductSaleVo> getProductSale(@ParameterObject @PageableDefault(sort="productId", direction = Sort.Direction.ASC, page = 0, size = 20)
                                               Pageable pageable) {
         return SERVICE.getProductSale2(pageable);

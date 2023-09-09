@@ -389,6 +389,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .from(productEntity)
                 .innerJoin(saleEntity)
                 .on(productEntity.eq(saleEntity.productEntity))
+                .orderBy(getAllOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -458,7 +459,8 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 
                     //세일등록한 상품 정렬
                     case "saleyn": orders.add(new OrderSpecifier(direction, productEntity.productId));
-                                    orders.add(new OrderSpecifier(direction, saleEntity.saleYn));break;
+                                orders.add(new OrderSpecifier(direction, saleEntity.saleYn));break;
+                    case "salerate": orders.add(new OrderSpecifier(direction, saleEntity.sale)); break;
 
 
                 }
