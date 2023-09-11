@@ -561,7 +561,8 @@ public class AdminService {
     }
 
     //할인 스케줄러 (t_sale 테이블의 sale_yn을 업데이트)
-    @Scheduled(cron = "0 0 0/1 1/1 * ?") //매시 정각마다 실행
+//    @Scheduled(cron = "0 0 0/1 1/1 * ?") //매시 정각마다 실행
+    @Scheduled(cron = "0 0 0 1/1 * ?") //매일 자정마다 실행
     public void updSaleDateTime() {
         ProductUpdDto dto = new ProductUpdDto();
 //        dto.setStartSale(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));

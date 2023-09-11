@@ -342,17 +342,17 @@ public class AdminController {
         return SERVICE.updStore2(param, storeId);
     }
 
-
+/*
     //매장 정보 삭제 mybatis
     @Operation(summary = "매장 정보 삭제", description = "삭제 성공시 코드 : 1, 실패시 코드 : 0")
-    @DeleteMapping("/store/{storeId}")
+    @DeleteMapping("/store2/{storeId}")
     public Long deleteStore(Long storeId) {
         return SERVICE.deleteStore(storeId);
     }
-
+*/
     //매장 정보 삭제 jpa
     @Operation(summary = "매장 정보 삭제p", description = "삭제 성공시 코드 : 1, 실패시 코드 : 0")
-    @DeleteMapping("/store2/{storeId}")
+    @DeleteMapping("/store/{storeId}")
     public Long deleteStore2(Long storeId) {
         return SERVICE.deleteStore(storeId);
     }
@@ -421,7 +421,7 @@ public class AdminController {
         return SERVICE.getProductDetail1(productId);
     }
 
-    //상품 디테일 관리자용
+    //상품 디테일 관리자용 jpa
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "등록 상품 디테일(상품 수정용)p")
     @GetMapping("/product/detail2")
