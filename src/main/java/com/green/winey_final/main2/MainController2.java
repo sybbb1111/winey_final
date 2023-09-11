@@ -366,7 +366,7 @@ public class MainController2 {
         return SERVICE.selWineByPrice2New(dto);
     }
 
-    @GetMapping("/price25/expensive")
+    @GetMapping("/price25/expencive")
     @Operation(summary = "2-5만원 와인리스트 - 높은가격순")
     public CountRes getWineByPrice25Expencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
@@ -421,7 +421,7 @@ public class MainController2 {
         return SERVICE.selWineByPrice510New(dto);
     }
 
-    @GetMapping("/price510/expensive")
+    @GetMapping("/price510/expencive")
     @Operation(summary = "5-10만원 와인리스트 - 높은가격순")
     public CountRes getWineByPrice510Expencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
@@ -476,7 +476,7 @@ public class MainController2 {
         return SERVICE.selWineByPrice10New(dto);
     }
 
-    @GetMapping("/price10/expensive")
+    @GetMapping("/price10/expencive")
     @Operation(summary = "10만원 이상 와인리스트 - 높은가격순")
     public CountRes getWineByPrice10Expencive(@RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "9") int row) {
