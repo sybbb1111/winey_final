@@ -43,6 +43,7 @@ public class AdminService {
     private final WinePairingRepository winePairingRep;
     private final SmallCategoryRepository smallCategoryRep;
     private final ProductRepository productRep;
+    private final OrderRepository orderRep;
 
     private final EntityManager em;
 
@@ -50,7 +51,7 @@ public class AdminService {
     private final AdminWorkRepositoryImpl adminWorkRep;
 
     @Autowired
-    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, SaleRepository saleRep, AromaRepository aromaRep, FeatureRepository featureRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, ProductRepository productRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
+    public AdminService(AdminMapper MAPPER, @Value("${file.dir}") String FILE_DIR, UserRepository userRep, StoreRepository storeRep, RegionNmRepository regionNmRep, SaleRepository saleRep, AromaRepository aromaRep, FeatureRepository featureRep, CountryRepository countryRep, CategoryRepository categoryRep, AromaCategoryRepository aromaCategoryRep, WinePairingRepository winePairingRep, SmallCategoryRepository smallCategoryRep, ProductRepository productRep, OrderRepository orderRep, EntityManager em, AdminWorkRepositoryImpl adminWorkRep) {
         this.MAPPER = MAPPER;
         this.FILE_DIR = MyFileUtils.getAbsolutePath(FILE_DIR);
         this.userRep = userRep;
@@ -65,6 +66,7 @@ public class AdminService {
         this.winePairingRep = winePairingRep;
         this.smallCategoryRep = smallCategoryRep;
         this.productRep = productRep;
+        this.orderRep = orderRep;
         this.em = em;
         this.adminWorkRep = adminWorkRep;
     }
@@ -839,7 +841,7 @@ public class AdminService {
         return 1L;
     }
 
-    //주문상태 업데이트 (관리자 페이지용)
+    //주문상태 업데이트 mybatis (관리자 페이지용)
     public Long updOrderStatus(OrderStatusDto dto) {
         //order_status 코드 유효성 검사
         String orderStatus = String.valueOf(dto.getOrderStatus()); // int -> String 변환
@@ -853,6 +855,21 @@ public class AdminService {
             return dto.getOrderId();
         }
         return 0L; //매장 정보 수정 실패했다는 의미
+    }
+    //주문상태 업데이트 jpa(관리자 페이지용)
+    public Long updOrderStatus2(OrderStatusDto dto) {
+        //order_status 코드 유효성 검사
+        String orderStatus = String.valueOf(dto.getOrderStatus()); // int -> String 변환
+        String pattern = "[1-6]";
+        if(!Pattern.matches(pattern, orderStatus)) {
+            return 500L; //orderStatus 코드 유효성 검사 실패시 500 리턴
+        }
+
+        OrderEntity orderEntity = orderRep.getReferenceById(dto.getOrderId());
+        orderEntity.setOrderStatus(dto.getOrderStatus());
+        orderRep.save(orderEntity);
+
+        return dto.getOrderId();
     }
 
     //할인 상태(saleYn) 업데이트 (관리자가 수동으로 On/Off하는 용도) mybatis

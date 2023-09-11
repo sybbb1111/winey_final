@@ -1,6 +1,7 @@
 package com.green.winey_final.repository;
 
 import com.green.winey_final.admin.model.*;
+import com.green.winey_final.common.config.security.model.RoleType;
 import com.green.winey_final.repository.support.PageCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
@@ -42,6 +43,7 @@ import static com.green.winey_final.common.entity.QWinePairingEntity.winePairing
 public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 
     private final JPAQueryFactory queryFactory;
+    private final UserRepository userRep;
 
     @Override
     public PageCustom<ProductVo> selProductAll(Pageable pageable, String str) {
@@ -78,7 +80,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         List<UserVo> list = queryFactory.select(new QUserVo(userEntity.userId, userEntity.email, userEntity.unm, regionNmEntity.regionNmId.intValue(), userEntity.createdAt.stringValue()))
                 .from(userEntity)
                 .where(eqUserName(searchType, str),
-        eqUserEmail(searchType, str), userEntity.delYn.eq(0L))
+        eqUserEmail(searchType, str), userEntity.delYn.eq(0L), userEntity.roleType.eq(RoleType.USER))
                 .orderBy(getAllOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
