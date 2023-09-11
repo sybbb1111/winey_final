@@ -91,7 +91,8 @@ public class SecurityConfiguration {
 
                                 .requestMatchers("/api/download/**").hasRole("ADMIN")
                                 .requestMatchers("/api/orderList/**").hasAnyRole("USER","ADMIN") //주문내역
-                                .requestMatchers("/api/detail/**").hasAnyRole("USER","ADMIN")  //주문상세내역
+//                                .requestMatchers("/api/detail/**").hasAnyRole("USER","ADMIN")  //상품상세내역 //이 상태는 로그인 해야 볼 수 있도록 하는 것
+                                .requestMatchers("/api/detail/**").permitAll() ////상품상세내역. 로그인하지 않아도 볼 수 있도록 권한
                                 .requestMatchers("/api/payment/**").hasAnyRole("USER","ADMIN") //결제
 
                                 .anyRequest().permitAll()

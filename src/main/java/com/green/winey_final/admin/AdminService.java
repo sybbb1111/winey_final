@@ -138,7 +138,7 @@ public class AdminService {
                 return 0;
             }
             if (result == 1) {
-                String targetPath = FILE_DIR + "/wine/"+dto.getProductId()+"/"; //수정예정?
+                String targetPath = FILE_DIR + "/wine/"+dto.getProductId()+"/"; //
 //                String targetPath = FILE_DIR + "/winey/product/" + dto.getProductId();
                 File targetDic = new File(targetPath);
                 if(!targetDic.exists()) {
@@ -652,32 +652,8 @@ public class AdminService {
 
         List<UserOrderDetailVo> list = MAPPER.selUserOrder(detailDto);
 
-//        for(int i=0;i<list.size();i++) {
-//            if(list.get(i).getCount()>1) {
-//                list.get(i).setNmKor(list.get(i).getNmKor()+" 외 "+(list.get(i).getCount()-1));
-//            }
-//        }
         UserInfo user = MAPPER.selUserInfo(userId);
 
-        //환불 금액, 횟수 구하는 로직
-
-//        UserRefundVo refundVo = MAPPER.selUserRefundInfo(userId);
-//        if(MAPPER.selUserRefundInfo(userId) != null) {
-//            user.setSumOrderPrice(user.getSumOrderPrice()-refundVo.getSumOrderPrice());
-//            user.setOrderCount(user.getOrderCount()-refundVo.getOrderCount());
-//        }
-
-//        System.out.println("11111111111111");
-//        UserRefundVo refundVo1 = MAPPER.selUserRefundInfo1(userId);
-////        System.out.println(refundVo1);
-//        UserRefundVo refundVo2 = MAPPER.selUserRefundInfo2(userId);
-//        System.out.println("22222222222222");
-//        if(refundVo1 != null) {
-//            user.setSumOrderPrice(user.getSumOrderPrice() - refundVo1.getSumOrderPrice());
-//        }
-//        if(refundVo2 != null) {
-//            user.setOrderCount(user.getOrderCount() - refundVo2.getOrderCount());
-//        }
 
         return UserOrderDetailList2.builder()
                 .page(new PageDto(maxUserOrder, dto.getPage(), dto.getRow()))
@@ -726,7 +702,6 @@ public class AdminService {
         list.getPageableCustom().setTotalElements(list2.getTotal());
 
         return list;
-//        return adminWorkRep.selOrderAll(pageable); //prev
     }
 
     //상세 주문 내역 리스트 by orderId
@@ -933,9 +908,6 @@ public class AdminService {
         return MAPPER.serchUser(dto);
     }
 
-//    public List<ProductVo> searchProduct(AdminSerchDto dto) {
-//        return MAPPER.searchProduct(dto);
-//    }
 
     public AdminProductDetailVo2 getProductDetail1(int productId) {
         AdminProductDetailVo2 dto = MAPPER.selPutProductInfo1(productId);
