@@ -128,7 +128,7 @@ public class AdminController {
                                               Pageable pageable) {
         return SERVICE.getProductSale2(pageable);
     }
-
+/*
     //가입 회원 리스트 출력 + 회원 검색
     @Tag(name = "관리자 페이지 별도 API")
     @Operation(summary = "가입 회원 리스트 + 회원 검색 myb(피그마: 가입회원리스트 페이지)", description = "page (기본값1), row (기본값15) 임시로 해놓은거라 수정이 필요합니다.<br>"
@@ -152,7 +152,7 @@ public class AdminController {
         dto.setStr(str);
         return SERVICE.getUserList2(dto);
     }
-
+*/
     @Operation(summary = "가입 회원 리스트 (피그마: 가입회원리스트 페이지)p", description = "<br>"
             + "page -> 0이 1페이지입니다.<br> row -> 한 페이지 당 보여줄 갯수<br>"
             + "sort ->  입력 예시) userId,asc <br> - 입력회원번호(userId) / 픽업지역(pickUp) <br> - 오름차순(asc) / 내림차순(desc)<br>"
