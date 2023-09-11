@@ -768,13 +768,20 @@ public class AdminService {
     public Long insStore2(StoreInsParam param) {
         StoreEntity storeEntity = new StoreEntity();
 
-        storeEntity.setRegionNmEntity(regionNmRep.findById(param.getRegionNmId()).get());
-        storeEntity.setNm(param.getNm());
-        storeEntity.setAddress(param.getAddress());
-        storeEntity.setTel(param.getTel());
+        //tel(전화번호) 유효성 검사하기
+        String pattern = "(\\d{2,3})-(\\d{3,4})-(\\d{4})"; // (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자)
 
-        storeRep.save(storeEntity);
-        return storeEntity.getStoreId();
+        if(Pattern.matches(pattern, param.getTel())) {
+            storeEntity.setRegionNmEntity(regionNmRep.findById(param.getRegionNmId()).get());
+            storeEntity.setNm(param.getNm());
+            storeEntity.setAddress(param.getAddress());
+            storeEntity.setTel(param.getTel());
+
+            storeRep.save(storeEntity);
+            return storeEntity.getStoreId();
+        }
+
+        return 0L;
     }
 
     public StoreList getStore2(SelListDto dto) {
