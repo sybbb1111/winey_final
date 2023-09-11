@@ -864,15 +864,14 @@ public class AdminService {
         }
         return 0L; //매장 정보 수정 실패했다는 의미
     }
-    //주문상태 업데이트 jpa(관리자 페이지용)
+    //주문 상태 업데이트 jpa(관리자 페이지용)
     public Long updOrderStatus2(OrderStatusDto dto) {
         //order_status 코드 유효성 검사
-        String orderStatus = String.valueOf(dto.getOrderStatus()); // int -> String 변환
+        String orderStatus = String.valueOf(dto.getOrderStatus()); // int->String 변환
         String pattern = "[1-6]";
         if(!Pattern.matches(pattern, orderStatus)) {
             return 500L; //orderStatus 코드 유효성 검사 실패시 500 리턴
         }
-
         OrderEntity orderEntity = orderRep.getReferenceById(dto.getOrderId());
         orderEntity.setOrderStatus(dto.getOrderStatus());
         orderRep.save(orderEntity);

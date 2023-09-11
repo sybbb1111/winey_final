@@ -77,7 +77,8 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
     @Override
     public PageCustom<UserVo> selUserAll(Pageable pageable, String searchType, String str) {
 
-        List<UserVo> list = queryFactory.select(new QUserVo(userEntity.userId, userEntity.email, userEntity.unm, regionNmEntity.regionNmId.intValue(), userEntity.createdAt.stringValue()))
+        List<UserVo> list = queryFactory.select(new QUserVo(userEntity.userId, userEntity.email,
+                        userEntity.unm, regionNmEntity.regionNmId.intValue(), userEntity.createdAt.stringValue()))
                 .from(userEntity)
                 .where(eqUserName(searchType, str),
         eqUserEmail(searchType, str), userEntity.delYn.eq(0L), userEntity.roleType.eq(RoleType.USER))
@@ -92,7 +93,6 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
         }
 
         JPAQuery<Long> countQuery = queryFactory
-//                .select(userEntity.count())// count()와 countDistinct() 차이 알기
                 .select(userEntity.countDistinct())// count()와 countDistinct() 차이 알기
                 .from(userEntity)
                 .where(eqUserName(searchType, str),
@@ -105,13 +105,6 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
 
     @Override
     public PageCustom<UserOrderDetailVo> selUserOrderByUserId(Long userId, Pageable pageable) {
-
-////        UserOrderDetailVo vo = new UserOrderDetailVo();
-//        StringTemplate formattedDate = Expressions.dateTemplate(String.class, , ConstantImpl.create("%Y-%m-%d"));
-//        //        StringTemplate formattedDate = Expressions.dateTemplate(
-////                "DATE_FORMAT({0}, {1})",
-////                UserOrderDetailVo,
-////                ConstantImpl.create("%y-%m-%d"));
 
         List<UserOrderDetailVo> list = queryFactory
                 .select(new QUserOrderDetailVo(orderEntity.orderId, orderEntity.orderDate.stringValue(), productEntity.nmKor, orderEntity.totalOrderPrice.intValue(), storeEntity.nm, orderEntity.orderStatus.intValue(), orderDetailEntity.count().intValue()))
@@ -143,9 +136,7 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
             }
         }
 
-
         JPAQuery<Long> countQuery = queryFactory
-//                .select(userEntity.userId.countDistinct())// count()와 countDistinct() 차이 알기
                 .select(userEntity.userId.count())// count()와 countDistinct() 차이 알기
                 .from(userEntity)
                 .innerJoin(orderEntity)
@@ -158,7 +149,6 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .on(orderEntity.storeEntity.storeId.eq(storeEntity.storeId))
 //                .where(userEntity.userId.eq(userId)) //이 부분 주석 풀면 안됨... 이유 찾아야함
                 .groupBy(orderEntity.orderId);
-
 
         Page<UserOrderDetailVo> map = PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
 
@@ -203,7 +193,6 @@ public class AdminWorkRepositoryImpl implements AdminQdslRepository{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-//                .fetchResults();
 
         //데이트포맷 로직
         for(int i=0;i<list.size();i++) {
