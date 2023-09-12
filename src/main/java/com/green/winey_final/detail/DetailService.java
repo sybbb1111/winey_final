@@ -66,13 +66,13 @@ public class DetailService {
 
         for (int i = 1; i <= 3; i++) {
             SelCountVo selCountVo = new SelCountVo();
-            selCountVo.setReviewLevel(Long.valueOf(i));
+            selCountVo.setReviewLevel(i);
             selCountVo.setProductId(productId);
 
            List<Long> countQuery = jpaQueryFactory.select(Projections.constructor(Long.class, review.reviewLevel.count()))
                     .from(review)
                     .leftJoin(orderDetail).on(orderDetail.orderDetailId.eq(review.orderDetailEntity.orderDetailId))
-                    .where(orderDetail.orderEntity.orderId.eq(productId).and(review.reviewId.eq(selCountVo.getReviewLevel())))
+                    .where(orderDetail.productEntity.productId.eq(productId).and(review.reviewLevel.eq(selCountVo.getReviewLevel())))
                     .fetch(); // 쿼리 실행 및 결과 가져오기
             for (Long count : countQuery) {
                 selCount.add(count.toString());

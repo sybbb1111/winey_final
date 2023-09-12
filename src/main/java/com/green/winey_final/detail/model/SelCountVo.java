@@ -6,6 +6,6 @@ import lombok.Data;
 
 public class SelCountVo {
     private Long productId;
-    private Long reviewLevel;
+    private Integer reviewLevel;
 
 }
