@@ -445,36 +445,60 @@ public class AdminService {
 
     public int putProduct2(MultipartFile pic, ProductUpdParam param) {
         //수정할 상품의pk 가져오기
-//        ProductEntity productEntity = productRep.findById(param.getProductId()).get();
+        ProductEntity productEntity = productRep.findById((long) param.getProductId()).get();
+
+        //t_feature에 인서트 후 feature_id(pk)값을 t_product 인서트에 넣기
+        FeatureEntity featureEntity = featureRep.findById(productEntity.getFeatureEntity().getFeatureId()).get();
+        featureEntity.setAcidity((long) param.getAcidity());
+        featureEntity.setSweety((long) param.getSweety());
+        featureEntity.setBody((long) param.getBody());
+
+        featureRep.save(featureEntity);
+
         //t_product
-        ProductEntity productEntity = ProductEntity.builder()
+        productEntity = ProductEntity.builder()
                 .productId(productRep.findById((long) param.getProductId()).get().getProductId())
                 .nmKor(param.getNmKor())
                 .nmEng(param.getNmEng())
                 .price(param.getPrice())
                 .countryEntity(countryRep.getReferenceById((long) param.getCountry()))
                 .categoryEntity(categoryRep.getReferenceById((long) param.getCategory()))
+                .featureEntity(featureEntity)
+                .pic(productRep.findById((long) param.getProductId()).get().getPic())
                 .build();
+
+        productRep.save(productEntity);
+
+        //기존 t_sale 삭제
+        saleRep.deleteByProductEntity(productEntity);
         //t_sale
-        SaleEntity saleEntity = SaleEntity.builder()
-                .sale(param.getSale())
-                .salePrice(param.getSalePrice())
-                .productEntity(productEntity)
-                .build();
+        SaleEntity saleEntity = saleRep.findByProductEntity(productRep.findById((long) param.getProductId()).get());
+        saleEntity.setSale(param.getSale());
+        saleEntity.setSalePrice(param.getSalePrice());
+        saleEntity.setSaleYn(param.getSaleYn());
+
         // 세일시작/종료날짜 로직
         LocalDate parseStartDate = LocalDate.parse(param.getStartSale(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String startSale을 LocalDate로 변환
         LocalDate parseEndDate = LocalDate.parse(param.getEndSale(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));//String endSale을 LocalDate로 변환
         LocalDate startSale = parseStartDate.withDayOfMonth(1); //할인시작월의 1일
         LocalDate endSale = parseEndDate.withDayOfMonth(parseEndDate.lengthOfMonth()); //할인종료월의 마지막 일
-        //t_feature
-        FeatureEntity featureEntity = FeatureEntity.builder()
-                .sweety((long) param.getSweety())
-                .acidity((long) param.getAcidity())
-                .body((long) param.getBody())
-                .build();
+
+        //saleDate가 이번 달과 똑같은 달이면 실행되는 로직
+        if(parseStartDate.getMonthValue() == LocalDate.now().getMonthValue()) {
+            saleEntity.setStartSale(LocalDate.now().plusDays(1).toString());
+            saleEntity.setEndSale(endSale.toString());
+            saleRep.save(saleEntity);
+
+        } else { //saleDate가 이번 달이 아니면 실행되는 로직
+            saleEntity.setStartSale(startSale.toString());
+            saleEntity.setEndSale(endSale.toString());
+            saleRep.save(saleEntity);
+        }
+
         //t_aroma update
         //삭제
-        aromaRep.deleteByProductEntity(productEntity);
+        int aromaEntity = aromaRep.deleteByProductEntity(productEntity);
+
         //인서트
         for(int i=0;i<param.getAroma().size();i++) {
             aromaRep.save(AromaEntity.builder()
@@ -482,17 +506,7 @@ public class AdminService {
                     .aromaCategoryEntity(aromaCategoryRep.getReferenceById(param.getAroma().get(i).longValue()))
                     .build());
         }
-        //t_sale update
-        //saleDate가 이번 달과 똑같은 달이면 실행되는 로직
-        if(parseStartDate.getMonthValue() == LocalDate.now().getMonthValue()) {
-            saleEntity.setStartSale(LocalDate.now().plusDays(1).toString());
-            saleEntity.setEndSale(endSale.toString());
-            saleRep.save(saleEntity);
-        } else { //saleDate가 이번 달이 아니면 실행되는 로직
-            saleEntity.setStartSale(startSale.toString());
-            saleEntity.setEndSale(endSale.toString());
-            saleRep.save(saleEntity);
-        }
+
         //t_feature 테이블 update 하고 productEntity에 featureId를 set
         productEntity.setFeatureEntity(featureRep.save(featureEntity));
 
@@ -508,6 +522,7 @@ public class AdminService {
                     .build();
             winePairingRep.save(winePairingEntity);
         }
+
         //사진 파일 업로드 로직 1
         //임시경로에 사진 저장
         if(pic != null) { //만약에 pic가 있다면
@@ -515,7 +530,7 @@ public class AdminService {
             if(!tempDic.exists()) { // /temp 경로에 temp폴더가 존재하지 않는다면 temp폴더를 만든다.
                 tempDic.mkdirs();
             }
-
+            deleteProductPic(param.getProductId()); //기존 사진 파일 삭제
             String savedFileName = MyFileUtils.makeRandomFileNm(pic.getOriginalFilename());
 
             File tempFile = new File(tempDic.getPath(), savedFileName);
@@ -553,6 +568,7 @@ public class AdminService {
             return productEntity.getProductId().intValue(); //성공시 상품PK값 리턴
         }
         //수정시 사진파일을 수정하지 않을 경우 (pic = null)
+        productEntity.setPic(productRep.findById((long) param.getProductId()).get().getPic());
         ProductEntity result2 = productRep.save(productEntity);
         if(result2 != null) {
             return productEntity.getProductId().intValue();
