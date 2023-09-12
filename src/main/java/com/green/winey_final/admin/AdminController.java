@@ -337,7 +337,7 @@ public class AdminController {
                                          @RequestParam(required = false)String str) {
         return SERVICE.getStore(pageable, searchType, str);
     }
-/*
+
     //매장 정보 수정 mybatis
     @Operation(summary = "매장 정보 수정", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
     @PutMapping("/store/{storeId}")
@@ -345,14 +345,14 @@ public class AdminController {
         return SERVICE.updStore(param, storeId);
     }
 
-*/
+/*
     //매장 정보 수정 jpa
     @Operation(summary = "매장 정보 수정p", description = "전화번호 유효성 검사 (2~3자리 숫자)-(3~4자리 숫자)-(4자리 숫자), 실패시 코드 : 0 ")
     @PutMapping("/store/{storeId}")
     public Long putStore2(@RequestBody StoreInsParam param, Long storeId) {
         return SERVICE.updStore2(param, storeId);
     }
-
+*/
 /*
     //매장 정보 삭제 mybatis
     @Operation(summary = "매장 정보 삭제", description = "삭제 성공시 코드 : 1, 실패시 코드 : 0")
