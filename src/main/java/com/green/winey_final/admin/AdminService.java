@@ -801,7 +801,7 @@ public class AdminService {
     public PageCustom<StoreVo> getStore(Pageable pageable, String searchType, String str) {
         return adminWorkRep.selStoreAll(pageable, searchType, str);
     }
-/*
+
     //매장 정보 수정 mybatis
     public Long updStore(StoreInsParam param, Long storeId) {
         StoreInsDto dto = new StoreInsDto();
@@ -821,7 +821,7 @@ public class AdminService {
         return 0L; //전화번호 유효성 검사 통과 실패
     }
 
-*/
+
     //매장 정보 수정 jpa
     public Long updStore2(StoreInsParam param, Long storeId) {
         //tel(전화번호) 유효성 검사하기
@@ -831,6 +831,8 @@ public class AdminService {
             storeEntity.setNm(param.getNm());
             storeEntity.setTel(param.getTel());
             storeEntity.setAddress(param.getAddress());
+            RegionNmEntity regionNmEntity = regionNmRep.getReferenceById(param.getRegionNmId());
+            storeEntity.setRegionNmEntity(regionNmEntity);
             storeRep.save(storeEntity);
             return 1L;
         }
