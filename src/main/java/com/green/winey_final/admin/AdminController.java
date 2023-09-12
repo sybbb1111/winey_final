@@ -57,8 +57,8 @@ public class AdminController {
     public int postProduct(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductInsParam param) {
         return SERVICE.postProduct(pic, param);
     }
-
-    @Operation(summary = "상품 수정", description = "성공시 코드 : 상품PK, 실패시 코드 : 0<br>"
+/*
+    @Operation(summary = "상품 수정myb", description = "성공시 코드 : 상품PK, 실패시 코드 : 0<br>"
             +"nmKor/nmEng -> String타입<br>"
             +"price/alcohol/quantity -> int타입<br>"
             +"promotion -> 추천상품에 해당할 때 1, 아닐 때 0<br>"
@@ -73,12 +73,24 @@ public class AdminController {
     public int putProduct(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductUpdParam param) {
         return SERVICE.putProduct(pic, param);
     }
+
+ */
     //jpa
-//    @Operation(summary = "상품 수정p")
-//    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public int putProduct2(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductUpdParam param) {
-//        return SERVICE.putProduct2(pic, param);
-//    }
+    @Operation(summary = "상품 수정p", description = "성공시 코드 : 상품PK, 실패시 코드 : 0<br>"
+            +"nmKor/nmEng -> String타입<br>"
+            +"price/alcohol/quantity -> int타입<br>"
+            +"promotion -> 추천상품에 해당할 때 1, 아닐 때 0<br>"
+            +"beginner -> 입문자 추천상품일 때 1, 아닐 때 0<br>"
+            +"country -> 1(미국), 2(스페인), 3(프랑스), 4(이탈리아), 5(포르투갈), 6(칠레)<br>"
+            +"sweety/acidity/body -> 1~5<br>"
+            +"category -> 1(레드), 2(화이트), 3(스파클링), 4(기타)<br>"
+            +"aroma -> flower(1), plant(2), fruit(3), spicy(4), earth(5), oak(6), nuts(7)<br>"
+            +"saleDate -> 2023-08-01(년-월-일), 일자는 01 고정 <br>"
+            +"smallCategoryId -> steak(1), chicken(2), 샐러드(salad)(3), pork(4), oyster(5), fish(6), 튀김(fried)(7), 한식(kfood)(8), cheese(9), fruit(10), pizza(11), 디저트(dessert)(12)<br>")
+    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public int putProduct2(@RequestPart(required = false) MultipartFile pic, @RequestPart ProductUpdParam param) {
+        return SERVICE.putProduct2(pic, param);
+    }
 /*
     //등록 상품 리스트 출력 mybatis
     @Tag(name = "관리자 페이지 별도 API")

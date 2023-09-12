@@ -469,8 +469,6 @@ public class AdminService {
 
         productRep.save(productEntity);
 
-        //기존 t_sale 삭제
-        saleRep.deleteByProductEntity(productEntity);
         //t_sale
         SaleEntity saleEntity = saleRep.findByProductEntity(productRep.findById((long) param.getProductId()).get());
         saleEntity.setSale(param.getSale());
