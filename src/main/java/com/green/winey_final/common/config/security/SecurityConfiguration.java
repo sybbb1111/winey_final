@@ -70,7 +70,7 @@ public class SecurityConfiguration {
                                         ,"/api/mypage/emails/**"
 
                                         ,"/api/search/**", "/api/search**"
-                                        ,"/admin" //이거해서 관리자페이지에서 새로고침시 화이트라벨 오류(401) 안뜸
+                                        ,"/admin/**" //이거해서 관리자페이지에서 새로고침시 화이트라벨 오류(401) 안뜸
 
                                         //,"/admin", "/admin**", "/admin/**"
 
