@@ -340,6 +340,7 @@ public class AdminService {
         dto.setPrice(param.getPrice()); //t_product
         dto.setCountryId(param.getCountry()); //t_product
         dto.setCategoryId(param.getCategory()); //t_product
+        dto.setQuantity(param.getQuantity()); //t_product
 
         dto.setSale(param.getSale()); // t_sale
         dto.setSalePrice(param.getSalePrice()); // t_sale
