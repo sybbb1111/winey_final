@@ -336,6 +336,9 @@ public class AdminService {
         dto.setProductId(param.getProductId()); //t_product
         dto.setNmKor(param.getNmKor()); //t_product
         dto.setNmEng(param.getNmEng()); //t_product
+        dto.setAlcohol(param.getAlcohol()); //t_product
+        dto.setBeginner(param.getBeginner());
+        dto.setPromotion(param.getPromotion());
 
         dto.setPrice(param.getPrice()); //t_product
         dto.setCountryId(param.getCountry()); //t_product
