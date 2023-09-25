@@ -16,6 +16,7 @@ app:
       - http://192.168.0.203:8080/oauth/redirect  #서윤 ip주소
       - http://192.168.0.47:3000/oauth/redirect   #동은님 아이피주소: 포트번호 ~/oauth/redirect-
       - http://112.222.157.156:5004/login/oauth2/code/kakao
+      - https://web-winey-react-iciy2almrfaqcz.sel5.cloudtype.app/oauth
       #- http://192.168.0.50:8080/oauth/redirect  #원희 ip주소
       #- http://192.168.0.203:8080/oauth/redirect #서윤 ip주소
 mybatis:
@@ -142,6 +143,7 @@ app:
     authorized-redirect-uris:
       - http://192.168.0.144:5004/oauth/redirect
       - http://112.222.157.156:5004/login/oauth2/code/kakao
+      - https://web-winey-react-iciy2almrfaqcz.sel5.cloudtype.app/oauth
 
 spring:
   config:
